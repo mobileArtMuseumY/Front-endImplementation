@@ -15,8 +15,20 @@ export default {
           link: '/home',
         },
         {
-          name: '测试',
-          link: '/test',
+          name: '发布项目',
+          link: '/project/publish',
+        },
+        {
+          name: '浏览项目',
+          link: '/project/view',
+        },
+        {
+          name: '人才排行榜',
+          link: '/rank/student',
+        },
+        {
+          name: '发现',
+          link: '/explore',
         },
       ],
     };

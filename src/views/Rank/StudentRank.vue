@@ -8,7 +8,7 @@
 export default {
   data() {
     return {
-      msg: '注册',
+      msg: '人才排行榜',
     };
   },
 };
