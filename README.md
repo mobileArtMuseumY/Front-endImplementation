@@ -3,11 +3,11 @@
 ## Build Setup
 
 ``` bash
-# 安装 nodejs 运行环境, nodejs 版本为 8.11.3 LTS
+# 安装 nodejs 运行环境, nodejs 版本为 LTS 版本
 https://nodejs.org/en/
 
 # clone 本项目
-git clone https://github.com/roojay520/sparrow.git
+git clone https://github.com/mobileArtMuseumY/Front-endImplementation.git
 
 # 进入项目目录
 cd sparrow
