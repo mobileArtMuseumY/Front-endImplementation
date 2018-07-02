@@ -1,7 +1,10 @@
 <template>
   <div class="wrap">
     <the-nav :nav="nav"></the-nav>
-    <router-view></router-view>
+    <div class="main-wrap">
+       <router-view></router-view>
+    </div>
+    <the-footer></the-footer>
   </div>
 </template>
 
@@ -35,3 +38,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.main-wrap{
+  min-height: calc(100vh - 56px - 120px)
+}
+</style>

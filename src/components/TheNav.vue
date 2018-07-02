@@ -62,7 +62,7 @@ export default {
 
 .nav-wrap {
   width: 100%;
-  height: 56px;
+  height: $h-nav;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
