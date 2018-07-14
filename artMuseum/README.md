@@ -67,4 +67,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
   - [ ] 邮箱验证界面以及功能
   - [ ] 更新自己的说明文档，将代码提交到主仓库中自己的分支中。
 
-#### log:[进度说明文档](https://github.com/mobileArtMuseumY/Front-endImplementation/blob/honeysyt/artMuseum/log.md)
+### log：[进度说明文档](https://github.com/mobileArtMuseumY/Front-endImplementation/blob/honeysyt/artMuseum/log.md)
