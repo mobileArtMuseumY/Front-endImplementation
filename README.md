@@ -1,6 +1,6 @@
 # artmuseum
 
-> A Vue.js project
+> an art museum website front
 
 ## Build Setup
 
