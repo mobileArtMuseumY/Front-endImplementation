@@ -25,6 +25,26 @@ module.exports = {
   },
   // add your custom rules here
   rules: {
+    'linebreak-style': 'off',
+    'no-console': 'off',
+    'no-plusplus': 'off',
+    'no-return-assign': 'off',
+    'no-unused-vars': 'off',
+    'array-callback-return': 'off',
+    'import/prefer-default-export':'off',
+    'consistent-return': 'off',
+    'import/prefer-default-export':'off',
+    'quotes': ['error', 'single'],
+    'no-cond-assign': 'warn',
+    'arrow-parens': 'off',
+    'no-undef': 'warn',
+    'generator-star-spacing': 'off',
+    'no-bitwise': 'off',
+    'no-new': 'off',
+    'no-unused-expressions': 'off',
+    'no-mixed-operators': 'off',
+    'max-len': 'off',
+    'no-multi-assign': 'off',
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       js: 'never',

@@ -4,9 +4,19 @@
   "description": "Sparrow Front-end project",
   "author": "honeysyt <honeysyt@foxmail.com>",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mobileArtMuseumY/Front-endImplementation.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mobileArtMuseumY/Front-endImplementation/issues"
+  },
+  "homepage": "https://github.com/mobileArtMuseumY/Front-endImplementation#readme",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
+    "analyze": "npm run build --report",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
@@ -15,7 +25,6 @@
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.4.5",
     "js-cookie": "^2.2.0",
-    "node-sass": "^4.9.2",
     "normalize.css": "^8.0.0",
     "nprogress": "^0.2.0",
     "vue": "^2.5.2",
@@ -28,6 +37,7 @@
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
@@ -48,6 +58,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "node-notifier": "^5.1.2",
+    "node-sass": "^4.9.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
@@ -55,6 +66,7 @@
     "postcss-loader": "^2.0.8",
     "postcss-url": "^7.2.1",
     "rimraf": "^2.6.0",
+    "sass-loader": "^7.1.0",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",

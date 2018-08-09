@@ -8,5 +8,7 @@ const components = {
   TheFooter,
 };
 
-export default (Vue) => Object.keys(components).forEach((key) => Vue.component(key, components[key]));
-
+export default (Vue) => {
+  Object.keys(components).forEach((key) =>
+    Vue.component(key, components[key]));
+};

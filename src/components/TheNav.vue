@@ -42,8 +42,12 @@ export default {
     },
   },
   computed: {
-    theNav() {
-      if (this.nav.length) return this.nav.filter(x => x.name);
+    return: {
+      theNav() {
+        if (this.nav.length) {
+          return this.nav.filter(x => x.name);
+        }
+      },
     },
   },
   methods: {
