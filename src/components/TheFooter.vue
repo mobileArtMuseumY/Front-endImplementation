@@ -39,7 +39,7 @@
       </div>
       <div class="copyright">
         <h4 class="content-copy">@2018 **** all rights reserved .</h4>
-        <h4 class="content-made">Made by H&Y <img src="https://github.com/syt-honey/study_picture/blob/master/album/hearticon.png" alt="hearticon">.</h4>
+        <h4 class="content-made">Made by H&Y <img src="\static\images\hearticon.png" alt="hearticon">.</h4>
       </div>
     </div>
   </div>
@@ -58,6 +58,12 @@ li{
   list-style-type:none;
 }
 
+a {
+  &:hover {
+    border-bottom: .06rem solid $clr-border;
+  }
+}
+
 .footer{
   background-color: $clr-white;
   height: $h-footer;
@@ -67,7 +73,7 @@ li{
 }
 
 .container {
-  width: 1360px;
+  width: 100%;
 }
 
 .site-info {
@@ -77,21 +83,21 @@ li{
 }
 
 .site-info-ul {
-  width: 250px;
-  line-height: 1.1em;
+  width: 15rem;
+  line-height: 1.1rem;
   float: left;
   padding: 0 20px 0 20px;
 }
 
 .siu-h {
   color: $clr-footer-font;
-  font-size: 14px;
+  font-size: .9rem;
   padding: 0 0 14px 43px;
 }
 
 .siuh-l {
   color: $clr-footer-font;
-  font-size: 12px;
+  font-size: .8rem;
   padding:  0 6px 4px 6px;
 }
 
@@ -102,24 +108,24 @@ li{
 .copyright {
   height: $h-footer-copyright;
   color: $clr-footer-font;
-  font-size: 12px;
+  font-size: .8rem;
   display: flex;
   float: left;
   margin: 0 20px;
 }
 
 .content-copy {
-  margin-right: 10px;
+  margin-right: .8rem;
   color: $clr-footer-font;
-  font-size: 12px;
-  line-height: 1em;
+  font-size: .8rem;
+  line-height: 1rem;
   width: 1120px;
 }
 
 .content-made {
   color: $clr-footer-font;
-  font-size: 12px;
-  line-height: 1em;
+  font-size: .8rem;
+  line-height: 1rem;
 }
 
 </style>

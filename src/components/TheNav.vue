@@ -11,17 +11,18 @@
       </router-link>
     </div>
     <div class="nav-right">
-      <div class="nav-search">
-        <el-input
-          placeholder="请输入需要搜索的内容"
-          prefix-icon="el-icon-search"
-          v-model="search">
-        </el-input>
-      </div>
       <div class="nav-login">
         <span @click="goSignin()">登录</span>
           |
         <span @click="goSignup()">注册</span>
+      </div>
+      <div class="nav-search">
+        <el-input
+          placeholder="search"
+          prefix-icon="el-icon-search"
+          v-model="search"
+          clearable>
+        </el-input>
       </div>
     </div>
   </div>
@@ -69,38 +70,42 @@ export default {
   height: $h-nav;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: $clr-white;
   align-items: center;
   transition: all .3s ease;
   box-shadow: $shadow-nav;
   overflow: hidden;
   .nav-left{
-
+    margin: 10%;
   }
   .nav-center{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    border: .06rem solid $clr-border;
   }
   .nav-right{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     .nav-search{
-      width: 12rem;
-      margin-right: 2rem;
+      width: 7rem;
+      margin-left: 1rem;
       .el-input__inner{
         border: none;
-        border-bottom: 1px solid $clr-border;
+        &:hover{
+          border-bottom: .06rem solid $clr-border;
+        }
       }
     }
     .nav-login{
       span{
         cursor: pointer;
         margin: 0 .2rem;
+        font-size: 0.8rem;
         &:hover{
           color: $clr-main;
         }
@@ -113,7 +118,7 @@ export default {
      color: $clr-black;
      text-decoration: none;
      font-size: 1rem;
-     line-height: 55px;
+     line-height: 3rem;
      padding: 0 .5rem;
      margin: 0 1rem;
      border-bottom: solid .1rem transparent;
