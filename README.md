@@ -41,7 +41,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 * 任务具体内容：
   - [x] 搭建 vue 基础框架
-  - [ ] nav、footer 部分实现
+  - [x] nav、footer 部分实现
   - [ ] 首页、发布项目页面实现
   - [ ] 将代码 pull request 到主仓库中
 

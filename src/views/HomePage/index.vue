@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <!-- <div v-loading="loading" element-loading-text="loading..." style="min-height: 35vw;" v-if="!error"></div> -->
     <div class="banner">
       <el-row>
         <el-button type="danger" class="button" @click="signup()">注册</el-button>
@@ -18,7 +17,7 @@
       <h3>精品展示</h3>
       <div class="works">
           <div v-for="item in work" :key="item">
-            <img :src="item" alt="picture">
+            <img :src="item" alt="picture" @click="display()">
           </div>
       </div>
     </div>
@@ -33,18 +32,23 @@ import picture3 from '../../../static/images/works/flower.jpg';
 import picture4 from '../../../static/images/works/rustic.jpg';
 import picture5 from '../../../static/images/works/water-bottle.jpg';
 import picture6 from '../../../static/images/works/woman.jpg';
+import picture7 from '../../../static/images/works/fog.jpg';
+import picture8 from '../../../static/images/works/cat.jpg';
 
 export default {
   data() {
     return {
       describe: 'Here is the description of the site operation...',
       works: 'there are some works...',
-      work: [picture1, picture2, picture3, picture4, picture5, picture6],
+      work: [picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8],
     };
   },
   methods: {
     signup() {
       this.$router.push('/signup');
+    },
+    display() {
+
     },
   },
 };
@@ -74,30 +78,32 @@ export default {
     padding: 3rem;
     width: 40%;
     height: 18rem;
-    border: .06rem solid $clr-border;
     .content {
       padding: .3rem;
-      border: .06rem solid $clr-border;
+      box-shadow: $shadow-work;
+      height: 17rem;
+      width: 15rem;
     }
   }
   .display {
     position: relative;
     padding: 3rem;
-    height: 44rem;
-    border: .06rem solid $clr-border;
+    height: 45rem;
     .works {
       padding: .3rem;
-      border: .06rem solid $clr-border;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
       flex-wrap: wrap;
+      box-shadow: $shadow-work;
       img {
         width: 13rem;
         height: 15rem;
         margin-left: 5rem;
         margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: $shadow-work;
       }
     }
   }
