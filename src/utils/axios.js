@@ -78,9 +78,8 @@ const post = (url, data = {}) => {
     method: 'post',
     url,
     data,
-  }).then(checkStatus).then(checkCode);
+  }).then(checkStatus).then(checkCode)
 };
-
 export default {
   get,
   post,

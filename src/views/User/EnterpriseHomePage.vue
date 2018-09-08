@@ -8,7 +8,7 @@
 export default {
   data() {
     return {
-      msg: '发布项目',
+      msg: '企业主页',
     };
   },
 };

@@ -37,27 +37,88 @@ div:focus {
   outline: none;
 }
 
+a {
+  outline: none;
+  color: $clr-footer-font;
+  text-decoration: none;
+  font-size: 10px;
+}
+
 a:focus,
 a:active {
   outline: none;
 }
 
-a,
 a:focus,
 a:hover {
   cursor: pointer;
-  color: inherit;
+  color: $clr-main;
   text-decoration: none;
 }
 
 .text{
-   text-align: justify;
-   text-align-last: justify;
-   text-justify: distribute;
-   text-align-last: initial;
+  text-align: justify;
+  text-align-last: justify;
+  text-justify: distribute;
+  text-align-last: initial;
 }
 
 .active{
-  color:$clr-main;
-  border-bottom:solid 1px $clr-main;
+  color: $clr-main;
+  border-bottom: solid 1px $clr-main;
+}
+
+label {
+  color: $clr-gray;
+  font-size: $font-size-label;
+}
+
+input {
+  height: $h-input;
+  width: $w-input;
+  border-color: $clr-gray;
+  border: .06rem solid $clr-border;
+  border-radius: 5px;
+  font-size: $font-size-input;
+  padding-inline-start: .6rem;
+  color: $clr-gray;
+  &:hover {
+    border-radius: 0;
+  }
+}
+
+::-webkit-input-placeholder {
+  color: $clr-gray;
+  font-size: $font-size-input;
+}
+//这个是不是默认的？
+input::-ms-clear {
+  display: inline;
+}
+input::-ms-reveal {
+  display: inline;
+}
+
+button {
+  color: $clr-main;
+  background-color: $clr-white;
+  border-color: $clr-main;
+  border: .06rem solid $clr-main;
+  width: $w-button;
+  height: $h-button;
+  font-size: $font-size-button;
+  border-radius: 5px;
+  &:hover {
+    background-color: $clr-main;
+    color: $clr-white;
+    border: none;
+  }
+}
+
+li {
+  list-style-type:none;
+}
+
+.icon {
+  border: none;
 }

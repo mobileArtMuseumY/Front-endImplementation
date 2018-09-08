@@ -19,12 +19,12 @@ const constRouterMap = [
       {
         path: 'signin',
         name: '登录',
-        component: () => import('@/views/Login/Signin'),
+        component: () => import('@/views/Login/SignIn'),
       },
       {
         path: 'signup',
         name: '注册',
-        component: () => import('@/views/Login/Signup'),
+        component: () => import('@/views/Login/SignUp'),
       },
       {
         path: 'project/publish',
@@ -45,6 +45,16 @@ const constRouterMap = [
         path: 'explore',
         name: '发现',
         component: () => import('@/views/Explore'),
+      },
+      {
+        path: 'enterpriseHome',
+        name: '企业主页',
+        component: () => import('@/views/User/EnterpriseHomePage'),
+      },
+      {
+        path: 'studentHome',
+        name: '学生主页',
+        component: () => import('@/views/User/StudentHomePage'),
       },
     ],
   },

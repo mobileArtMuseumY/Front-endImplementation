@@ -1,9 +1,32 @@
-$shadow-nav: 0 0 4px 0 rgba(0,0,0,.01), 0 4px 4px 0 rgba(0,0,0,.04);
-$shadow-work: 0 0 4px 0 rgba(0,0,0,.15), 0 4px 4px 0 rgba(0,0,0,.04);
-$shadow-work-hover: 0 0 4px 0 rgba(0,0,0,.15), 0 5px 5px 0 rgba(0,0,0,.15);
 
-$h-nav: 57px;
-$h-banner: 600px;
-$h-footer: 220px;
-$h-footer-siteinfo: 165px;
-$h-footer-copyright: 25px;
+$shadow-work: 0 0 4px 0 rgba(0,0,0,.15), 0 4px 4px 0 rgba(0,0,0,.04);
+$shadow-work-hover: 0 0 4px 0 rgba(0,0,0,.2), 0 5px 5px 0 rgba(0,0,0,.2);
+
+
+// TheNav
+$h-nav: 3.56rem;
+$h-banner: 37.5rem;
+$shadow-nav: 0 0 4px 0 rgba(0,0,0,.01), 0 4px 4px 0 rgba(0,0,0,.04);
+
+// TheFooter
+$h-footer: 17em;
+$h-footer-siteinfo: 11rem;
+$h-footer-copyright: 1.5rem;
+
+// SignUp
+$h-signup-container: 100rem;
+
+//SignIn
+$h-signin-container: 40rem;
+
+//components
+$h-input: 2rem;
+$w-input: 18rem;
+$font-size-input: 13px;
+
+$h-button: 1.7rem;
+$w-button: 8rem;
+$font-size-button: 15px;
+
+$font-size-label: 13px;
+

@@ -1,7 +1,7 @@
 <template>
   <div class="nav-wrap">
     <div class="nav-left">
-      logo
+      <icon class="icon" name="logo" scale="5"></icon>
     </div>
     <div class="nav-center">
       <router-link
@@ -9,12 +9,13 @@
         :key="i" :to="v.link">
         {{v.name}}
       </router-link>
+        {{msg}}
     </div>
     <div class="nav-right">
       <div class="nav-login">
-        <span @click="goSignin()">登录</span>
+        <span @click="goSignIn()">登录</span>
           |
-        <span @click="goSignup()">注册</span>
+        <span @click="goSignUp()">注册</span>
       </div>
       <div class="nav-search">
         <el-input
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       search: '',
+      msg: 'hello',
     };
   },
   props: {
@@ -52,10 +54,10 @@ export default {
     },
   },
   methods: {
-    goSignin() {
+    goSignIn() {
       this.$router.push('/signin');
     },
-    goSignup() {
+    goSignUp() {
       this.$router.push('/signup');
     },
   },
@@ -63,7 +65,7 @@ export default {
 </script>
 
 <style lang="scss" >
-@import 'src/assets/scss/index';
+@import "src/assets/scss/index";
 
 .nav-wrap {
   width: 100%;
@@ -73,62 +75,64 @@ export default {
   justify-content: space-between;
   background-color: $clr-white;
   align-items: center;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
   box-shadow: $shadow-nav;
   overflow: hidden;
-  .nav-left{
+  .nav-left {
     margin: 10%;
   }
-  .nav-center{
+  .nav-center {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    border: .06rem solid $clr-border;
+    border: 0.06rem solid $clr-border;
   }
-  .nav-right{
+  .nav-right {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    .nav-search{
+    .nav-search {
       width: 7rem;
       margin-left: 1rem;
-      .el-input__inner{
+      .el-input__inner {
         border: none;
-        &:hover{
-          border-bottom: .06rem solid $clr-border;
+        &:hover {
+          border-bottom: 0.06rem solid $clr-border;
         }
       }
     }
-    .nav-login{
-      span{
+    .nav-login {
+      span {
         cursor: pointer;
-        margin: 0 .2rem;
+        margin: 0 0.2rem;
         font-size: 0.8rem;
-        &:hover{
+        &:hover {
+          color: $clr-main;
+        }
+        //没用？？？
+        &:visited {
           color: $clr-main;
         }
       }
     }
   }
   a {
-     display: inline-block;
-     text-align: center;
-     color: $clr-black;
-     text-decoration: none;
-     font-size: 1rem;
-     line-height: 3rem;
-     padding: 0 .5rem;
-     margin: 0 1rem;
-     border-bottom: solid .1rem transparent;
-     &:hover{
-       color: $clr-main;
-     }
-     &.active{
-       color: $clr-main;
-       border-bottom-color: $clr-main;
-     }
-   }
+    display: inline-block;
+    text-align: center;
+    color: $clr-black;
+    font-size: 1rem;
+    line-height: 3rem;
+    padding: 0 0.5rem;
+    margin: 0 1rem;
+    border-bottom: solid 0.1rem transparent;
+    &.active {
+      color: $clr-main;
+      border-bottom-color: $clr-main;
+    }
+  }
 }
+
 </style>

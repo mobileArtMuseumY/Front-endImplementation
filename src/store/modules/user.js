@@ -1,5 +1,10 @@
+
 const user = {
-  state: {},
+  state: {
+    role: null,
+    login: false,
+    userInfo: null,
+  },
   mutations: {},
   actions: {},
 };

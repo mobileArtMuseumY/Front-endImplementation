@@ -8,11 +8,12 @@
 export default {
   data() {
     return {
-      msg: '发布项目',
+      msg: '学生主页',
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
 </style>

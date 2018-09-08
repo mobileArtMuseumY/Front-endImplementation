@@ -1,47 +1,66 @@
 <template>
   <div class="footer">
-    <div class="container">
-      <div class="site-info">
-        <ul class="site-info-ul">
-          <h3 class="siu-h">占位置</h3>
-          <ul>
-            <li class="siuh-l"><a class="siuh-a" >关于</a></li>
-            <li class="siuh-l"><a class="siuh-a">向导</a></li>
-            <li class="siuh-l"><a class="siuh-a" >联系我们</a></li>
-            <li class="siuh-l"><a class="siuh-a">帮助</a></li>
-          </ul>
-        </ul>
-        <ul class="site-info-ul">
-          <h3 class="siu-h">****移动艺术馆</h3>
-          <ul>
-            <li class="siuh-l"><a class="siuh-a" >关于</a></li>
-            <li class="siuh-l"><a class="siuh-a">向导</a></li>
-            <li class="siuh-l"><a class="siuh-a" >联系我们</a></li>
-            <li class="siuh-l"><a class="siuh-a">帮助</a></li>
-          </ul>
-        </ul>
-        <ul class="site-info-ul">
-          <h3 class="siu-h">关于网站</h3>
-          <ul>
-            <li class="siuh-l"><a class="siuh-a" >API</a></li>
-            <li class="siuh-l"><a class="siuh-a">网站logo</a></li>
-          </ul>
-        </ul>
-        <ul class="site-info-ul">
-          <h3 class="siu-h">联系开发者</h3>
-          <ul>
-            <li class="siuh-l"><a class="siuh-a" >mllove</a></li>
-            <li class="siuh-l"><a class="siuh-a">syt-honey</a></li>
-            <li class="siuh-l"><a class="siuh-a" >mlhaprial1028@gmail.com</a></li>
-            <li class="siuh-l"><a class="siuh-a">honeysyt@foxmail.com</a></li>
-          </ul>
-        </ul>
+    <div class="footer-session-container">
+      <div class="footer-session logo">
+        <icon class="icon" name="logo" scale="5"></icon>
+        <div class="help">
+          <icon class="icon" name="help" scale="2"></icon>
+          <!-- 跳转到联系管理员页面 -->
+          <a href="">帮助&amp;支持</a>
+        </div>
       </div>
-      <div class="copyright">
-        <h4 class="content-copy">@2018 **** all rights reserved .</h4>
-        <h4 class="content-made">Made by H&Y <img src="\static\images\hearticon.png" alt="hearticon">.</h4>
+      <div class="footer-session">
+        <div class="title">校园移动艺术馆</div>
+          <div class="a">
+            <!--
+              1. 按照技能分类的项目页面
+              2. 浏览项目页面
+              3. 开发人员API页面
+             -->
+            <a href="">分类</a>
+            <a href="">项目</a>
+            <a href="">开发人员API</a>
+          </div>
+      </div>
+      <div class="footer-session">
+        <div class="title">关于</div>
+          <div class="a">
+            <a href="">关于我们</a>
+            <a href="">平台是如何运作的</a>
+            <a href="">联系我们</a>
+          </div>
+      </div>
+      <div class="footer-session">
+        <div class="title">条款</div>
+         <div class="a">
+           <!-- 待完成 -->
+            <a href="">隐私条款</a>
+            <a href="">隐私政策</a>
+            <a href="">行为准则</a>
+            <a href="">条款和条件</a>
+            <a href="">费用及收费</a>
+         </div>
+      </div>
+      <div class="footer-session">
+        <div class="title">联系开发者</div>
+          <div class="a">
+            <div class="github">
+              <icon class="icon" name="github" scale="2"></icon>
+              <a href="https://github.com/mllove">mllove</a>
+            </div>
+            <div class="github">
+              <icon class="icon github-icon" name="github" scale="2"></icon>
+              <a class="github-name" href="https://github.com/syt-honey">syt-honey</a>
+            </div>
+            <a href="">mlhaprial1028@gmail.com</a>
+            <a href="">honeysyt@foxmail.com</a>
+          </div>
       </div>
     </div>
+      <div class="copyright">
+        <div class="content-copy">@2018 **** all rights reserved .</div>
+        <div class="content-made">Made by H&Y <img src="\static\images\hearticon.png" alt="hearticon">.</div>
+      </div>
   </div>
 </template>
 
@@ -54,78 +73,68 @@ export default {
 <style  lang="scss" scoped>
 @import 'src/assets/scss/index';
 
-li{
-  list-style-type:none;
+.footer{
+  position: relative;
+  float: bottom;
+  width: 100%;
+  background-color: $clr-white;
+  height: $h-footer;
+  border: .06rem solid $clr-border;
+}
+
+.footer-session-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 3%;
+}
+
+.footer-session {
+  display: flex;
+  flex-direction: column;
+}
+
+.a {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.3rem;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4%;
+}
+
+.github-icon {
+  margin-top: .3rem;
+}
+
+.github {
+  margin-bottom: .5rem;
 }
 
 a {
-  &:hover {
-    border-bottom: .06rem solid $clr-border;
-  }
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }
 
-.footer{
-  background-color: $clr-white;
-  height: $h-footer;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-}
-
-.container {
-  width: 100%;
-}
-
-.site-info {
-  height: $h-footer-siteinfo;
-  padding: 0 2px 0 30px;
-  position: relative;
-}
-
-.site-info-ul {
-  width: 15rem;
-  line-height: 1.1rem;
-  float: left;
-  padding: 0 20px 0 20px;
-}
-
-.siu-h {
-  color: $clr-footer-font;
+.title {
   font-size: .9rem;
-  padding: 0 0 14px 43px;
-}
-
-.siuh-l {
-  color: $clr-footer-font;
-  font-size: .8rem;
-  padding:  0 6px 4px 6px;
-}
-
-.siuh-a {
-  color: $clr-footer-font;
 }
 
 .copyright {
-  height: $h-footer-copyright;
-  color: $clr-footer-font;
-  font-size: .8rem;
   display: flex;
-  float: left;
-  margin: 0 20px;
-}
-
-.content-copy {
-  margin-right: .8rem;
+  flex-direction: row;
+  justify-content: space-between;
   color: $clr-footer-font;
   font-size: .8rem;
-  line-height: 1rem;
-  width: 1120px;
 }
 
+.content-copy,
 .content-made {
   color: $clr-footer-font;
   font-size: .8rem;
-  line-height: 1rem;
 }
 
 </style>

@@ -1,9 +1,7 @@
 <template>
   <div class="home">
     <div class="banner">
-      <el-row>
-        <el-button type="danger" class="button" @click="signup()">注册</el-button>
-      </el-row>
+      <button class="button" @click="goSignUp()">注册</button>
     </div>
 
     <div class="describe">
@@ -17,7 +15,7 @@
       <h3>精品展示</h3>
       <div class="works">
           <div v-for="item in work" :key="item">
-            <img :src="item" alt="picture" @click="display()">
+            <img :src="item" alt="picture" @click="Display()">
           </div>
       </div>
     </div>
@@ -44,12 +42,10 @@ export default {
     };
   },
   methods: {
-    signup() {
+    goSignUp() {
       this.$router.push('/signup');
     },
-    display() {
-
-    },
+    Display() {},
   },
 };
 </script>
@@ -59,7 +55,6 @@ export default {
 
 .home {
    width: 100%;
-   background-color: $clr-white;
    margin-top: .2rem;
   .banner {
     position: relative;
@@ -69,8 +64,12 @@ export default {
     .button{
       position: relative;
       width: 6.25rem;
+      height: 2.3rem;
       left: 15%;
       top: 23rem;
+      background-color: $clr-main;
+      color: $clr-white;
+      border: none;
     }
   }
   .describe {
