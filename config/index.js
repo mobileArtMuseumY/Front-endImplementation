@@ -14,9 +14,12 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api/': {
-        target: 'http://120.79.239.141:8080',  // 请求本地 需要clone node-api项目
-        changeOrigin: true
-      }
+        target: 'http://120.79.239.141:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/': '/',
+        },
+      },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
@@ -34,7 +37,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

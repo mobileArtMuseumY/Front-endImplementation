@@ -11,6 +11,8 @@ const $http = axios.create({
   withCredentials: true,
 });
 
+$http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded;charset=UTF-8';
+
 // 请求拦截
 $http.interceptors.request.use(
   config => {

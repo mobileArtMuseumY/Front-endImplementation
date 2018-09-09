@@ -149,17 +149,22 @@ export default {
   font-size: 30px;
   font-weight: bold;
   width: 20%;
-  margin-left: 25%;
+  margin-left: 30%;
   color: #363636;
+  // border: 0.06rem solid $clr-border;
+
 }
 
 .main
 .content {
   position: relative;
   height: 80%;
+  width: 80%;
+  margin-left: 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  // border: 0.06rem solid $clr-border;
 }
 
 .content
@@ -167,6 +172,7 @@ export default {
   width: 50%;
   margin-top: 2rem;
   margin-left: 25%;
+  // border: 0.06rem solid $clr-border;
 }
 
 .content
