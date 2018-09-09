@@ -19,8 +19,6 @@ Vue.prototype.$cookie = cookie;
 Vue.prototype.$session = session;
 Vue.prototype.$regx = regx;
 Vue.prototype.$notify = Notification;
-// Vue.prototype.$loading = Loading.service;
-// Vue.prototype.$message = Message;
 
 Vue.use(components);
 

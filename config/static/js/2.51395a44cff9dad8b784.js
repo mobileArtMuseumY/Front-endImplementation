@@ -1,0 +1,2 @@
+webpackJsonp([2],{KbCL:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var r=n("VU/8")({data:function(){return{msg:"学生主页"}}},s,!1,function(t){n("OfdJ")},"data-v-c1eda046",null);e.default=r.exports},OfdJ:function(t,e){}});
+//# sourceMappingURL=2.51395a44cff9dad8b784.js.map

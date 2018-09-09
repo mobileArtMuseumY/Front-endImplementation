@@ -1,0 +1,2 @@
+webpackJsonp([5],{"+ygq":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var r=n("VU/8")({data:function(){return{msg:"发现"}}},s,!1,function(t){n("mmIU")},"data-v-341c4d90",null);e.default=r.exports},mmIU:function(t,e){}});
+//# sourceMappingURL=5.d50c14b36cf016c3d7ab.js.map

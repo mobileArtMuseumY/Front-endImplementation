@@ -78,7 +78,6 @@ export default {
         enterpriseSignIn(data).then(res => {
           // 将用户信息存入cookie中
           this.message('hello');
-          // this.message(res);
           set('token', res.msg);
           set('userName', this.userName);
           this.$router.push('/enterpriseHome');

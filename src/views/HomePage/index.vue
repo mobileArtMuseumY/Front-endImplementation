@@ -89,12 +89,13 @@ export default {
     padding: 3rem;
     height: 45rem;
     .works {
-      padding: .3rem;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
-      flex-wrap: wrap;
+      // padding: .3rem;
+      // display: flex;
+      // // flex-direction: row;
+      // justify-content: space-around;
+      // align-items: center;
+      // flex-wrap: wrap;
+      column-count: 4;
       box-shadow: $shadow-work;
       img {
         width: 13rem;
