@@ -14,6 +14,6 @@
   Opening index.html over file:// won't work.`。   
   图片：   
   ![build error](https://github.com/syt-honey/study_picture/blob/master/album/build_error.png)
-  - [ ] 使用nginx部署访问服务器出错，504。   
+  - [ ] 使用nginx部署访问服务器出错，404。   
   图片：   
   ![access server error](https://github.com/syt-honey/study_picture/blob/master/album/nginx_error.png)
