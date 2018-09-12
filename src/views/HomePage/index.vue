@@ -12,7 +12,7 @@
     </div>
 
     <div class="display">
-      <h3>精品展示</h3>
+      <h3>美图欣赏</h3>
       <div class="works">
           <div v-for="item in work" :key="item">
             <img :src="item" alt="picture" @click="Display()">
@@ -24,14 +24,21 @@
 </template>
 
 <script>
-import picture1 from '../../../static/images/works/bird.jpg';
-import picture2 from '../../../static/images/works/currants.jpg';
-import picture3 from '../../../static/images/works/flower.jpg';
-import picture4 from '../../../static/images/works/rustic.jpg';
-import picture5 from '../../../static/images/works/water-bottle.jpg';
-import picture6 from '../../../static/images/works/woman.jpg';
-import picture7 from '../../../static/images/works/fog.jpg';
-import picture8 from '../../../static/images/works/cat.jpg';
+/**
+ * 作用：网站首页
+ * 状态：一种
+ * 样式要求：暂时没有(将来可能需要添加一些特效，以后找到了想加的再贴过来~)
+ * 问题：暂时没有
+ */
+
+import picture1 from '../../../static/images/home/bird.jpg';
+import picture2 from '../../../static/images/home/currants.jpg';
+import picture3 from '../../../static/images/home/flower.jpg';
+import picture4 from '../../../static/images/home/rustic.jpg';
+import picture5 from '../../../static/images/home/water-bottle.jpg';
+import picture6 from '../../../static/images/home/woman.jpg';
+import picture7 from '../../../static/images/home/fog.jpg';
+import picture8 from '../../../static/images/home/cat.jpg';
 
 export default {
   data() {
@@ -43,9 +50,13 @@ export default {
   },
   methods: {
     goSignUp() {
-      this.$router.push('/signup');
+      // 暂时提供进入企业主页的入口，仅供测试时使用
+      this.$router.push('/enterpriseHomePage');
     },
-    Display() {},
+    Display() {
+      // 点击图片发生的动作
+      // 暂时不需要
+    },
   },
 };
 </script>
@@ -59,7 +70,7 @@ export default {
   .banner {
     position: relative;
     height: $h-banner;
-    background-image: url('/static/images/banner/background.jpg');
+    background-image: url('/static/images/home/background.jpg');
     background-size: cover;
     .button{
       position: relative;
@@ -89,18 +100,14 @@ export default {
     padding: 3rem;
     height: 45rem;
     .works {
-      // padding: .3rem;
-      // display: flex;
-      // // flex-direction: row;
-      // justify-content: space-around;
-      // align-items: center;
-      // flex-wrap: wrap;
       column-count: 4;
       box-shadow: $shadow-work;
+      // 图片布局看的很不舒服，margin太多
       img {
         width: 13rem;
         height: 15rem;
-        margin-left: 5rem;
+        margin-left: 3rem;
+        margin-right: 3rem;
         margin-top: 1.5rem;
         margin-bottom: 1.5rem;
         box-shadow: $shadow-work;

@@ -11,6 +11,7 @@ const $http = axios.create({
   withCredentials: true,
 });
 
+// 传输数据和传输文件的请求头不相同
 $http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded;charset=UTF-8';
 
 // 请求拦截
@@ -66,12 +67,13 @@ function checkCode(res) {
   return res;
 }
 
-const get = (url, params = {}) => {
+const get = (url, data = {}) => {
   if (!url) return;
   return $http({
     method: 'get',
     url,
-    params,
+    data,
+    headers: {'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8'},
   }).then(checkStatus).then(checkCode);
 };
 const post = (url, data = {}) => {
@@ -80,9 +82,32 @@ const post = (url, data = {}) => {
     method: 'post',
     url,
     data,
+    headers: {'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8'},
+  }).then(checkStatus).then(checkCode)
+};
+
+// 发送文件请求
+const getFile = (url, data = {}) => {
+  if (!url) return;
+  return $http({
+    method: 'get',
+    url,
+    data,
+    headers: {'Content-Type': 'multipart/form-data'},
+  }).then(checkStatus).then(checkCode);
+};
+const postFile = (url, data = {}) => {
+  if (!url) return;
+  return $http({
+    method: 'post',
+    url,
+    data,
+    headers: {'Content-Type': 'multipart/form-data'},
   }).then(checkStatus).then(checkCode)
 };
 export default {
   get,
   post,
+  getFile,
+  postFile,
 };

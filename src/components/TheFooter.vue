@@ -4,7 +4,7 @@
       <div class="footer-session logo">
         <icon class="icon" name="logo" scale="5"></icon>
         <div class="help">
-          <icon class="icon" name="help" scale="2"></icon>
+          <icon class="icon help" name="help" scale="2"></icon>
           <!-- 跳转到联系管理员页面 -->
           <a href="">帮助&amp;支持</a>
         </div>
@@ -59,18 +59,29 @@
     </div>
       <div class="copyright">
         <div class="content-copy">@2018 **** all rights reserved .</div>
-        <div class="content-made">Made by H&Y <img src="\static\images\hearticon.png" alt="hearticon">.</div>
+        <div class="content-made">Made by H&Y <img src="\static\images\footer\hearticon.png" alt="hearticon">.</div>
       </div>
   </div>
 </template>
 
 <script>
+/**
+ * 作用：页面的footer
+ * 状态：一种                                   已完成
+ * 样式要求：
+ *   1. 始终在最底部                           未完成
+ *   2. hover时颜色变为红色($clr-main)        已完成
+ * 问题：
+ *   1. 当nav的样式为scopedfooter才能正常显示，为什么？
+ *   2. nav的样式为什么不是scoped的？
+ */
 export default {
-
+	name: 'the-footer',
+	data() {},
 };
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
 @import 'src/assets/scss/index';
 
 .footer{
@@ -79,50 +90,44 @@ export default {
   width: 100%;
   background-color: $clr-white;
   height: $h-footer;
-  border: .06rem solid $clr-border;
+  border-top: .06rem solid $clr-border;
 }
-
 .footer-session-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   margin-top: 3%;
 }
-
 .footer-session {
   display: flex;
   flex-direction: column;
 }
-
 .a {
   display: flex;
   flex-direction: column;
   margin-top: 1.3rem;
 }
-
 .logo {
   display: flex;
   flex-direction: column;
   padding-top: 4%;
 }
-
 .github-icon {
   margin-top: .3rem;
 }
-
 .github {
   margin-bottom: .5rem;
 }
-
 a {
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  display: inline-block;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  height: 2rem;
 }
-
 .title {
   font-size: .9rem;
 }
-
 .copyright {
   display: flex;
   flex-direction: row;
@@ -130,11 +135,14 @@ a {
   color: $clr-footer-font;
   font-size: .8rem;
 }
-
 .content-copy,
 .content-made {
   color: $clr-footer-font;
   font-size: .8rem;
+}
+
+.help {
+  margin-left: .3rem;
 }
 
 </style>

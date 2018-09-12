@@ -82,9 +82,6 @@ input {
   font-size: $font-size-input;
   padding-inline-start: .6rem;
   color: $clr-gray;
-  &:hover {
-    border-radius: 0;
-  }
 }
 
 ::-webkit-input-placeholder {

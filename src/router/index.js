@@ -47,12 +47,12 @@ const constRouterMap = [
         component: () => import('@/views/Explore'),
       },
       {
-        path: 'enterpriseHome',
+        path: 'enterpriseHomePage',
         name: '企业主页',
         component: () => import('@/views/User/EnterpriseHomePage'),
       },
       {
-        path: 'studentHome',
+        path: 'studentHomePage',
         name: '学生主页',
         component: () => import('@/views/User/StudentHomePage'),
       },

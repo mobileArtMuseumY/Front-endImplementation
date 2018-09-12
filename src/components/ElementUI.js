@@ -6,6 +6,7 @@ import {
   Message,
   Input,
   Loading,
+  Upload,
 } from 'element-ui';
 
 Vue.prototype.$message = Message;
@@ -15,3 +16,4 @@ Vue.use(FormItem);
 Vue.use(Button);
 Vue.use(Input);
 Vue.use(Loading);
+Vue.use(Upload);

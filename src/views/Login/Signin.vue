@@ -10,13 +10,13 @@
          <label>昵称或邮箱：</label>
          <br>
          <br>
-         <input type="text" v-model="userName" placeholder="请输入您的昵称或邮箱..." aria-label="昵称或邮箱">
+         <input type="text" v-model="userName" placeholder="请输入您的昵称或邮箱..." >
       </div>
       <div class="box">
          <label>密码：</label>
          <br>
          <br>
-         <input type="password" v-model="userPwd" @keyup.enter="goSigIn()" placeholder="请输入您的密码..." aria-label="密码">
+         <input type="password" v-model="userPwd" @keyup.enter="goSigIn()" placeholder="请输入您的密码..." >
       </div>
       </div>
       <div class="content">
@@ -30,8 +30,28 @@
   </div>
 </template>
 <script>
+/**
+ * 作用：网站登录
+ * 角色：企业、学生
+ * 样式要求：暂时没有
+ * 问题：
+ *   1. 发送请求不成功(连不上服务器)
+ *   2. 如何存储用户状态？？？(待测试)
+ *   3. 
+ *   ```
+ *   //这个是不是默认的？
+     input::-ms-clear {
+        display: inline;
+     }
+     input::-ms-reveal {
+        display: inline;
+     }
+ *   ```
+ *   4. 输入框的文本检查还未解决
+ */
 import { enterpriseSignIn, studentSignIn } from '../../api/user';
 import { set } from '../../utils/cookie';
+import { modules } from '../../store/index';
 
 export default {
   data() {
@@ -40,7 +60,6 @@ export default {
       role: '',
       userName: '',
       userPwd: '',
-      logintxt: '登录',
     };
   },
   computed: {
@@ -61,6 +80,7 @@ export default {
         this.message('我是学生');
       }
     },
+    // 登录
     goSignIn() {
       if (!this.role) {
         this.message('请选择角色！');
@@ -76,18 +96,27 @@ export default {
       }
       if (this.role === '企业') {
         enterpriseSignIn(data).then(res => {
+          // 存储登录状态，有问题。。。。
+          user.role = this.role;
+          user.signIn = true;
+          user.userInfo = data;
+          
           // 将用户信息存入cookie中
-          this.message('hello');
           set('token', res.msg);
           set('userName', this.userName);
-          this.$router.push('/enterpriseHome');
+          this.$router.push('/enterpriseHomePage');
         });
       } else {
         studentSignIn(data).then(res => {
-          this.message('hello');
+          // 存储登录状态，
+          user.role = this.role;
+          user.signIn = true;
+          user.userInfo = data;
+
+          // 将用户信息存入cookie中
           set('token', res.msg);
           set('userName', this.userName);
-          this.$router.push('/studentHome');
+          this.$router.push('/studentHomePage');
         });
       }
     },
@@ -113,12 +142,13 @@ export default {
   display: flex;
   background-image: url('/static/images/signin/fisherman.jpg');
   background-repeat: no-repeat;
+  background-size: 100% 100%;
   .main {
     position: relative;
     width: 23rem;
-    height: 30rem;
-    margin-top: 6rem;
-    margin-left: 10%;
+    height: 70%;
+    margin-top: 8%;
+    margin-left: 8%;
     padding: 0.3rem;
     box-shadow: $shadow-work;
     background-color: $clr-white;

@@ -2,8 +2,8 @@
 const user = {
   state: {
     role: null,
-    login: false,
-    userInfo: null,
+    signIn: false,
+    userInfo: {},
   },
   mutations: {},
   actions: {},
