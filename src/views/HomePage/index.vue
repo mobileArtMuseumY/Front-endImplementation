@@ -98,19 +98,26 @@ export default {
   .display {
     position: relative;
     padding: 3rem;
-    height: 45rem;
+    // height: 45rem;
     .works {
-      column-count: 4;
+      padding: 1em;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: space-around;
       box-shadow: $shadow-work;
       // 图片布局看的很不舒服，margin太多
       img {
-        width: 13rem;
-        height: 15rem;
-        margin-left: 3rem;
-        margin-right: 3rem;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
+        border-radius: 4px;
+        width: 20vw;
+        height: calc(20vw * 3 / 4);
+        margin: 1em;
         box-shadow: $shadow-work;
+      }
+      &:after {
+        content: "";
+        width: 20vw;;
+        margin: 0 1em;
       }
     }
   }
