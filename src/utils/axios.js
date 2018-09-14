@@ -2,6 +2,8 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import { getToken } from './auth';
+
 
 const BASE_API = process.env.NODE_ENV === 'production' ? '' : '/api';
 
@@ -12,12 +14,13 @@ const $http = axios.create({
 });
 
 // 传输数据和传输文件的请求头不相同
-$http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded;charset=UTF-8';
+// $http.headers['Content-Type'] = 'application/x-www=form-urlencoded;charset=UTF-8';
 
 // 请求拦截
 $http.interceptors.request.use(
   config => {
     NProgress.start();
+    if (getToken()) config.headers.Authorization = getToken();
     return config;
   },
   err => Promise.reject(err),
@@ -49,7 +52,7 @@ function checkStatus(res) {
   NProgress.done();
   return {
     code: 0,
-    message: `Error:${res.status} 服务器出错!`,
+    message: `Error:${res.status} ${res.data.message || '服务器出错!'}`,
     data: res.statusText,
   };
 }
@@ -67,43 +70,43 @@ function checkCode(res) {
   return res;
 }
 
-const get = (url, data = {}) => {
+export const get = (url, data = {}) => {
   if (!url) return;
   return $http({
     method: 'get',
     url,
     data,
-    headers: {'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8'},
+    headers: { 'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8' },
   }).then(checkStatus).then(checkCode);
 };
-const post = (url, data = {}) => {
+export const post = (url, data = {}) => {
   if (!url) return;
   return $http({
     method: 'post',
     url,
     data,
-    headers: {'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8'},
-  }).then(checkStatus).then(checkCode)
+    headers: { 'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8' },
+  }).then(checkStatus).then(checkCode);
 };
 
 // 发送文件请求
-const getFile = (url, data = {}) => {
+export const getFile = (url, data = {}) => {
   if (!url) return;
   return $http({
     method: 'get',
     url,
     data,
-    headers: {'Content-Type': 'multipart/form-data'},
+    headers: { 'Content-Type': 'multipart/form-data' },
   }).then(checkStatus).then(checkCode);
 };
-const postFile = (url, data = {}) => {
+export const postFile = (url, data = {}) => {
   if (!url) return;
   return $http({
     method: 'post',
     url,
     data,
-    headers: {'Content-Type': 'multipart/form-data'},
-  }).then(checkStatus).then(checkCode)
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }).then(checkStatus).then(checkCode);
 };
 export default {
   get,

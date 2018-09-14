@@ -1,2 +1,0 @@
-webpackJsonp([8],{noqq:function(t,n){},z4Qd:function(t,n,e){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var r=e("VU/8")({data:function(){return{msg:"发布项目"}}},s,!1,function(t){e("noqq")},"data-v-13ff114b",null);n.default=r.exports}});
-//# sourceMappingURL=8.a962aac3f64cb8d01eb9.js.map

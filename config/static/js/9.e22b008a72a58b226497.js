@@ -1,2 +1,0 @@
-webpackJsonp([9],{KUBY:function(t,e){},kwQo:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var r=n("VU/8")({data:function(){return{msg:"人才排行榜"}}},s,!1,function(t){n("KUBY")},"data-v-069405fe",null);e.default=r.exports}});
-//# sourceMappingURL=9.e22b008a72a58b226497.js.map

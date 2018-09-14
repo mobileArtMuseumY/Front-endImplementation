@@ -1,10 +1,13 @@
-import { post } from 'axios';
+import { post } from '../utils/axios';
 
 // 企业登录
-export const enterpriseSignIn = (data) => post('/api/bussiness/login', data);
+export const enterpriseSignIn = (data) => post('/bussiness/login', data);
 
 // 学生登录
-export const studentSignIn = (data) => post('/api/student/login', data);
+export const studentSignIn = (data) => post('/student/login', data);
 
 // 企业注册
-export const enterpriseSignUp = (data) =>post('/api/business/register', data);
+export const enterpriseSignUp = (data) => post('/business/register', data);
+
+//  管理员登陆
+export const adminSignIn = (data) => post('/admin/login', data);

@@ -43,50 +43,46 @@
  *   4. 当往下滑时nav背景变为透明
  */
 export default {
-	name: 'the-nav',
-	data() {
-		return {
-			search: '',
-		};
-	},
-	props: {
-		nav: {
-			type: Array,
-			required: true,
-		},
-	},
-	computed: {
-		return: {
-			theNav() {
-				if (this.nav.length) {
-					return this.nav.filter(x => x.name);
-				} else {
-					return msg;
-				}
-			},
-		},
-	},
-	methods: {
-		goSignIn() {
-			this.$router.push('/signin');
-		},
-		goSignUp() {
-			this.$router.push('/signup');
-		},
-		// 没起作用
-		watchScroll() {
-			var scrollTop = window.pageXOffset || document.documentElement.scrollTop || document.body.scrollTop;
-			if (scrollTop > 49) {
-				this.navBarFixed = true;
-			} else {
-				this.navBarFixed = false;
-			}
-		},
-	},
-	// mounted: {
-	//   // 事件监听滚动条
-	//   window.addEventListener('scroll', this.watchScroll);
-	// },
+  name: 'the-nav',
+  data() {
+    return {
+      search: '',
+    };
+  },
+  props: {
+    nav: {
+      type: Array,
+      required: true,
+    },
+  },
+  computed: {
+    theNav() {
+      if (this.nav.length) {
+        return this.nav.filter(x => x.name);
+      }
+    },
+  },
+  methods: {
+    goSignIn() {
+      this.$router.push('/signin');
+    },
+    goSignUp() {
+      this.$router.push('/signup');
+    },
+    // 没起作用
+    watchScroll() {
+      const scrollTop = window.pageXOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 49) {
+        this.navBarFixed = true;
+      } else {
+        this.navBarFixed = false;
+      }
+    },
+  },
+  // mounted: {
+  //   // 事件监听滚动条
+  //   window.addEventListener('scroll', this.watchScroll);
+  // },
 };
 </script>
 
@@ -96,7 +92,7 @@ export default {
 .nav-wrap {
   position: fixed;
   top: 0;
-  z-index: 9999;
+  z-index: 99;
 	width: 100%;
 	height: $h-nav;
 	display: flex;

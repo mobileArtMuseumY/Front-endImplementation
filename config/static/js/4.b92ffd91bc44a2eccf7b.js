@@ -1,2 +1,0 @@
-webpackJsonp([4],{"4GuV":function(t,e){},dFQw:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var r=n("VU/8")({data:function(){return{msg:"浏览项目"}}},s,!1,function(t){n("4GuV")},"data-v-7d950c9a",null);e.default=r.exports}});
-//# sourceMappingURL=4.b92ffd91bc44a2eccf7b.js.map

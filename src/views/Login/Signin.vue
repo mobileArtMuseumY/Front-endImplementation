@@ -2,7 +2,7 @@
   <div class="container">
     <div class="main">
       <div class="role">
-        <span id="e-clicked" @click="confirmRole('企业')">企业</span>
+        <span id="e-clicked" @click="confirmRole('企业')" style="z-index:9999">企业</span>
         <span id="s-clicked" @click="confirmRole('学生')">学生</span>
       </div>
       <div class="big-box">
@@ -37,7 +37,7 @@
  * 问题：
  *   1. 发送请求不成功(连不上服务器)
  *   2. 如何存储用户状态？？？(待测试)
- *   3. 
+ *   3.
  *   ```
  *   //这个是不是默认的？
      input::-ms-clear {
@@ -49,8 +49,9 @@
  *   ```
  *   4. 输入框的文本检查还未解决
  */
-import { enterpriseSignIn, studentSignIn } from '../../api/user';
-import { set } from '../../utils/cookie';
+import axios from '../../utils/axios';
+import { enterpriseSignIn, studentSignIn, adminSignIn } from '../../api/user';
+import Cookie from '../../utils/cookie';
 import { modules } from '../../store/index';
 
 export default {
@@ -100,24 +101,29 @@ export default {
           user.role = this.role;
           user.signIn = true;
           user.userInfo = data;
-          
+
           // 将用户信息存入cookie中
           set('token', res.msg);
           set('userName', this.userName);
           this.$router.push('/enterpriseHomePage');
         });
       } else {
-        studentSignIn(data).then(res => {
-          // 存储登录状态，
-          user.role = this.role;
-          user.signIn = true;
-          user.userInfo = data;
+        const userData = { username: this.userName, password: this.userPwd };
 
-          // 将用户信息存入cookie中
-          set('token', res.msg);
-          set('userName', this.userName);
-          this.$router.push('/studentHomePage');
-        });
+        adminSignIn(userData)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
+        // studentSignIn(data).then(res => {
+        //   // 存储登录状态，
+        //   user.role = this.role;
+        //   user.signIn = true;
+        //   user.userInfo = data;
+
+        //   // 将用户信息存入cookie中
+        //   set('token', res.msg);
+        //   set('userName', this.userName);
+        //   this.$router.push('/studentHomePage');
+        // });
       }
     },
     goSignUp() {

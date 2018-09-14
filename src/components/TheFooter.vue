@@ -76,8 +76,10 @@
  *   2. nav的样式为什么不是scoped的？
  */
 export default {
-	name: 'the-footer',
-	data() {},
+  name: 'the-footer',
+  data() {
+    return {};
+  },
 };
 </script>
 
