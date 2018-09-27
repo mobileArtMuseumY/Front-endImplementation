@@ -21,7 +21,7 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   data:function () {
     return {

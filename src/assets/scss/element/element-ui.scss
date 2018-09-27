@@ -9,6 +9,11 @@ $--color-warning: #ff9900;
 $--color-danger: #FF3300;
 $--color-info: #dddfe6;
 
+//不起作用？
+.el-input__inner {
+  height: .5rem;
+}
+
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 

@@ -12,16 +12,17 @@
     </div>
     <div class="nav-right">
       <div class="nav-login">
-        <span @click="goSignIn()">登录</span>
+        <span id="signin-clicked" @click="goSignIn()">登录</span>
           |
-        <span @click="goSignUp()">注册</span>
+        <span id="signiup-clicked" @click="goSignUp()">注册</span>
       </div>
       <div class="nav-search">
         <el-input
           placeholder="search"
           prefix-icon="el-icon-search"
           v-model="search"
-          clearable>
+          clearable
+          style="border: 0px">
         </el-input>
       </div>
     </div>
@@ -34,65 +35,58 @@
  * 状态：两种(已登录、未登录)                   未完成
  * 样式要求：
  *   1. 始终置顶(postion: fixed; top: 0;)      已完成
- *   2. span被选中时颜色变为红色($clr-main)
+ *   2. span被选中时颜色变为红色($clr-main)    已完成
  *   3. hover时颜色变为红色($clr-main)        已完成
  * 问题：
  *   1. 添加置顶样式时，nav会消失                                                //已解决
- *   2. 被选中后颜色不能改变(设置:active 不起作用 )
+ *   2. 被选中后颜色不能改变(设置:active 不起作用 )                               //换了一种解决方式
  *   3. name是起什么作用的？为什么注释掉了页面里的nav也同样可以正常显示？           //已解决
- *   4. 当往下滑时nav背景变为透明
+ *   4. 当往下滑时nav背景变为透明                                               //未解决
+ *   5. 当点击span之后再点击导航栏时，span的颜色该如何变成black?                  //未解决
  */
 export default {
-  name: 'the-nav',
-  data() {
-    return {
-      search: '',
-    };
-  },
-  props: {
-    nav: {
-      type: Array,
-      required: true,
-    },
-  },
-  computed: {
-    theNav() {
-      if (this.nav.length) {
-        return this.nav.filter(x => x.name);
-      }
-    },
-  },
-  methods: {
-    goSignIn() {
-      this.$router.push('/signin');
-    },
-    goSignUp() {
-      this.$router.push('/signup');
-    },
-    // 没起作用
-    watchScroll() {
-      const scrollTop = window.pageXOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      if (scrollTop > 49) {
-        this.navBarFixed = true;
-      } else {
-        this.navBarFixed = false;
-      }
-    },
-  },
-  // mounted: {
-  //   // 事件监听滚动条
-  //   window.addEventListener('scroll', this.watchScroll);
-  // },
+	name: 'the-nav',
+	data() {
+		return {
+			search: '',
+		};
+	},
+	props: {
+		nav: {
+			type: Array,
+			required: true,
+		},
+	},
+	computed: {
+		theNav() {
+			if (this.nav.length) {
+				return this.nav.filter(x => x.name);
+			}
+		},
+	},
+	methods: {
+		goSignIn() {
+			document.getElementById('signin-clicked').style.color = 'red';
+			document.getElementById('signiup-clicked').style.color = 'black';
+			this.$router.push('/signin');
+		},
+		goSignUp() {
+			document.getElementById('signin-clicked').style.color = 'black';
+			document.getElementById('signiup-clicked').style.color = 'red';
+			this.$router.push('/signup');
+		},
+	},
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import 'src/assets/scss/index';
 
 .nav-wrap {
-  position: fixed;
-  top: 0;
-  z-index: 99;
+  font-size: 10px;
+	position: fixed;
+	top: 0;
+	z-index: 99;
 	width: 100%;
 	height: $h-nav;
 	display: flex;
@@ -113,7 +107,7 @@ export default {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	font-size: 0.8rem;
+	font-size: 10px;
 }
 .nav-right {
 	display: flex;
@@ -125,6 +119,7 @@ export default {
 		margin-left: 1rem;
 		.el-input__inner {
 			border: none;
+			border-bottom: 0.06rem solid $clr-border;
 			&:hover {
 				border-bottom: 0.06rem solid $clr-border;
 			}
@@ -138,10 +133,6 @@ export default {
 			&:hover {
 				color: $clr-main;
 			}
-			//没用？？？
-			&.active {
-				color: $clr-main;
-			}
 		}
 	}
 }
@@ -149,7 +140,7 @@ a {
 	display: inline-block;
 	text-align: center;
 	color: $clr-black;
-	font-size: 0.9rem;
+	font-size: 0.8rem;
 	line-height: 3rem;
 	padding: 0 0.5rem;
 	margin: 0 1rem;
@@ -159,5 +150,5 @@ a {
 		border-bottom-color: $clr-main;
 	}
 }
-
 </style>
+

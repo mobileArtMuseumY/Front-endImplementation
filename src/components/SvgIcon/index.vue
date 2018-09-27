@@ -1,6 +1,6 @@
 <template>
-  <svg :class="svgClass" :style="style" aria-hidden="true">
-    <use :xlink:href="iconName"></use>
+  <svg :class="svgClass" :style="style" aria-hidden="true" viewBox="0 0 19 19">
+    <use :href="iconName"></use>
   </svg>
 </template>
 
@@ -33,7 +33,7 @@ export default {
     },
     svgClass() {
       if (this.className) {
-        return ` ${this.class}`;
+        return `svg-icon ${this.className}`;
       }
       return 'svg-icon';
     },

@@ -4,7 +4,6 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from './auth';
 
-
 const BASE_API = process.env.NODE_ENV === 'production' ? '' : '/api';
 
 const $http = axios.create({
@@ -14,13 +13,15 @@ const $http = axios.create({
 });
 
 // 传输数据和传输文件的请求头不相同
-// $http.headers['Content-Type'] = 'application/x-www=form-urlencoded;charset=UTF-8';
+// $http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded';
 
 // 请求拦截
 $http.interceptors.request.use(
   config => {
     NProgress.start();
-    if (getToken()) config.headers.Authorization = getToken();
+    if(getToken()) {
+      config.headers.Authorization = getToken();config.headers.Authorization = getToken();
+    }
     return config;
   },
   err => Promise.reject(err),
@@ -76,7 +77,7 @@ export const get = (url, data = {}) => {
     method: 'get',
     url,
     data,
-    headers: { 'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8' },
+    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
   }).then(checkStatus).then(checkCode);
 };
 export const post = (url, data = {}) => {
@@ -85,7 +86,7 @@ export const post = (url, data = {}) => {
     method: 'post',
     url,
     data,
-    headers: { 'Content-Type': 'application/x-www=form-urlencoded;charset=UTF-8' },
+    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
   }).then(checkStatus).then(checkCode);
 };
 
@@ -105,12 +106,12 @@ export const postFile = (url, data = {}) => {
     method: 'post',
     url,
     data,
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': 'multipart/form-data; boundary=-----------------------------7db372eb000e2' },
   }).then(checkStatus).then(checkCode);
 };
-export default {
-  get,
-  post,
-  getFile,
-  postFile,
-};
+// export default {
+//   get,
+//   post,
+//   getFile,
+//   postFile,
+// };

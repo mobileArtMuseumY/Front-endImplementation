@@ -41,7 +41,7 @@ a {
   outline: none;
   color: $clr-footer-font;
   text-decoration: none;
-  font-size: 10px;
+  font-size: 5px;
 }
 
 a:focus,
@@ -76,7 +76,6 @@ label {
 input {
   height: $h-input;
   width: $w-input;
-  border-color: $clr-gray;
   border: .06rem solid $clr-border;
   border-radius: 5px;
   font-size: $font-size-input;
@@ -110,6 +109,14 @@ button {
     color: $clr-white;
     border: none;
   }
+}
+
+textarea {
+  border-radius: 4px;
+  border: .06rem solid $clr-border;
+  padding-inline-start: .6rem;
+  height: 10rem;
+  line-height: 2rem;
 }
 
 li {
