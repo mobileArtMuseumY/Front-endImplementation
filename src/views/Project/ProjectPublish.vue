@@ -19,12 +19,11 @@
             <!-- :action="UploadUrl" -->
           <el-upload
             ref="upload"
-            action="uploadUrl"
-            accept="image/jpeg, image/png"
-            :data="fileData"
+            :action="uploadUrl()"
+            accept="image/jpeg,image/png"
             :limit="3"
             :on-exceed="handleExceed"
-            :auto-upload="false"
+            :auto-upload="true"
             :file-list="fileList"
             :before-upload="onBeforeUpload"
             :on-change="uploadAttachment"
@@ -98,130 +97,130 @@ import { skillList, publishProjectForm, publishProjectFile } from '@/api/project
 import { enterpriseSignUpFile } from '@/api/user';
 
 export default {
-	data() {
-		return {
-			title: '告诉我们您需要完成的事情',
-			ruleForm: {
-				projectName: '',
-				textarea: '',
-				selecSkill: [], // 被选中的skill
-				bidPeriod: '',
-				budget: '',
-				transaPeriod: '',
-			},
-			fileList: [],
-			options: [
-				{
-					value: '选项1',
-					label: '15',
-				},
-				{
-					value: '选项2',
-					label: '20',
-				},
-				{
-					value: '选项3',
-					label: '25',
-				},
-				{
-					value: '选项4',
-					label: '30',
-				},
-			],
-			projectSkill: [], // 用来接收请求到的skill
-			skills: [], // 用来存储另一种格式的skill，本地需要用到的格式
-			fileData: {
-				projectId: Number,
-			},
-		};
-	},
-	methods: {
-		uploadUrl() {
-			return '/project/upload';
-		},
-		uploadAttachment(file) {
-			this.fileList.push(file);
-		},
-		deleteAttachment(file) {
-			this.fileList.pop(file);
-		},
-		handleExceed() {
-			this.$message.error(`最多只能上传3个文件！,共选择了 ${this.fileList.length} 个文件！`);
-		},
-		onBeforeUpload(file) {
-			const isIMAGE = file.raw.type === 'image/jpeg' || file.raw.type === 'image/png';
-			const isL1M = file.size / 1024 / 1024 < 1;
+  data() {
+    return {
+      title: '告诉我们您需要完成的事情',
+      ruleForm: {
+        projectName: '',
+        textarea: '',
+        selecSkill: [], // 被选中的skill
+        bidPeriod: '',
+        budget: '',
+        transaPeriod: '',
+      },
+      fileList: [],
+      options: [
+        {
+          value: '选项1',
+          label: '15',
+        },
+        {
+          value: '选项2',
+          label: '20',
+        },
+        {
+          value: '选项3',
+          label: '25',
+        },
+        {
+          value: '选项4',
+          label: '30',
+        },
+      ],
+      projectSkill: [], // 用来接收请求到的skill
+      skills: [], // 用来存储另一种格式的skill，本地需要用到的格式
+      fileData: {
+        projectId: Number,
+      },
+    };
+  },
+  methods: {
+    uploadUrl() {
+      return '/api/business/register/upload';
+    },
+    uploadAttachment(file) {
+      this.fileList.push(file);
+    },
+    deleteAttachment(file) {
+      this.fileList.pop(file);
+    },
+    handleExceed() {
+      this.$message.error(`最多只能上传3个文件！,共选择了 ${this.fileList.length} 个文件！`);
+    },
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === 'image/jpeg' || file.type === 'image/png';
+      const isL1M = file.size / 1024 / 1024 < 3;
 
-			if (!isIMAGE) {
-				this.$message.error('上传文件只能是jpeg/png格式!');
-				return false;
-			}
-			if (!isL1M) {
-				this.$message.error('上传文件大小不能超过1M!');
-				return false;
-			}
-			return isIMAGE && isL1M;
-		},
-		onSuccess() {
-			this.$message.success('文件上传成功！');
-		},
-		publishProject() {
-			// 确定用户选择的技能，这个技能应该为[]
+      if (!isIMAGE) {
+        this.$message.error('上传文件只能是jpeg/png格式!');
+        return false;
+      }
+      if (!isL1M) {
+        this.$message.error('上传文件大小不能超过1M!');
+        return false;
+      }
+      return isIMAGE && isL1M;
+    },
+    onSuccess() {
+      this.$message.success('文件上传成功！');
+    },
+    publishProject() {
+      // 确定用户选择的技能，这个技能应该为[]
 
-			const test = 2;
-			const projectData = {
-				projectName: this.ruleForm.projectName,
-				projectDescription: this.ruleForm.textarea,
-				// skillList: this.ruleForm.selecSkill,
-				skillList: this.projectSkill,
-				tenderPeriod: this.ruleForm.bidPeriod,
-				budget: this.ruleForm.budget,
-				expectedTime: test,
-				// expectedTime: this.ruleForm.transaPeriod,
-			};
-			// this.fileData.projectId = 123456;
-			// const fileList = this.$refs.upload;
-			// console.log(fileList);
+      const test = 2;
+      const projectData = {
+        projectName: this.ruleForm.projectName,
+        projectDescription: this.ruleForm.textarea,
+        // skillList: this.ruleForm.selecSkill,
+        skillList: this.projectSkill,
+        tenderPeriod: this.ruleForm.bidPeriod,
+        budget: this.ruleForm.budget,
+        expectedTime: test,
+        // expectedTime: this.ruleForm.transaPeriod,
+      };
+      // this.fileData.projectId = 123456;
+      // const fileList = this.$refs.upload;
+      // console.log(fileList);
 
-			publishProjectForm(projectData)
-				.then(res => {
-					// console.log(res);
-					// const data = {
-					//   projectId: res.data.businessId,
-					//   file: this.fileList,
-					// };
-					// this.fileData.projectId = res.data.businessId;
-					// const fileList = this.fileList;
-					publishProjectFile(fileList)
-						.then(res => {
-							console.log(res);
-						})
-						.catch(err => {
-							console.log(err);
-						});
-				})
-				.catch(err => {
-					console.log(err);
-				});
-		},
-	},
-	mounted() {
-		// 从服务器端获取技能
-		skillList()
-			.then(res => {
-				// 将获取到的技能列表按照想要的格式赋给skills
-				this.projectSkill = res.data;
-				for (let i = 0; i < this.projectSkill.length; ++i) {
-					const object = [];
-					object.value = '选项' + (i + 1);
-					object.label = this.projectSkill[i].skillName;
-					this.skills.push(object);
-				}
-			})
-			.catch(err => {
-				console.log(err);
-			});
-	},
+      publishProjectForm(projectData)
+        .then(res => {
+          // console.log(res);
+          // const data = {
+          //   projectId: res.data.businessId,
+          //   file: this.fileList,
+          // };
+          // this.fileData.projectId = res.data.businessId;
+          // const fileList = this.fileList;
+          publishProjectFile(fileList)
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+  },
+  mounted() {
+    // 从服务器端获取技能
+    skillList()
+      .then(res => {
+        // 将获取到的技能列表按照想要的格式赋给skills
+        this.projectSkill = res.data;
+        for (let i = 0; i < this.projectSkill.length; ++i) {
+          const object = [];
+          object.value = `选项${i + 1}`;
+          object.label = this.projectSkill[i].skillName;
+          this.skills.push(object);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
 };
 </script>
 
