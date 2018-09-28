@@ -39,7 +39,7 @@ const constRouterMap = [
       {
         path: 'rank/student',
         name: '人才排行榜',
-        component: () => import('@/views/Rank/StudentRank'),
+        component: () => import('@/views/Rank/StudentRanking'),
       },
       {
         path: 'explore',
@@ -49,12 +49,12 @@ const constRouterMap = [
       {
         path: 'enterpriseHomePage',
         name: '企业主页',
-        component: () => import('@/views/User/EnterpriseHomePage'),
+        component: () => import('@/views/User/HomePageOfEnterprise'),
       },
       {
         path: 'studentHomePage',
         name: '学生主页',
-        component: () => import('@/views/User/StudentHomePage'),
+        component: () => import('@/views/User/HomePageOfStudent'),
       },
     ],
   },

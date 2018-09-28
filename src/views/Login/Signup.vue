@@ -66,7 +66,7 @@
  *   2. 在v-for展示出来后如何使用v-model，然后获取输入框中的数据         //已解决
  */
 
-import { enterpriseSignUpV, enterpriseSignUpC, enterpriseSignUpForm, enterpriseSignUpFile } from '../../api/user';
+import { enterpriseSignUpV, enterpriseSignUpC, enterpriseSignUpForm, enterpriseSignUpFile } from '@/api/user';
 
 export default {
 	data() {

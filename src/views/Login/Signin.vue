@@ -46,10 +46,10 @@
  *   4. 输入框的文本检查还未解决              已解决
  */
 
-import axios from '../../utils/axios';
-import { enterpriseSignIn, studentSignIn } from '../../api/user';
-import { setToken, setUser, getToken, getUser } from '../../utils/auth';
-import { modules } from '../../store/index';
+import axios from '@/utils/axios';
+import { enterpriseSignIn, studentSignIn } from '@/api/user';
+import { setToken, setUser, getToken, getUser } from '@/utils/auth';
+import { modules } from '@/store/index';
 
 export default {
 	data() {

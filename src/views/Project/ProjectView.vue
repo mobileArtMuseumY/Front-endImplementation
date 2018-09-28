@@ -12,9 +12,7 @@
       <div class="sortASkillFather">
         <div class="skill">
           <label>我的技能：</label>
-          <svg-icon icon="upload"></svg-icon>
-          <svg-icon icon="user"></svg-icon>
-          <!-- <icon :class="[rotate ? 'go': 'aa']" name="upload" scale="2" id="click" ></icon> -->
+          <svg-icon icon="upload" :class="[rotate ? 'go' : 'aa']" @click.native="getSkills()"></svg-icon>
         </div>
         <div class="sort">
           <label>分类：</label>
@@ -24,10 +22,21 @@
       </div>
     </div>
     <div class="main">
-      <v-for item></v-for>
+      <p>这是main</p>
     </div>
     <div class="pagination">
-
+      <p>hello</p>
+      <!-- <template v-if="count">
+        <ul>
+          <li v-for="item in items" :key="item">...</li>
+          <multi-paging
+          :page-index="currentPage"
+          :total="count"
+          :page-size="pageSize"
+          @change="pageChange">
+          </multi-paging>
+        </ul>
+      </template> -->
     </div>
   </div>
 </template>
@@ -49,20 +58,38 @@
  * 问题：
  *   1. 如何控制页面的大小？(页面大小自适应)
  */
+
+import { skillList, getProjectData } from '@/api/project';
+
 export default {
 	data() {
 		return {
 			search: '',
-			projectSkill: '',
 			rotate: true,
+			projectSkill: [],
+			skills: [], // 符合el-select的所有skill列表
+			selected: 0, // 当前被选中的项(时间或者关注度)
+			projectData: {
+				avatar: '',
+				businessName: '',
+				projectName: '',
+				projectDescription: '',
+				skillList: [], // 该项目拥有的skill
+				gmtCreate: '',
+				leftTime: Number,
+        budget: Number,
+			},
+			pageSize: 8,
+			currentPage: 1,
+			count: 0,
+			items: [],
 		};
 	},
 	methods: {
+		// 有点乱。。。
 		getSkills() {
 			this.$message('hello');
 			this.rotate = !this.rotate;
-			console.log(this.rotate);
-
 			// 发送请求
 			skillList()
 				.then(res => {
@@ -74,20 +101,57 @@ export default {
 						object.label = this.projectSkill[i].skillName;
 						this.skills.push(object);
 					}
-				})
-				.catch(err => {
+				}).catch(err => {
 					console.log(err);
 				});
 		},
 		sortOfTime() {
-			// 按照时间发送请求
+      // 按照时间发送请求
+      this.selected = 0;
+			const data = {
+				method: this.selected,
+				page: this.currentPage,
+				rows: this.pageSize,
+      };
+			this.getProject(data);
 		},
 		sortOfFocused() {
 			// 按照关注度发送请求
+			this.selected = 1;
+			const data = {
+				method: this.selected,
+				page: this.currentPage,
+				rows: this.pageSize,
+      };
+			this.getProject(data);
+		},
+		getProject(data) {
+			// 发送请求
+			getProjectData(data)
+				.then(res => {
+          this.items = res.data;
+					// this.projectData.avatar = res.data.avatar;
+					// this.projectData.businessName = res.data.businessName;
+					// this.projectData.projectName = res.data.projectName;
+					// this.projectData.projectDescription = res.data.projectDescription;
+					// this.projectData.skillList = res.data.skillList;
+					// this.projectData.gmtCreate = res.data.gmtCreate;
+					// this.projectData.leftTime = res.data.leftTime;
+          // this.projectData.budget = res.data.budget;
+          console.log(items);
+          this.count = res.data.count;
+				})
+				.then(err => {
+					console.log(err);
+				});
+		},
+		pageChange(page) {
+			this.currentPage = page;
+			this.sortOfFocused();
 		},
 	},
 	mounted() {
-		this.sortOfTime();
+		this.sortOfFocused();
 	},
 };
 </script>
@@ -96,6 +160,7 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
+  height: 100%;
 	margin-top: $h-nav;
 	width: 100%;
 	.filter {
@@ -125,7 +190,15 @@ export default {
 	.main {
 		width: 100%;
 		border: 0.03rem solid $clr-border;
+    height: 50vw;
 	}
+  .pagination {
+		width: 100%;
+    height: 3rem;;
+    text-align: center;
+		border: 0.03rem solid $clr-main;
+    margin-bottom: 1rem;
+  }
 }
 
 span {
@@ -138,27 +211,14 @@ span {
 	}
 }
 
-.icon:hover {
-	cursor: pointer;
-	transform: rotate(-90deg);
-	-webkit-transform: rotate(-90deg);
-	border: none;
-}
-
 .go {
-	transform: rotate(-180deg);
-	border: none;
+	cursor: pointer;
+	transform: rotate(180deg);
 	transition: all 2s;
 }
 
 .aa {
-	transition: all 2s;
-}
-
-#click:hover {
-	transform: rotate(-180deg);
-	// border: none;
-	transition: all 2s;
+	cursor: pointer;
 }
 </style>
 

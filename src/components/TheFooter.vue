@@ -2,9 +2,11 @@
   <div class="footer">
     <div class="footer-session-container">
       <div class="footer-session logo">
-        <icon class="icon" name="logo" scale="5"></icon>
+        <!-- <icon class="icon" name="logo" scale="5"></icon> -->
+        <svg-icon icon="logo" style="width: 2rem;height: 2rem;"></svg-icon>
         <div class="help">
-          <icon class="icon help" name="help" scale="2"></icon>
+          <svg-icon icon="help" style="width: .9rem;height: .9rem;"></svg-icon>
+          <!-- <icon class="icon help" name="help" scale="2"></icon> -->
           <!-- 跳转到联系管理员页面 -->
           <a href="">帮助&amp;支持</a>
         </div>
@@ -45,11 +47,11 @@
         <div class="title">联系开发者</div>
           <div class="a">
             <div class="github">
-              <icon class="icon" name="github" scale="2"></icon>
+              <svg-icon icon="github" ></svg-icon>
               <a href="https://github.com/mllove">mllove</a>
             </div>
             <div class="github">
-              <icon class="icon github-icon" name="github" scale="2"></icon>
+              <svg-icon icon="github" ></svg-icon>
               <a class="github-name" href="https://github.com/syt-honey">syt-honey</a>
             </div>
             <a href="">mlhaprial1028@gmail.com</a>
@@ -76,75 +78,74 @@
  *   2. nav的样式为什么不是scoped的？
  */
 export default {
-  name: 'the-footer',
-  data() {
-    return {};
-  },
+	name: 'the-footer',
+	data() {
+		return {};
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import 'src/assets/scss/index';
 
-.footer{
-  position: relative;
-  float: bottom;
-  width: 100%;
-  background-color: $clr-white;
-  height: $h-footer;
-  border-top: .06rem solid $clr-border;
+.footer {
+	position: relative;
+	float: bottom;
+	width: 100%;
+	background-color: $clr-white;
+	height: $h-footer;
+	border-top: 0.06rem solid $clr-border;
 }
 .footer-session-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 3%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	margin-top: 3%;
 }
 .footer-session {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 .a {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1.3rem;
+	display: flex;
+	flex-direction: column;
+	margin-top: 1.3rem;
 }
 .logo {
-  display: flex;
-  flex-direction: column;
-  padding-top: 4%;
+	display: flex;
+	flex-direction: column;
+	padding-top: 4%;
 }
 .github-icon {
-  margin-top: .3rem;
+	margin-top: 0.3rem;
 }
 .github {
-  margin-bottom: .5rem;
+	margin-bottom: 0.5rem;
 }
 a {
-  display: inline-block;
-  text-align: left;
-  padding: 0;
-  margin: 0;
-  height: 2rem;
+	display: inline-block;
+	text-align: left;
+	padding: 0;
+	margin: 0;
+	height: 2rem;
 }
 .title {
-  font-size: .9rem;
+	font-size: 0.9rem;
 }
 .copyright {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  color: $clr-footer-font;
-  font-size: .8rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	color: $clr-footer-font;
+	font-size: 0.8rem;
 }
 .content-copy,
 .content-made {
-  color: $clr-footer-font;
-  font-size: .8rem;
+	color: $clr-footer-font;
+	font-size: 0.8rem;
 }
 
 .help {
-  margin-left: .3rem;
+	margin-left: 0.3rem;
 }
-
 </style>

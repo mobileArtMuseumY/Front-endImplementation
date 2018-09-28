@@ -1,7 +1,8 @@
 <template>
   <div class="nav-wrap">
     <div class="nav-left">
-      <icon class="icon" name="logo" scale="5"></icon>
+      <!-- <icon class="icon" name="logo" scale="5"></icon> -->
+      <svg-icon icon="logo" style="width: 2rem;height: 2rem;"></svg-icon>
     </div>
     <div class="nav-center">
       <router-link
@@ -83,7 +84,7 @@ export default {
 @import 'src/assets/scss/index';
 
 .nav-wrap {
-  font-size: 10px;
+	font-size: 10px;
 	position: fixed;
 	top: 0;
 	z-index: 99;

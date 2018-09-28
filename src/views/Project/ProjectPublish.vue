@@ -94,8 +94,8 @@
  *   8. 当页面缩小时，组件不能随着页面缩小而缩小(需要改用vw作为单位)
  *   9. 还有点问题！！！怎么将用户上传的文件加入到fileList？？    // 已完成
  */
-import { skillList, publishProjectForm, publishProjectFile } from '../../api/project';
-import { enterpriseSignUpFile } from '../../api/user';
+import { skillList, publishProjectForm, publishProjectFile } from '@/api/project';
+import { enterpriseSignUpFile } from '@/api/user';
 
 export default {
 	data() {
@@ -172,16 +172,16 @@ export default {
 			const projectData = {
 				projectName: this.ruleForm.projectName,
 				projectDescription: this.ruleForm.textarea,
-				skillList: this.ruleForm.selecSkill,
-				// skillList: this.projectSkill,
+				// skillList: this.ruleForm.selecSkill,
+				skillList: this.projectSkill,
 				tenderPeriod: this.ruleForm.bidPeriod,
 				budget: this.ruleForm.budget,
 				expectedTime: test,
 				// expectedTime: this.ruleForm.transaPeriod,
 			};
-			this.fileData.projectId = 123456;
-			const fileList = this.$refs.upload;
-			console.log(fileList);
+			// this.fileData.projectId = 123456;
+			// const fileList = this.$refs.upload;
+			// console.log(fileList);
 
 			publishProjectForm(projectData)
 				.then(res => {

@@ -3,6 +3,7 @@ import TheNav from '@/components/TheNav';
 import TheFooter from '@/components/TheFooter';
 import TimerBtn from '@/components/TimerBtn';
 import ProRegistrationBtn from '@/components/ProRegistrationBtn';
+import MultiPage from '@/components/MultiPage';
 
 const components = {
   SvgIcon,
@@ -10,6 +11,7 @@ const components = {
   TheFooter,
   TimerBtn,
   ProRegistrationBtn,
+  MultiPage,
 };
 
 export default (Vue) => {

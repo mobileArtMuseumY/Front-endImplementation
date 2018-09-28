@@ -4,7 +4,8 @@
         {{ content }}
     </div>
     <button class="button" @click="goSignUp()">注册</button>
-    <icon class="icon" name="delete" scale="1.5" @click="goDelete()"></icon>
+    <svg-icon icon="delete" @click="goDelete()"></svg-icon>
+
   </div>
 </template>
 

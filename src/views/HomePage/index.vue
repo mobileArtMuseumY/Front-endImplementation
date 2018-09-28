@@ -32,15 +32,15 @@
  * 问题：暂时没有
  */
 
-import picture1 from '../../../static/images/home/bird.jpg';
-import picture2 from '../../../static/images/home/currants.jpg';
-import picture3 from '../../../static/images/home/flower.jpg';
-import picture4 from '../../../static/images/home/rustic.jpg';
-import picture5 from '../../../static/images/home/water-bottle.jpg';
-import picture6 from '../../../static/images/home/woman.jpg';
-import picture7 from '../../../static/images/home/fog.jpg';
-import picture8 from '../../../static/images/home/cat.jpg';
-import test from '../../api/user';
+import picture1 from '@/../static/images/home/bird.jpg';
+import picture2 from '@/../static/images/home/currants.jpg';
+import picture3 from '@/../static/images/home/flower.jpg';
+import picture4 from '@/../static/images/home/rustic.jpg';
+import picture5 from '@/../static/images/home/water-bottle.jpg';
+import picture6 from '@/../static/images/home/woman.jpg';
+import picture7 from '@/../static/images/home/fog.jpg';
+import picture8 from '@/../static/images/home/cat.jpg';
+import test from '@/api/user';
 import axios from 'axios';
 
 export default {
