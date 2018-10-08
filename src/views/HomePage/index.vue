@@ -8,15 +8,15 @@
     <div class="describe">
       <h3>该如何运作我们的网站？</h3>
       <div class="content">
-        {{describe}}
+        {{ describe }}
       </div>
     </div>
 
     <div class="display">
       <h3>美图欣赏</h3>
       <div class="works">
-          <div v-for="item in work" :key="item">
-            <img :src="item" alt="picture" @click="Display()">
+          <div v-for="item in works" :key="item">
+            <img :src="item" alt="works" @click="Display()">
           </div>
       </div>
     </div>
@@ -40,33 +40,25 @@ import picture5 from '@/../static/images/home/water-bottle.jpg';
 import picture6 from '@/../static/images/home/woman.jpg';
 import picture7 from '@/../static/images/home/fog.jpg';
 import picture8 from '@/../static/images/home/cat.jpg';
-import test from '@/api/user';
-import axios from 'axios';
 
 export default {
 	data() {
 		return {
 			describe: 'Here is the description of the site operation...',
-			works: 'there are some works...',
-			work: [picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8],
+			works: [picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8],
 		};
 	},
 	methods: {
 		goSignUp() {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
-			// this.$router.push('/enterpriseHomePage');
-			this.$router.push('/studentHomePage');
+			this.$router.push('/enterpriseHomePage');
+			// this.$router.push('/studentHomePage');
 			// this.$router.push('/signinbackup');
 		},
 		Display() {
 			// 点击图片发生的动作
 			// 暂时不需要
 		},
-		// goTest() {
-		//   axios.get('/student/test')
-		//   .then(res => console.log(res))
-		//   .catch(err => console.log(err));
-		// }
 	},
 };
 </script>
@@ -76,7 +68,8 @@ export default {
 
 .home {
 	width: 100%;
-	margin-top: 0.2rem;
+	margin-top: $h-nav;
+	background-color: #f7f8fa;
 	.banner {
 		position: relative;
 		height: $h-banner;
@@ -110,6 +103,7 @@ export default {
 		padding: 3rem;
 		// height: 45rem;
 		.works {
+      width: 90%;
 			padding: 1em;
 			display: flex;
 			flex-wrap: wrap;
@@ -117,14 +111,13 @@ export default {
 			justify-content: space-around;
 			box-shadow: $shadow-work;
 			// border: 0.06rem solid $clr-border;
-
 			// 图片布局看的很不舒服，margin太多
 			img {
-				border-radius: 4px;
+				border-radius: 1px;
 				width: 15vw;
 				height: calc(20vw);
 				margin: 1em;
-				box-shadow: $shadow-work;
+				// box-shadow: $shadow-work;
 				border: 0.06rem solid $clr-border;
 			}
 			&:after {

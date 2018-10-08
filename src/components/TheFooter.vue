@@ -94,7 +94,6 @@ export default {
 	width: 100%;
 	background-color: $clr-white;
 	height: $h-footer;
-	border-top: 0.06rem solid $clr-border;
 }
 .footer-session-container {
 	display: flex;

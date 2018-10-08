@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- <pro-registration-btn v-if="status"></pro-registration-btn> -->
     <div class="filter">
       <div class="search">
         <el-input
@@ -22,21 +23,31 @@
       </div>
     </div>
     <div class="main">
-      <p>这是main</p>
+      <div v-for="data in projectData" :key="data" class="project">
+        <!-- <img :src="data.avatar" alt="avatar"> -->
+        <svg-icon icon="user" style="width: 40px; height: 60px; color: #5E5E5E; " class="avatar"></svg-icon>
+        <label class="budget"><strong>￥{{ data.budget }}</strong></label>
+        <label class="projectName">{{ data.projectName }}</label>
+        <button class="a businessId" @click="goBusinessHome(data.businessId)">{{ data.businessName }}</button>
+        <textarea v-model="data.projectDescription" readonly="true" wrap="false" class="description"></textarea>
+        <li v-for="skill in skills" :key="skill" class="skill"></li>
+        <label class="gmtTime">{{ data.gmtCreate }}</label>
+        <label class="leftTime">{{ data.leftTime }}</label>
+        <button class="a projectId" @click="goProjectHome(data.prjectId)">查看详情</button>
+      </div>
     </div>
     <div class="pagination">
-      <p>hello</p>
-      <!-- <template v-if="count">
+      <template v-if="count">
         <ul>
           <li v-for="item in items" :key="item">...</li>
-          <multi-paging
+          <multi-page
           :page-index="currentPage"
           :total="count"
           :page-size="pageSize"
           @change="pageChange">
-          </multi-paging>
+          </multi-page>
         </ul>
-      </template> -->
+      </template>
     </div>
   </div>
 </template>
@@ -59,30 +70,129 @@
  *   1. 如何控制页面的大小？(页面大小自适应)
  */
 
-import { skillList, getProjectData } from '@/api/project';
+import { getSkillList, getProjectData } from '@/api/project';
 
 export default {
 	data() {
 		return {
 			search: '',
-			rotate: true,
+			rotate: false,
 			projectSkill: [],
 			skills: [], // 符合el-select的所有skill列表
 			selected: 0, // 当前被选中的项(时间或者关注度)
-			projectData: {
-				avatar: '',
-				businessName: '',
-				projectName: '',
-				projectDescription: '',
-				skillList: [], // 该项目拥有的skill
-				gmtCreate: '',
-				leftTime: Number,
-        budget: Number,
-			},
+			// projectData: {
+			// 	avatar: '',
+			// 	businessName: '',
+			// 	projectName: '',
+			// 	projectDescription: '',
+			// 	skillList: [], // 该项目拥有的skill
+			// 	gmtCreate: '',
+			// 	leftTime: Number,
+			//   budget: Number,
+			// },
 			pageSize: 8,
 			currentPage: 1,
-			count: 0,
+			count: 100,
 			items: [],
+			projectData: [
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription: 'this is a project description',
+					skillList: [],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+				// {
+				// 	avatar: null,
+				// 	businessName: 'buzhidaoya',
+				// 	projectName: 'bulabu',
+				// 	projectDescription: 'this is a project description',
+				// 	skillList: [],
+				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
+				// 	leftTime: 11,
+				// 	budget: 1200,
+				// 	projectId: 1234567,
+				// 	bussinessId: 1224324,
+				// },
+			],
+			// status: this.$store.user.login,
 		};
 	},
 	methods: {
@@ -91,28 +201,30 @@ export default {
 			this.$message('hello');
 			this.rotate = !this.rotate;
 			// 发送请求
-			skillList()
+			getSkillList()
 				.then(res => {
 					// 将获取到的技能列表按照想要的格式赋给skills
 					this.projectSkill = res.data;
 					for (let i = 0; i < this.projectSkill.length; ++i) {
 						const object = [];
-						object.value = '选项' + (i + 1);
+						object.value = `选项${i + 1}`;
 						object.label = this.projectSkill[i].skillName;
 						this.skills.push(object);
 					}
-				}).catch(err => {
+				})
+				.catch(err => {
 					console.log(err);
 				});
 		},
 		sortOfTime() {
-      // 按照时间发送请求
-      this.selected = 0;
+			// 按照时间发送请求
+			this.selected = 0;
 			const data = {
 				method: this.selected,
 				page: this.currentPage,
 				rows: this.pageSize,
-      };
+			};
+			console.log(typeof data.method);
 			this.getProject(data);
 		},
 		sortOfFocused() {
@@ -122,14 +234,14 @@ export default {
 				method: this.selected,
 				page: this.currentPage,
 				rows: this.pageSize,
-      };
+			};
 			this.getProject(data);
 		},
 		getProject(data) {
 			// 发送请求
 			getProjectData(data)
 				.then(res => {
-          this.items = res.data;
+					this.items = res.data;
 					// this.projectData.avatar = res.data.avatar;
 					// this.projectData.businessName = res.data.businessName;
 					// this.projectData.projectName = res.data.projectName;
@@ -137,9 +249,9 @@ export default {
 					// this.projectData.skillList = res.data.skillList;
 					// this.projectData.gmtCreate = res.data.gmtCreate;
 					// this.projectData.leftTime = res.data.leftTime;
-          // this.projectData.budget = res.data.budget;
-          console.log(items);
-          this.count = res.data.count;
+					// this.projectData.budget = res.data.budget;
+					// // console.log(items);
+					this.count = res.count; // 希望是这样的
 				})
 				.then(err => {
 					console.log(err);
@@ -147,11 +259,11 @@ export default {
 		},
 		pageChange(page) {
 			this.currentPage = page;
-			this.sortOfFocused();
+			// this.sortOfFocused();
 		},
 	},
 	mounted() {
-		this.sortOfFocused();
+		// this.sortOfTime();
 	},
 };
 </script>
@@ -160,13 +272,15 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-  height: 100%;
 	margin-top: $h-nav;
 	width: 100%;
+	background-color: #f7f8fa;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	.filter {
 		position: relative;
-		width: 100%;
-		// border: 0.06rem solid $clr-border;
+		width: 90vw;
 		height: 6rem;
 		display: flex;
 		flex-direction: row;
@@ -174,7 +288,9 @@ export default {
 		align-items: center;
 		.search {
 			position: relative;
+			border: 0.06rem solid $clr-border;
 			width: 25vw;
+			height: 2rem;
 		}
 		.sortASkillFather {
 			width: 60vw;
@@ -188,17 +304,52 @@ export default {
 		}
 	}
 	.main {
-		width: 100%;
-		border: 0.03rem solid $clr-border;
-    height: 50vw;
+		width: 90vw;
+		// border: 0.03rem solid $clr-border;
+		height: 115vw;
+		.project {
+			position: relative;
+			border-top: 0.03rem solid $clr-border;
+			padding: 2rem;
+			.avatar {
+				border: 0.06rem solid $clr-border;
+			}
+			.budget {
+				border: 0.06rem solid $clr-border;
+			}
+			.projectName {
+				border: 0.06rem solid $clr-border;
+			}
+			.businessId {
+				border: 0.06rem solid $clr-border;
+			}
+			.description {
+        background-color: transparent;
+        height: 4rem;
+        color: $clr-footer-font;
+        line-height: 20px;
+			}
+			.projectId {
+				border: 0.06rem solid $clr-border;
+			}
+		}
 	}
-  .pagination {
+	.pagination {
 		width: 100%;
-    height: 3rem;;
-    text-align: center;
-		border: 0.03rem solid $clr-main;
-    margin-bottom: 1rem;
-  }
+		height: 3rem;
+		text-align: center;
+		margin-bottom: 1rem;
+		margin-top: 1rem;
+	}
+}
+.a {
+	border: none;
+	background-color: transparent;
+	color: $clr-title;
+	&:hover {
+		background-color: transparent;
+		color: $clr-main;
+	}
 }
 
 span {
@@ -220,6 +371,22 @@ span {
 .aa {
 	cursor: pointer;
 }
+
+h1 {
+	font-weight: normal;
+	size: 90px;
+}
+
+.a {
+	border: none;
+	background-color: transparent;
+	color: $clr-title;
+	&:hover {
+		background-color: transparent;
+		color: $clr-main;
+	}
+}
+
 </style>
 
 <style lang="scss">

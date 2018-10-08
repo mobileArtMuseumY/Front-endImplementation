@@ -1,7 +1,7 @@
 import { post, get, postFile } from '@/utils/axios';
 
 // 全部技能列表
-export const skillList = () => get('/show/skillList');
+export const getSkillList = () => get('/show/skillList');
 
 /**
  * 通过学生技能来筛选project

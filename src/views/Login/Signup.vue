@@ -2,12 +2,15 @@
   <div class="container">
     <div class="bussinessAdmin">
       <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        ref="upload"
+        :action="uploadUrl()"
+        accept="image/jpeg,image/png"
+        :auto-upload="true"
         :with-credentials="true"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
+        :before-upload="onBeforeUpload"
+        :on-success="onSuccess"
+        :multiple="false">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
@@ -46,7 +49,7 @@
         </el-form>
         </div>
           <input class="varify" type="text" placeholder="请输入验证码..." >
-          <timer-btn ref="timerbtn" class="captcha" v-on:run="sendCode()" ></timer-btn>
+          <timer-btn ref="timerbtn" class="captcha" :run="sendCode()" ></timer-btn>
           <Button class="signUpButton" @click="goSignUp()">注册</Button>
       </div>
     </div>
@@ -101,7 +104,8 @@ export default {
 				phoneNumber: '',
 			},
 			imageUrl: '',
-			status: 0,
+      status: 0,
+      businessAttachment: '',
 			rules: {
 				enterpriseName: [
 					{
@@ -163,21 +167,26 @@ export default {
 		};
 	},
 	methods: {
-		handleAvatarSuccess(res, file) {
-			this.imageUrl = URL.createObjectURL(file.raw);
+		uploadUrl() {
+			return '/api/business/register/upload';
 		},
-		beforeAvatarUpload(file) {
-			const isJPG = file.type === 'image/jpeg';
-			const isLt2M = file.size / 1024 / 1024 < 2;
-			if (!isJPG) {
-				this.$message.error('Avatar picture must be JPG format!');
-				this.message('Avatar picture must be JPG format!');
+		onSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.businessAttachment = res.data;
+		},
+		onBeforeUpload(file) {
+			const isIMAGE = file.type === 'image/jpeg' || file.type === 'image/png';
+			const isL1M = file.size / 1024 / 1024 < 3;
+
+			if (!isIMAGE) {
+				this.$message.error('上传文件只能是jpeg/png格式!');
+				return false;
 			}
-			if (!isLt2M) {
-				this.$message.error('Avatar picture size can not exceed 2MB!');
-				this.message('Avatar picture size can not exceed 2MB!');
+			if (!isL1M) {
+				this.$message.error('上传文件大小不能超过1M!');
+				return false;
 			}
-			return isJPG && isLt2M;
+			return isIMAGE && isL1M;
 		},
 		goSignUp() {
 			// 发送请求
@@ -187,14 +196,6 @@ export default {
 			 * 3. 跳转到邮箱验证成功页面，等待审核
 			 */
 			// 可以使用回调检查input的值，使用watch监听事件
-      let certificate = this.imageUrl;
-      // console.log(certificate);
-      // console.log(certificate);
-      enterpriseSignUpFile(certificate).then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      });
 			// if (status == 200) {
 			// 	const captcha = this.ruleForm.captcha;
 			// 	enterpriseSignUpC(captcha)
@@ -221,9 +222,25 @@ export default {
 			// } else {
 			// 	this.message('获取验证码失败');
 			// }
+
+			const userData = {
+				enterpriseName: this.ruleForm.enterpriseName,
+				name: this.ruleForm.name,
+				idCard: this.ruleForm.idCard,
+				password: this.ruleForm.password,
+				varifyPassword: this.ruleForm.varifyPassword,
+				email: this.ruleForm.email,
+        phoneNumber: this.ruleForm.phoneNumber,
+        businessAttachment: this.businessAttachment,
+			};
+			enterpriseSignUpForm(userData).then(res => {
+        console.log(res);
+			}).then(err => {
+        console.log(err);
+      });
 		},
 		sendCode() {
-			this.$refs.timerbtn.setDisabled(true);
+			// this.$refs.timerbtn.setDisabled(true);
 			// 向服务器发送请求
 			/**
 			 * data为参数
@@ -233,11 +250,10 @@ export default {
 			 *   this.$refs.timerbtn.stop();
 			 * }
 			 */
-
-			const phoneNumber = this.ruleForm.phoneNumber;
-			enterpriseSignUpV(phoneNumber).then(res => {
-				this.status = res.status;
-			});
+			// const phoneNumber = this.ruleForm.phoneNumber;
+			// enterpriseSignUpV(phoneNumber).then(res => {
+			// 	this.status = res.status;
+			// });
 		},
 	},
 };
@@ -250,7 +266,7 @@ export default {
 .container {
 	height: $h-signup-container;
 	width: 100%;
-	margin-top: 0.2rem;
+	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signup/background.jpg');
 	background-repeat: no-repeat;
@@ -297,12 +313,15 @@ export default {
 	width: 80%;
 	display: flex;
 	flex-direction: column;
+	// border: 0.06rem solid $clr-border;
+
 }
 
 .content .form {
 	width: 75%;
 	margin-top: 4rem;
 	margin-left: 25%;
+	// border: 0.06rem solid $clr-border;
 }
 
 input {
@@ -321,7 +340,8 @@ label {
 	border: none;
 	border-bottom: 0.05rem solid $clr-border;
 	margin-top: 3rem;
-	margin-left: 25%;
+  margin-left: 25%;
+	width: 73%;
 }
 
 .content .varify ::-webkit-input-placeholder {
@@ -330,13 +350,13 @@ label {
 }
 
 .content .signUpButton {
-	width: $w-input;
+	width: 73%;
 	margin-top: 5.5rem;
 	margin-left: 25%;
 }
 
 .captcha {
-	margin-left: 67%;
+	margin-left: 73%;
 	margin-top: -65px;
 }
 
@@ -392,7 +412,7 @@ label {
 }
 
 .el-input__inner {
-  height: 32px;
+	height: 32px;
 }
 
 .el-form-item.is-required .el-form-item__label:before {

@@ -9,6 +9,7 @@ import {
   Upload,
   Option,
   Select,
+  Pagination,
 } from 'element-ui';
 
 Vue.prototype.$message = Message;
@@ -21,3 +22,4 @@ Vue.use(Loading);
 Vue.use(Upload);
 Vue.use(Option);
 Vue.use(Select);
+Vue.use(Pagination);

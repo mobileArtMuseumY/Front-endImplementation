@@ -14,9 +14,6 @@
           <el-input type="textarea" v-model="ruleForm.textarea" placeholder="请输入您项目的详细信息..."></el-input>
         </el-form-item>
         <div class="upload">
-            <!-- :data="uploadData" -->
-            <!-- show-file-list="false" -->
-            <!-- :action="UploadUrl" -->
           <el-upload
             ref="upload"
             :action="uploadUrl()"
@@ -56,7 +53,7 @@
         </el-form-item>
         </el-form>
         <label>您预计的项目交易时间(从您确定投稿者到您项目结束)是多少天？</label>
-        <el-select v-model.number="ruleForm.transaPeriod" type="number" placeholder="请选择">
+        <el-select v-model="transaPeriod" placeholder="请选择" @change="changeValue">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -89,24 +86,25 @@
  *   4. 下边框应该和图片重合                                     //已完成
  *   5. skill的个数未知，应该如何控制“选项几”？                  //已完成
  *   6. 表单和文件是否需要异步传输？
- *   7. 技能应该是多选的，返回一个数组(目前只实现了单选)
+ *   7. 技能应该是多选的，返回一个数组(目前只实现了单选)          //已完成
  *   8. 当页面缩小时，组件不能随着页面缩小而缩小(需要改用vw作为单位)
  *   9. 还有点问题！！！怎么将用户上传的文件加入到fileList？？    // 已完成
  */
-import { skillList, publishProjectForm, publishProjectFile } from '@/api/project';
+import { getSkillList, publishProjectForm, publishProjectFile } from '@/api/project';
 import { enterpriseSignUpFile } from '@/api/user';
 
 export default {
   data() {
     return {
       title: '告诉我们您需要完成的事情',
+      transaPeriod: '',        // 用于v-model
       ruleForm: {
         projectName: '',
         textarea: '',
         selecSkill: [], // 被选中的skill
         bidPeriod: '',
         budget: '',
-        transaPeriod: '',
+        transaPeriod: Number,      // 用于提交表单
       },
       fileList: [],
       options: [
@@ -136,7 +134,7 @@ export default {
   },
   methods: {
     uploadUrl() {
-      return '/api/business/register/upload';
+      return '/api/project/upload';
     },
     uploadAttachment(file) {
       this.fileList.push(file);
@@ -164,6 +162,14 @@ export default {
     onSuccess() {
       this.$message.success('文件上传成功！');
     },
+    // 获取transaPeriod中select中的值
+    changeValue(value) {
+      let obj = {};
+      obj = this.options.find((item) => {
+        return item.value === value;
+      });
+      this.ruleForm.transaPeriod = parseInt(obj.label);
+    },
     publishProject() {
       // 确定用户选择的技能，这个技能应该为[]
 
@@ -175,8 +181,8 @@ export default {
         skillList: this.projectSkill,
         tenderPeriod: this.ruleForm.bidPeriod,
         budget: this.ruleForm.budget,
-        expectedTime: test,
-        // expectedTime: this.ruleForm.transaPeriod,
+        // expectedTime: test,
+        expectedTime: this.ruleForm.transaPeriod,
       };
       // this.fileData.projectId = 123456;
       // const fileList = this.$refs.upload;
@@ -206,7 +212,7 @@ export default {
   },
   mounted() {
     // 从服务器端获取技能
-    skillList()
+    getSkillList()
       .then(res => {
         // 将获取到的技能列表按照想要的格式赋给skills
         this.projectSkill = res.data;
@@ -229,9 +235,9 @@ export default {
 @import url('//unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css');
 
 .container {
-	height: $h-pubProject-container;
+	height: 150vw;
 	width: 100%;
-	margin-top: 0.5rem;
+	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signup/background.jpg');
 	background-repeat: no-repeat;
@@ -246,13 +252,12 @@ export default {
 	flex-direction: column;
 	justify-content: center;
 	width: 53%;
-	height: 83%;
+	height: 120vw;
 	margin-top: 10rem;
 	margin-left: 20%;
 	box-shadow: $shadow-work;
 	background-color: $clr-white;
 	border-radius: 5px;
-	border: 0.06rem solid $clr-border;
 }
 
 .main .title {
@@ -266,7 +271,7 @@ export default {
 
 .main .content {
 	position: relative;
-	height: 80%;
+	height: 100vw;
 	width: $w-input;
 	display: flex;
 	flex-direction: column;
@@ -281,27 +286,25 @@ label {
 	font-size: 0.5rem;
 }
 
-.button {
-	width: $w-input / 2;
-}
-
 .upload {
-	width: $w-input + 0.5rem;
+	width: $w-input;
 	padding-bottom: 1rem;
-	margin-top: 3rem;
-	margin-bottom: 3rem;
+	margin-top: 4rem;
+	margin-bottom: 4rem;
 	border: 0.06rem solid $clr-border;
 	border-radius: 4px;
 }
 
 .uploadFile {
-	margin-top: 1rem;
+	margin-top: .5rem;
+	margin-left: 1rem;
+	margin-bottom: 1rem;
+	padding-left: 1rem;
+  line-height: 50%;
+  text-align: center;
 	border: none;
-	width: 5.5rem;
-	&:hover {
-		color: $clr-main;
-		background-color: $clr-white;
-	}
+	border: 0.06rem solid $clr-border;
+	width: 5rem;
 }
 
 .el-upload__tip {

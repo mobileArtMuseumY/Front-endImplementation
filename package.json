@@ -26,7 +26,10 @@
     "element-ui": "^2.4.5",
     "js-cookie": "^2.2.0",
     "normalize.css": "^8.0.0",
+    "npm": "^6.4.1",
     "nprogress": "^0.2.0",
+    "to": "^0.2.9",
+    "update": "^0.7.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

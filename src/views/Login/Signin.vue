@@ -96,11 +96,12 @@ export default {
 			},
 		};
 	},
-	computed: {
-		count() {
-			return this.$store.user.login;
-		},
-	},
+	// computed: {
+	// 	// count() {
+  //   //   console.log(this.$store.user.);
+	// 	// 	return this.$store.user.signIn;
+	// 	// },
+	// },
 	methods: {
 		confirmRole(role) {
 			this.role = role;
@@ -125,6 +126,7 @@ export default {
 				return false;
 			}
 			if (this.role === '企业') {
+        // this.count();
 				const userData = { email: this.ruleForm.userId, password: this.ruleForm.password };
 				enterpriseSignIn(userData)
 					.then(res => {
@@ -136,6 +138,7 @@ export default {
 						this.$message.err('账号或密码不正确！');
 					});
 			} else {
+        // this.count();
 				const userData = { studentId: this.ruleForm.userId, password: this.ruleForm.password };
 				studentSignIn(userData)
 					.then(res => {
@@ -166,7 +169,7 @@ export default {
 .container {
 	height: $h-signin-container;
 	width: 100%;
-	margin-top: 0.2rem;
+	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signin/fisherman.jpg');
 	background-repeat: no-repeat;

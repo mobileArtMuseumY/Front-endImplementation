@@ -20,7 +20,7 @@ $http.interceptors.request.use(
   config => {
     NProgress.start();
     if(getToken()) {
-      config.headers.Authorization = getToken();config.headers.Authorization = getToken();
+      config.headers.Authorization = getToken();
     }
     return config;
   },
