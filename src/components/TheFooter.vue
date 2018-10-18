@@ -2,23 +2,15 @@
   <div class="footer">
     <div class="footer-session-container">
       <div class="footer-session logo">
-        <!-- <icon class="icon" name="logo" scale="5"></icon> -->
         <svg-icon icon="logo" style="width: 2rem;height: 2rem;"></svg-icon>
         <div class="help">
           <svg-icon icon="help" style="width: .9rem;height: .9rem;"></svg-icon>
-          <!-- <icon class="icon help" name="help" scale="2"></icon> -->
-          <!-- 跳转到联系管理员页面 -->
           <a href="">帮助&amp;支持</a>
         </div>
       </div>
       <div class="footer-session">
         <div class="title">校园移动艺术馆</div>
           <div class="a">
-            <!--
-              1. 按照技能分类的项目页面
-              2. 浏览项目页面
-              3. 开发人员API页面
-             -->
             <a href="">分类</a>
             <a href="">项目</a>
             <a href="">开发人员API</a>
@@ -90,18 +82,17 @@ export default {
 
 .footer {
 	position: relative;
-	float: bottom;
-	width: 100%;
+  float: bottom;
+  @include wh(100%, $h-footer);
 	background-color: $clr-white;
-	height: $h-footer;
 }
 .footer-session-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	margin-top: 3%;
 }
 .footer-session {
+  margin-top: 3rem;
 	display: flex;
 	flex-direction: column;
 }
@@ -143,7 +134,6 @@ a {
 	color: $clr-footer-font;
 	font-size: 0.8rem;
 }
-
 .help {
 	margin-left: 0.3rem;
 }

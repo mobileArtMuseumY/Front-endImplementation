@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!-- <pro-registration-btn v-if="status"></pro-registration-btn> -->
+    <pro-registration-btn></pro-registration-btn>
     <div class="filter">
       <div class="search">
         <el-input
@@ -10,8 +10,8 @@
           clearable>
         </el-input>
       </div>
-      <div class="sortASkillFather">
-        <div class="skill">
+      <div class="sortASkillFarent">
+        <div class="myskill">
           <label>我的技能：</label>
           <svg-icon icon="upload" :class="[rotate ? 'go' : 'aa']" @click.native="getSkills()"></svg-icon>
         </div>
@@ -24,16 +24,24 @@
     </div>
     <div class="main">
       <div v-for="data in projectData" :key="data" class="project">
-        <!-- <img :src="data.avatar" alt="avatar"> -->
-        <svg-icon icon="user" style="width: 40px; height: 60px; color: #5E5E5E; " class="avatar"></svg-icon>
-        <label class="budget"><strong>￥{{ data.budget }}</strong></label>
-        <label class="projectName">{{ data.projectName }}</label>
-        <button class="a businessId" @click="goBusinessHome(data.businessId)">{{ data.businessName }}</button>
-        <textarea v-model="data.projectDescription" readonly="true" wrap="false" class="description"></textarea>
-        <li v-for="skill in skills" :key="skill" class="skill"></li>
+        <!-- <img :src="data.avatar" alt="avatar" class="avatar"> -->
+       <div class="top">
+          <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar"></svg-icon>
+          <label class="projectName"><strong>{{ data.projectName }}</strong></label>
+          <label class="budget"><strong>￥{{ data.budget }}</strong></label>
+          <button class="a businessId" @click="goBusinessHome(data.businessId)">{{ data.businessName }}</button>
+       </div>
+        <p class="description" >{{ data.projectDescription }}</p>
+        <div class="bottom">
+        <ul v-if="data.skillList">
+          <div class="skillParent">
+            <li v-for="skill in data.skillList" :key="skill" class="skill">{{ skill }}</li>
+          </div>
+        </ul>
         <label class="gmtTime">{{ data.gmtCreate }}</label>
-        <label class="leftTime">{{ data.leftTime }}</label>
+        <label class="leftTime">剩余{{ data.leftTime }}天</label>
         <button class="a projectId" @click="goProjectHome(data.prjectId)">查看详情</button>
+        </div>
       </div>
     </div>
     <div class="pagination">
@@ -65,12 +73,16 @@
  *   4. “关注度”请求发送成功                                     //未完成
  *   5. 当用户未注册时，如何将“pro-registration-btn”组件插入页面  //未完成
  *   6. “我的技能”被点击时动画效果
- *   7. icon的一个bug，不能绑定方法~~~(猜测)
+ *   7. icon的一个bug，不能绑定方法~~~(猜测)                    //已弃用
  * 问题：
  *   1. 如何控制页面的大小？(页面大小自适应)
+ *   2. .descriptioin和.skill的样式完全没用。。。
+ *   3. 转换时间戳的时候会出现找不到mudule的情况(main.js中已经注册)
+ *   4. “我的技能”被点击时动画效果
  */
 
 import { getSkillList, getProjectData } from '@/api/project';
+import { formatDate } from '@/utils/date';
 
 export default {
 	data() {
@@ -99,98 +111,80 @@ export default {
 					avatar: null,
 					businessName: 'buzhidaoya',
 					projectName: 'bulabu',
-					projectDescription: 'this is a project description',
-					skillList: [],
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
 					gmtCreate: '2018-09-24T08:18:59.000+0000',
 					leftTime: 11,
 					budget: 1200,
 					projectId: 1234567,
 					bussinessId: 1224324,
 				},
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
-				// {
-				// 	avatar: null,
-				// 	businessName: 'buzhidaoya',
-				// 	projectName: 'bulabu',
-				// 	projectDescription: 'this is a project description',
-				// 	skillList: [],
-				// 	gmtCreate: '2018-09-24T08:18:59.000+0000',
-				// 	leftTime: 11,
-				// 	budget: 1200,
-				// 	projectId: 1234567,
-				// 	bussinessId: 1224324,
-				// },
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
+				{
+					avatar: null,
+					businessName: 'buzhidaoya',
+					projectName: 'bulabu',
+					projectDescription:
+						'this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description,this is a project description',
+					skillList: ['logo', 'java'],
+					gmtCreate: '2018-09-24T08:18:59.000+0000',
+					leftTime: 11,
+					budget: 1200,
+					projectId: 1234567,
+					bussinessId: 1224324,
+				},
 			],
 			// status: this.$store.user.login,
 		};
@@ -262,6 +256,11 @@ export default {
 			// this.sortOfFocused();
 		},
 	},
+	computed: {
+		transferTime: function() {
+			// return formatDate(this.projectData.gmtCreate);
+		},
+	},
 	mounted() {
 		// this.sortOfTime();
 	},
@@ -274,13 +273,15 @@ export default {
 .container {
 	margin-top: $h-nav;
 	width: 100%;
-	background-color: #f7f8fa;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	.filter {
 		position: relative;
-		width: 90vw;
+		background-color: #fff;
+		margin-top: 2rem;
+		border-radius: 4px;
+		width: 80vw;
 		height: 6rem;
 		display: flex;
 		flex-direction: row;
@@ -288,105 +289,142 @@ export default {
 		align-items: center;
 		.search {
 			position: relative;
-			border: 0.06rem solid $clr-border;
 			width: 25vw;
 			height: 2rem;
 		}
-		.sortASkillFather {
-			width: 60vw;
-			// border: 0.06rem solid $clr-border;
+		.sortASkillFarent {
+			width: 50vw;
 			.sort {
 				float: right;
 			}
-			.skill {
+			.myskill {
 				float: left;
 			}
 		}
 	}
 	.main {
-		width: 90vw;
-		// border: 0.03rem solid $clr-border;
-		height: 115vw;
+		width: 80vw;
+		height: 125rem;
+		background-color: #fff;
+		border-radius: 4px;
 		.project {
 			position: relative;
 			border-top: 0.03rem solid $clr-border;
 			padding: 2rem;
-			.avatar {
-				border: 0.06rem solid $clr-border;
+			&:hover {
+				box-shadow: $shadow-work;
+				border-left: 0.1rem solid $clr-main;
 			}
-			.budget {
-				border: 0.06rem solid $clr-border;
-			}
-			.projectName {
-				border: 0.06rem solid $clr-border;
-			}
-			.businessId {
-				border: 0.06rem solid $clr-border;
-			}
-			.description {
-        background-color: transparent;
-        height: 4rem;
-        color: $clr-footer-font;
-        line-height: 20px;
-			}
-			.projectId {
-				border: 0.06rem solid $clr-border;
+			.top {
+				width: 75vw;
+				height: 6.5rem;
+				.avatar {
+					width: 70px;
+					height: 70px;
+					float: left;
+					margin-top: 0;
+					margin-left: 0;
+				}
+				.budget {
+					float: right;
+					padding: 0.5rem;
+					font-size: 17px;
+					color: $clr-main;
+				}
+				.projectName {
+					// logo设计
+					float: left;
+					margin: 0 auto 100px 90px;
+					font-size: 17px;
+					color: $clr-footer-font;
+				}
+				.businessId {
+					text-align: start;
+					float: left;
+					margin-top: 80px;
+					margin-left: -220px;
+				}
+				.description {
+					padding: 0 0.5rem 0 0;
+					line-height: 20px;
+					width: 50vw;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 2; // 改变行数
+					-webkit-box-orient: vertical;
+					color: #bcbcbc;
+					border: 0.06rem solid $clr-border;
+				}
+				// 整个bottom都瘫痪了？？？
+				.bottom {
+					width: 75vw;
+					height: 7rem;
+					border: 0.06rem solid $clr-border;
+					.projectId {
+						text-align: end;
+						float: right;
+						border: 0.06rem solid $clr-border;
+					}
+					.skillParent {
+						// display: inline-block;
+						// padding: 0;
+						.skill {
+							display: inline;
+							color: #bcbcbc;
+							margin-left: 5px;
+							box-shadow: $shadow-skill;
+							&:first-child {
+								margin-left: -40px; // 为什么0的时候不是最左边？
+							}
+						}
+					}
+					.leftTime {
+						margin-left: 40px;
+					}
+				}
 			}
 		}
+		.pagination {
+			width: 100%;
+			height: 3rem;
+			text-align: center;
+			margin-bottom: 3rem;
+			margin-top: 2rem;
+			margin-left: -7vw;
+		}
 	}
-	.pagination {
-		width: 100%;
-		height: 3rem;
-		text-align: center;
-		margin-bottom: 1rem;
-		margin-top: 1rem;
-	}
-}
-.a {
-	border: none;
-	background-color: transparent;
-	color: $clr-title;
-	&:hover {
+	.a {
+		border: none;
 		background-color: transparent;
-		color: $clr-main;
+		color: $clr-title;
+		cursor: pointer;
+		&:hover {
+			background-color: transparent;
+			color: $clr-main;
+		}
+	}
+
+	span {
+		cursor: pointer;
+		margin: 0.3rem;
+		font-size: 0.8rem;
+		color: $clr-gray;
+		&:hover {
+			color: $clr-main;
+		}
+	}
+
+	.go {
+		cursor: pointer;
+		transform: rotate(180deg);
+		transition: all 2s;
+	}
+
+	.aa {
+		cursor: pointer;
 	}
 }
-
-span {
-	cursor: pointer;
-	margin: 0.3rem;
-	font-size: 0.8rem;
-	color: $clr-gray;
-	&:hover {
-		color: $clr-main;
-	}
-}
-
-.go {
-	cursor: pointer;
-	transform: rotate(180deg);
-	transition: all 2s;
-}
-
-.aa {
-	cursor: pointer;
-}
-
-h1 {
-	font-weight: normal;
-	size: 90px;
-}
-
-.a {
-	border: none;
-	background-color: transparent;
-	color: $clr-title;
-	&:hover {
-		background-color: transparent;
-		color: $clr-main;
-	}
-}
-
 </style>
 
 <style lang="scss">

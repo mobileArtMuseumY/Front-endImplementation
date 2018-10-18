@@ -1,7 +1,8 @@
-import Cookie from './cookie';
+import Cookie from 'js-cookie';
 
 export const setToken = (data) => Cookie.set('token', data);
 export const getToken = () => Cookie.get('token');
+export const removeToken = () => Cookie.remove('token');
 
-export const setUser = (user) => Cookie.set('user', user);
-export const getUser = () => Cookie.get('user');
+// export const setUser = (user) => Cookie.set('user', user);
+// export const getUser = () => Cookie.get('user');

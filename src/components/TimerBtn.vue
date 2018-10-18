@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="run" :disabled="disabled || time > 0">{{ text }}</button>
+  <button @click="run" :disabled="disabled || time > 0">{{ text }}</button>
 </template>
 
 <script>
@@ -8,25 +8,20 @@
  */
 export default {
   name: 'timer-btn',
-  data() {
-    return {
-
-    }
-  },
   props: {
     second: {
-      type: Number,
-      default: 60,
+      type: Number, 
+      default: () => 60,
     },
     disabled: {
       type: Boolean,
-      default: false,
+      default: () => false,
     },
   },
-  data:function () {
+  data() {
     return {
-      time: 0
-    }
+      time: 0,
+    };
   },
   methods: {
     run: function() {

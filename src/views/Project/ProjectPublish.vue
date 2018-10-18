@@ -76,9 +76,7 @@
  * 进度：
  *   1. 完成基本样式                                            //已完成
  *   2. “我的技能”请求发送成功                                   //已完成
- *   3. “发布时间”请求发送成功(页面打开默认)                      //未完成
- *   4. “关注度”请求发送成功                                     //未完成
- *   5. 当用户未注册时，如何将“pro-registration-btn”组件插入页面  //未完成
+ *   3. 当用户未注册时，如何将“pro-registration-btn”组件插入页面  //已完成(v-if控制)
  * 问题：
  *   1. 样式好像有点丑。。。
  *   2. 上传文件
@@ -87,7 +85,7 @@
  *   5. skill的个数未知，应该如何控制“选项几”？                  //已完成
  *   6. 表单和文件是否需要异步传输？
  *   7. 技能应该是多选的，返回一个数组(目前只实现了单选)          //已完成
- *   8. 当页面缩小时，组件不能随着页面缩小而缩小(需要改用vw作为单位)
+ *   8. 当页面缩小时，组件不能随着页面缩小而缩小(需要改用vw作为单位) 
  *   9. 还有点问题！！！怎么将用户上传的文件加入到fileList？？    // 已完成
  */
 import { getSkillList, publishProjectForm, publishProjectFile } from '@/api/project';
@@ -318,7 +316,7 @@ label {
 <style lang="scss">
 .el-form-item__label {
 	font-size: 0.6rem;
-	line-height: 20px;
+	// line-height: 20px;
 }
 
 .el-form-item__error {

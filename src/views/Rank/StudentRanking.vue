@@ -1,9 +1,13 @@
 <template>
   <div class="container">
-    <!-- <pro-registration-btn></pro-registration-btn> -->
-    {{msg}}
+    <pro-registration-btn></pro-registration-btn>
+    <div class="filter">
+
+    </div>
+    <div class="main">
+
+    </div>
     <div class="pagination">
-      <p>hello</p>
       <template v-if="count">
         <ul>
           <li v-for="item in items" :key="item">...</li>
@@ -23,19 +27,19 @@
 export default {
 	data() {
 		return {
-      msg: '人才排行榜',
-      pageSize: 8,
+			msg: '人才排行榜',
+			pageSize: 8,
 			currentPage: 1,
-      count: 100,
-      items: [],
+			count: 100,
+			items: [],
 		};
-  },
-  methods: {
-    pageChange(page) {
+	},
+	methods: {
+		pageChange(page) {
 			this.currentPage = page;
 			// this.sortOfFocused();
 		},
-  },
+	},
 };
 </script>
 
@@ -43,13 +47,34 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-	height: 80vw;
 	margin-top: $h-nav;
 	width: 100%;
-  background-color: #f7f8fa;
-  .pagination {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	.filter {
+		position: relative;
+		background-color: #fff;
+		margin-top: 2rem;
+		border-radius: 4px;
+		width: 80vw;
+		height: 6rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+	.main {
+		width: 80vw;
+		height: 130rem;
+		background-color: #fff;
+		border-radius: 4px;
+		margin-top: 1rem;
+	}
+	.pagination {
 		margin-top: 3rem;
 		margin-bottom: 3rem;
+		margin-left: -7vw;
 	}
 }
 </style>

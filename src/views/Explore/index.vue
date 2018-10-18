@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <pro-registration-btn></pro-registration-btn>
     <div class="sort">
       <label>分类：</label>
       <span @click="sortOfTime()">发布时间</span>
@@ -38,6 +39,7 @@
  *   1. 如果让div在vertical的方向设置距离               笨方法完成(设置margin)
  *   2. 让图片“自适应”屏幕宽度                         完成
  *   3. 图片放入静态资源服务器中，config中index.js，proxyTable有什么关系？
+ *   4. 如何从远程图床上引用图片
  */
 import picture1 from '@/../static/images/home/r11.jpg';
 import picture2 from '@/../static/images/home/r12.jpg';
@@ -52,7 +54,7 @@ import picture10 from '@/../static/images/home/snowing.jpg';
 import picture11 from '@/../static/images/home/sunflower.jpg';
 import picture12 from '@/../static/images/home/sunset.jpg';
 import picture13 from '@/../static/images/home/yellowFlower.jpg';
-import { getWorksData, queryWorksDetails } from '@/api/project';
+import { getWorksData, queryWorksDetails } from '@/api/works';
 import axios from 'axios';
 
 export default {
@@ -89,7 +91,7 @@ export default {
 				page: this.currentPage,
 				rows: this.pageSize,
 			};
-			this.getWorksData(data);
+      this.getWorksData(data);
 		},
 		sortOfFocused() {
 			this.selected = 1;
@@ -129,34 +131,38 @@ export default {
 .container {
 	width: 100%;
 	margin-top: $h-nav;
-	background-color: #f7f8fa;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	.sort {
-		margin-top: 2rem;
-		margin-bottom: 1rem;
+    @include margin-tl(2em, 1em);
 		margin-left: 92vw;
 		width: 20%;
 	}
 	.main {
 		flex-grow: 1;
 		margin: 0.3rem;
-		// background-color: violet;  // 用来测试
-		height: calc(20vw);
 		img {
+			cursor: pointer;
 			border-radius: 1px;
 			height: calc(20vw);
 			max-width: 100%;
 			min-width: 100%;
 			object-fit: cover;
 			vertical-align: bottom;
+			transition: all 1s ease 0s;
 			box-shadow: $shadow-work;
+			z-index: 4;
+			&:hover {
+				transform: translateY(-7px);
+				transition: all 0.5s ease 0s;
+			}
 		}
 	}
 	.pagination {
 		margin-top: 3rem;
 		margin-bottom: 3rem;
+		margin-left: -7vw;
 	}
 }
 span {

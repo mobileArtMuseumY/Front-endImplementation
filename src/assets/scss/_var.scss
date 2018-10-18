@@ -1,7 +1,7 @@
 
 $shadow-work: 0 0 4px 0 rgba(0,0,0,.15), 0 4px 4px 0 rgba(0,0,0,.04);
 $shadow-work-hover: 0 0 4px 0 rgba(0,0,0,.2), 0 5px 5px 0 rgba(0,0,0,.2);
-
+$shadow-skill: 4px 4px 1px 0 rgba(255,0,0,0.06);
 
 // TheNav
 $h-nav: 3.56rem;
@@ -12,7 +12,6 @@ $shadow-nav: 0 0 4px 0 rgba(0,0,0,.01), 0 4px 4px 0 rgba(0,0,0,.04);
 $h-footer: 17rem;
 $h-footer-siteinfo: 11rem;
 $h-footer-copyright: 1.5rem;
-// $shadow-footer: 4px 0 4px 0 rgba(0.01,0,0,0), 0 4px 4px 0 rgba(.04,0,0,.04);
 
 // ProjectPublish
 $h-pubProject-container: 95rem;
@@ -21,7 +20,7 @@ $h-pubProject-container: 95rem;
 $h-regBtn: 4rem;
 
 // SignUp
-$h-signup-container: 80rem;
+$h-signup-container: 95rem;
 
 //SignIn
 $h-signin-container: 40rem;
@@ -36,4 +35,7 @@ $w-button: 8rem;
 $font-size-button: 12px;
 
 $font-size-label: 13px;
+
+// 设置border
+$border: 0.06rem solid $clr-border;
 

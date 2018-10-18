@@ -48,8 +48,9 @@
           </el-form-item>
         </el-form>
         </div>
-          <input class="varify" type="text" placeholder="请输入验证码..." >
-          <timer-btn ref="timerbtn" class="captcha" :run="sendCode()" ></timer-btn>
+          <input class="varify" type="text" v-model="ruleForm.captcha" placeholder="请输入验证码..." >
+          <timer-btn ref="timerbtn" class="captchaButton" :run="sendCode()" ></timer-btn>
+          <el-checkbox v-model="checked"><router-link to="signUpAgreement">同意该协议</router-link></el-checkbox>
           <Button class="signUpButton" @click="goSignUp()">注册</Button>
       </div>
     </div>
@@ -62,14 +63,13 @@
  * 角色：企业
  * 进度：
  *   1. 样式确定                                                       //已完成
- *   2. 检测输入框文本的正确性                                          //未完成
- *   3. 正确发送请求                                                   //未完成
+ *   2. 检测输入框文本的正确性                                          //已完成
+ *   3. 正确发送请求                                                   //已完成
  * 问题；
  *   1. 如何将多个输入框用一个v-for展示出来？                           //已解决
  *   2. 在v-for展示出来后如何使用v-model，然后获取输入框中的数据         //已解决
+ *   3. 表单的准确验证                                                //未解决
  */
-
-import { enterpriseSignUpV, enterpriseSignUpC, enterpriseSignUpForm, enterpriseSignUpFile } from '@/api/user';
 
 export default {
 	data() {
@@ -102,10 +102,12 @@ export default {
 				varifyPassword: '',
 				mail: '',
 				phoneNumber: '',
+				captcha: '',
 			},
+			checked: true,         // 协议是否被选中
 			imageUrl: '',
-      status: 0,
-      businessAttachment: '',
+			status: 0,
+			businessAttachment: '',
 			rules: {
 				enterpriseName: [
 					{
@@ -171,8 +173,8 @@ export default {
 			return '/api/business/register/upload';
 		},
 		onSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      this.businessAttachment = res.data;
+			this.imageUrl = URL.createObjectURL(file.raw);
+			this.businessAttachment = res.data;
 		},
 		onBeforeUpload(file) {
 			const isIMAGE = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -189,40 +191,12 @@ export default {
 			return isIMAGE && isL1M;
 		},
 		goSignUp() {
+      if(!this.checked){
+        this.$message.error('非常抱歉，您需同意我们的协议才可以注册！');
+        return ;
+      }
 			// 发送请求
-			/***
-			 * 1. 获取form中的字符, 证书
-			 * 2. 发送请求
-			 * 3. 跳转到邮箱验证成功页面，等待审核
-			 */
-			// 可以使用回调检查input的值，使用watch监听事件
-			// if (status == 200) {
-			// 	const captcha = this.ruleForm.captcha;
-			// 	enterpriseSignUpC(captcha)
-			// 		.then(res => {
-			// 			const userData = {
-			// 				enterpriseName: this.ruleForm.enterpriseName,
-			// 				name: this.ruleForm.name,
-			// 				idCard: this.ruleForm.idCard,
-			// 				password: this.ruleForm.password,
-			// 				varifyPassword: this.ruleForm.varifyPassword,
-			// 				email: this.ruleForm.email,
-			// 				phoneNumber: this.ruleForm.phoneNumber,
-			// 			};
-			// 			enterpriseSignUpForm(userData).then(res => {
-			// 				const imageUrl = this.imageUrl;
-			// 				enterpriseSignUpFile(imageUrl).then(res => {
-			// 					// 跳转到邮箱验证界面
-			// 				});
-			// 			});
-			// 		})
-			// 		.catch(err => {
-			// 			this.message('验证码验证失败');
-			// 		});
-			// } else {
-			// 	this.message('获取验证码失败');
-			// }
-
+			const captcha = this.ruleForm.captcha;
 			const userData = {
 				enterpriseName: this.ruleForm.enterpriseName,
 				name: this.ruleForm.name,
@@ -230,17 +204,16 @@ export default {
 				password: this.ruleForm.password,
 				varifyPassword: this.ruleForm.varifyPassword,
 				email: this.ruleForm.email,
-        phoneNumber: this.ruleForm.phoneNumber,
-        businessAttachment: this.businessAttachment,
+				phoneNumber: this.ruleForm.phoneNumber,
+				businessAttachment: this.businessAttachment,
 			};
-			enterpriseSignUpForm(userData).then(res => {
-        console.log(res);
-			}).then(err => {
-        console.log(err);
-      });
+			const data = {
+				captcha,
+				userData,
+			};
+			this.$store.dispatch('SendCaptcha', data);
 		},
 		sendCode() {
-			// this.$refs.timerbtn.setDisabled(true);
 			// 向服务器发送请求
 			/**
 			 * data为参数
@@ -250,10 +223,9 @@ export default {
 			 *   this.$refs.timerbtn.stop();
 			 * }
 			 */
-			// const phoneNumber = this.ruleForm.phoneNumber;
-			// enterpriseSignUpV(phoneNumber).then(res => {
-			// 	this.status = res.status;
-			// });
+			// this.$refs.timerbtn.setDisabled(true);
+			const phoneNumber = this.ruleForm.phoneNumber;
+			this.$store.dispatch('SendVerify', phoneNumber);
 		},
 	},
 };
@@ -264,8 +236,7 @@ export default {
 @import url('//unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css');
 
 .container {
-	height: $h-signup-container;
-	width: 100%;
+	@include wh(100%, $h-signup-container);
 	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signup/background.jpg');
@@ -275,31 +246,28 @@ export default {
 	opacity: 0.9;
 }
 
-.container .bussinessAdmin {
+.bussinessAdmin {
 	position: relative;
-	padding: 3rem;
-	width: 20%;
-	height: 18rem;
-	margin-top: 2rem;
+	@include margin-tl(5em, 2em);
+	@include wh(20vw, 14rem);
 }
 
-.container .main {
-	position: relative;
+.certificate-content {
+	@include margin-tl(2em, 20%);
+}
+
+.main {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	width: 45%;
-	height: 80%;
-	margin-top: 10rem;
-	margin-left: 1rem;
+	@include wh(45vw, 80vw);
+	@include margin-tl(15em, 2em);
 	box-shadow: $shadow-work;
 	background-color: $clr-white;
 	border-radius: 5px;
-	border: 0.06rem solid $clr-border;
 }
 
-.main .title {
-	position: relative;
+.title {
 	font-size: 30px;
 	font-weight: bold;
 	width: 25%;
@@ -307,97 +275,82 @@ export default {
 	color: #363636;
 }
 
-.main .content {
-	position: relative;
-	height: 80%;
-	width: 80%;
+.content {
+	@include wh(80%, 80%);
 	display: flex;
 	flex-direction: column;
-	// border: 0.06rem solid $clr-border;
-
 }
 
-.content .form {
+.form {
 	width: 75%;
-	margin-top: 4rem;
-	margin-left: 25%;
-	// border: 0.06rem solid $clr-border;
+	@include margin-tl(4em, 25%);
 }
 
 input {
-	margin-top: 1rem;
-	margin-bottom: 2rem;
+	@include margin-tl(1em, 2em);
 }
 
 label {
-	color: #666666;
-	margin-top: 3rem;
-	margin-bottom: 3rem;
+	color: $clr-label;
+	@include margin-tb(3em, 3em);
 }
 
-.content .varify {
+.varify {
+	width: 73%;
 	border-radius: 0%;
 	border: none;
-	border-bottom: 0.05rem solid $clr-border;
-	margin-top: 3rem;
-  margin-left: 25%;
-	width: 73%;
+	border-bottom: $border;
+	@include margin-tl(3em, 25%);
 }
 
-.content .varify ::-webkit-input-placeholder {
+.varify ::-webkit-input-placeholder {
 	color: $clr-black;
 	font-size: 12px;
 }
 
-.content .signUpButton {
+.signUpButton {
 	width: 73%;
-	margin-top: 5.5rem;
-	margin-left: 25%;
+	@include margin-tl(1em, 25%);
 }
 
-.captcha {
-	margin-left: 73%;
-	margin-top: -65px;
-}
-
-.certificate-content {
-	margin-top: 2rem;
-	margin-left: 20%;
+.captchaButton {
+	@include margin-tl(-30px, 73%);
 }
 
 .avatar-uploader .el-upload {
-	border: 1px dashed #ffffff;
+	border: 1px dashed $clr-white;
 	border-radius: 6px;
 	cursor: pointer;
 	position: relative;
 	overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
 	border-color: #409eff;
 }
+
 .avatar-uploader-icon {
 	font-size: 28px;
-	color: #666666;
-	width: 205px;
-	height: 110px;
+	color: $clr-label;
+	@include wh(205px, 110px);
 	line-height: 110px;
 	text-align: center;
-	border: 1px dashed #666666;
-	margin-left: 10%;
-	margin-top: 10%;
+	border: 1px dashed $clr-label;
+	@include margin-tl(10%, 10%);
 	box-shadow: $shadow-work;
 }
+
 .avatar {
-	width: 205px;
-	height: 110px;
 	display: block;
+	@include wh(205px, 110px);
+	@include margin-tl(10%, 10%);
 	box-shadow: $shadow-work-hover;
-	margin-left: 10%;
-	margin-top: 10%;
 }
 </style>
 
 <style lang="scss">
+@import 'src/assets/scss/index';
+
 .el-form-item__label {
 	font-size: 0.6rem;
 	line-height: 20px;
@@ -423,5 +376,27 @@ label {
 
 .el-form-item.is-success .el-input__validateIcon {
 	color: #8fb5f2;
+}
+
+.el-checkbox {
+	margin-left: 25%;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+	color: $clr-label;
+	&:hover {
+		color: $clr-main;
+	}
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+	color: $clr-gray;
+	background-color: $clr-gray;
+	border-color: $clr-gray;
+}
+
+.el-checkbox__inner:hover {
+	border-color: $clr-gray;
 }
 </style>

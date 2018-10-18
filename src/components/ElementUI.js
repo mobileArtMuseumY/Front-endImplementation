@@ -10,6 +10,10 @@ import {
   Option,
   Select,
   Pagination,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  Checkbox,
 } from 'element-ui';
 
 Vue.prototype.$message = Message;
@@ -23,3 +27,7 @@ Vue.use(Upload);
 Vue.use(Option);
 Vue.use(Select);
 Vue.use(Pagination);
+Vue.use(Dropdown);
+Vue.use(DropdownItem);
+Vue.use(DropdownMenu);
+Vue.use(Checkbox);

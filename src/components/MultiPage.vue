@@ -155,22 +155,12 @@ export default {
 @import 'src/assets/scss/index';
 
 .mo-paging {
-	// display: inline-block;
-	// padding: 0;
-	// margin: 1rem 0;
-	// font-size: 0;
-	// list-style: none;
-	// user-select: none;
 	> .paging-item {
 		display: inline;
 		font-size: 14px;
 		position: relative;
 		padding: 6px 12px;
-		// line-height: 1.42857143;
-		// text-decoration: none;
-		// border: 1px solid #ccc;
-		background-color: #fff;
-		// margin-left: -5px;
+		background-color: $clr-white;
 		cursor: pointer;
 		color: #7B7676;
 		&:first-child {
@@ -181,10 +171,9 @@ export default {
 		}
 		&.paging-item--disabled,
 		&.paging-item--more {
-			background-color: #fff;
+			background-color: $clr-white;
 			color: #7B7676;
 		}
-		//禁用
 		&.paging-item--disabled {
 			cursor: not-allowed;
 			opacity: 0.5;

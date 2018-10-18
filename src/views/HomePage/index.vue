@@ -51,9 +51,9 @@ export default {
 	methods: {
 		goSignUp() {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
-			this.$router.push('/enterpriseHomePage');
-			// this.$router.push('/studentHomePage');
-			// this.$router.push('/signinbackup');
+			// this.$router.push('/user/enterpriseHomePage');
+			// this.$router.push('user//studentHomePage');
+			this.$router.push('/signinFirst');
 		},
 		Display() {
 			// 点击图片发生的动作
@@ -69,56 +69,49 @@ export default {
 .home {
 	width: 100%;
 	margin-top: $h-nav;
-	background-color: #f7f8fa;
 	.banner {
-		position: relative;
 		height: $h-banner;
 		background-image: url('/static/images/home/background.jpg');
 		background-size: cover;
 		.button {
-			position: relative;
-			width: 6.25rem;
-			height: 2.3rem;
-			left: 15%;
-			top: 23rem;
+      position: relative;
+      @include wh(6.25rem, 2.3rem);
+      @include margin-tl(23rem, 15%);
 			background-color: $clr-main;
 			color: $clr-white;
 			border: none;
 		}
 	}
 	.describe {
-		position: relative;
-		padding: 3rem;
-		width: 40%;
-		height: 18rem;
+    padding: 3rem;
+    @include wh(40%, 18rem);
 		.content {
 			padding: 0.3rem;
-			box-shadow: $shadow-work;
-			height: 17rem;
-			width: 15rem;
+      box-shadow: $shadow-work;
+      @include wh(17rem, 15rem);
 		}
 	}
 	.display {
-		position: relative;
 		padding: 3rem;
-		// height: 45rem;
 		.works {
-      width: 90%;
+			width: 90%;
 			padding: 1em;
 			display: flex;
 			flex-wrap: wrap;
 			flex-direction: row;
 			justify-content: space-around;
 			box-shadow: $shadow-work;
-			// border: 0.06rem solid $clr-border;
-			// 图片布局看的很不舒服，margin太多
 			img {
-				border-radius: 1px;
-				width: 15vw;
-				height: calc(20vw);
+        border-radius: 3px;
+        @include wh(15vw, calc(20vw));
 				margin: 1em;
-				// box-shadow: $shadow-work;
-				border: 0.06rem solid $clr-border;
+				transform: scale(1);
+				transition: all 1s ease 0s;
+				border: $border;
+				&:hover {
+					transform: scale(1.1);
+					transition: all 1s ease 0s;
+				}
 			}
 			&:after {
 				content: '';

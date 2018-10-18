@@ -39,9 +39,9 @@ div:focus {
 
 a {
   outline: none;
-  color: $clr-footer-font;
   text-decoration: none;
   font-size: 5px;
+  color: $clr-footer-font;
 }
 
 a:focus,
@@ -63,10 +63,10 @@ a:hover {
   text-align-last: initial;
 }
 
-.active{
-  color: $clr-main;
-  border-bottom: solid 1px $clr-main;
-}
+// .active{
+//   color: $clr-main;
+//   border-bottom: solid 1px $clr-main;
+// }
 
 label {
   color: $clr-gray;
@@ -123,6 +123,10 @@ li {
   list-style-type:none;
 }
 
-.icon {
+.active {
+  color: $clr-label;
   border: none;
+  &:hover {
+    border-bottom: solid 1px $clr-main;
+  }
 }

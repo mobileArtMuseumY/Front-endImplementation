@@ -11,20 +11,69 @@
         {{v.name}}
       </router-link>
     </div>
+    <div class="nav-search">
+      <!-- 还没实现 -->
+      <!-- :fetch-suggestions="querySearchAsync"
+          @select="handleSelect"
+          :on-icon-click="handleIconClick"
+          @keydown.enter.native="handleIconClick" -->
+        <el-input
+          placeholder="请输入关键字"
+          prefix-icon="el-icon-search"
+          v-model="search"
+          minlength="1"
+          maxlength="100"
+          clearable
+          style="border: 0px">
+        </el-input>
+      </div>
     <div class="nav-right">
-      <div class="nav-login">
+      <div class="nav-login" v-if="!user.signIn">
         <span id="signin-clicked" @click="goSignIn()">登录</span>
           |
         <span id="signiup-clicked" @click="goSignUp()">注册</span>
       </div>
-      <div class="nav-search">
-        <el-input
-          placeholder="search"
-          prefix-icon="el-icon-search"
-          v-model="search"
-          clearable
-          style="border: 0px">
-        </el-input>
+      <div class="user-profile" v-if="user.signIn">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+                <img src="/static/images/nav/avatar.png" alt="avatar" class="nav-avatar">
+            </span>
+          <el-dropdown-menu slot="dropdown" v-if="user.role === 'enterprise'">
+            <!-- <el-dropdown-item>
+              <router-link to="/enterpriseHomePage">我的主页</router-link>
+            </el-dropdown-item> -->
+            <el-dropdown-item>
+              <router-link to="/enterpriseHomePage">我的主页</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item> 
+              <router-link to="/setting">设置</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <router-link to="/service">客服</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="lala" @click="signOut">退出</a>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+          <el-dropdown-menu slot="dropdown" v-if="user.role === 'student'">
+            <el-dropdown-item>
+              <router-link to="/studentHomePage">我的主页</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item> 
+              <router-link to="/setting">设置</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <router-link to="service">客服</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <a href="lala" @click="signOut()">退出</a>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+          </el-dropdown>
+        |
+        <div class="reminder">
+          <svg-icon icon="reminder-hollow" style="width: 20px; height: 30px;"></svg-icon>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +82,7 @@
 <script>
 /**
  * 作用：页面的nav
- * 状态：两种(已登录、未登录)                   未完成
+ * 状态：两种(已登录、未登录)                   已完成
  * 样式要求：
  *   1. 始终置顶(postion: fixed; top: 0;)      已完成
  *   2. span被选中时颜色变为红色($clr-main)    已完成
@@ -45,6 +94,9 @@
  *   4. 当往下滑时nav背景变为透明                                               //未解决
  *   5. 当点击span之后再点击导航栏时，span的颜色该如何变成black?                  //未解决
  */
+
+import { mapGetters } from 'vuex';
+
 export default {
 	name: 'the-nav',
 	data() {
@@ -64,6 +116,7 @@ export default {
 				return this.nav.filter(x => x.name);
 			}
 		},
+		...mapGetters(['user']),
 	},
 	methods: {
 		goSignIn() {
@@ -76,7 +129,11 @@ export default {
 			document.getElementById('signiup-clicked').style.color = 'red';
 			this.$router.push('/signup');
 		},
+		signOut() {
+			this.$store.dispatch('SignOut');
+		},
 	},
+	watch: {},
 };
 </script>
 
@@ -87,9 +144,8 @@ export default {
 	font-size: 10px;
 	position: fixed;
 	top: 0;
-	z-index: 99;
-	width: 100%;
-	height: $h-nav;
+  z-index: 999;
+  @include wh(100%, $h-nav);
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -100,6 +156,7 @@ export default {
 	box-shadow: $shadow-nav;
 	overflow: hidden;
 }
+
 .nav-left {
 	margin-left: 10%;
 }
@@ -115,14 +172,15 @@ export default {
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
+	margin-right: 5%;
 	.nav-search {
 		width: 7rem;
 		margin-left: 1rem;
 		.el-input__inner {
 			border: none;
-			border-bottom: 0.06rem solid $clr-border;
+			border-bottom: $border;
 			&:hover {
-				border-bottom: 0.06rem solid $clr-border;
+				border-bottom: $border;
 			}
 		}
 	}
@@ -137,6 +195,22 @@ export default {
 		}
 	}
 }
+
+.user-profile {
+	width: 8rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.nav-avatar {
+	cursor: pointer;
+	border-radius: 50%;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	@include wh(40px, 40px);
+}
+
 a {
 	display: inline-block;
 	text-align: center;
@@ -152,4 +226,15 @@ a {
 	}
 }
 </style>
+
+<style lang="scss">
+@import 'src/assets/scss/index';
+
+.el-dropdown-menu {
+  display: inline-block;
+	text-align: center;
+}
+
+</style>
+
 

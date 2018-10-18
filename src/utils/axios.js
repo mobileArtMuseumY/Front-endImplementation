@@ -3,6 +3,7 @@ import { Message } from 'element-ui';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from './auth';
+import store from '@/store';
 
 const BASE_API = process.env.NODE_ENV === 'production' ? '' : '/api';
 
@@ -21,6 +22,8 @@ $http.interceptors.request.use(
     NProgress.start();
     if(getToken()) {
       config.headers.Authorization = getToken();
+      // console.log('lala');
+      console.log(config.headers.Authorization);
     }
     return config;
   },
@@ -109,9 +112,4 @@ export const postFile = (url, data = {}) => {
     headers: { 'Content-Type': 'multipart/form-data; boundary=-----------------------------7db372eb000e2' },
   }).then(checkStatus).then(checkCode);
 };
-// export default {
-//   get,
-//   post,
-//   getFile,
-//   postFile,
-// };
+ 

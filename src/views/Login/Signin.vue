@@ -1,9 +1,9 @@
 <template>
-  <div class="container" :style="style">
+  <div class="container">
     <div class="main">
       <div class="role">
-        <span id="e-clicked" @click="confirmRole('企业')">企业</span>
-        <span id="s-clicked" @click="confirmRole('学生')">学生</span>
+        <span id="e-clicked" @click="confirmRole('enterprise')">企业</span>
+        <span id="s-clicked" @click="confirmRole('student')">学生</span>
       </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="ruleForm">
         <el-form-item label="昵称或邮箱：" prop="userId">
@@ -14,7 +14,9 @@
         </el-form-item>
       </el-form>
       <div class="content">
-        <p>没有注册？那就 &nbsp;<a @click="goSignUp()">注册</a> &nbsp;一个吧！</p>
+        <div class="left">
+          <span>没有注册？那就 &nbsp;<a @click="goSignUp()">注册</a> &nbsp;一个吧！</span>
+        </div>
         <div class="right">
           <a @click="getPassword()">忘记密码</a>
         </div>
@@ -32,7 +34,7 @@
  * 样式要求：暂时没有
  * 问题：
  *   1. 发送请求不成功(连不上服务器)           已解决
- *   2. 如何存储用户状态？？？(待测试)         
+ *   2. 如何存储用户状态？？？(待测试)         已解决
  *   3. 根据角色显示相应的placeholder         已解决
  *   ```
  *   //这个是不是默认的？
@@ -49,7 +51,7 @@
 import axios from '@/utils/axios';
 import { enterpriseSignIn, studentSignIn } from '@/api/user';
 import { setToken, setUser, getToken, getUser } from '@/utils/auth';
-import { modules } from '@/store/index';
+import { mapMutations } from 'vuex';
 
 export default {
 	data() {
@@ -61,7 +63,6 @@ export default {
 			}
 		};
 		return {
-			style: {},
 			opacity: 0,
 			input: '',
 			role: '',
@@ -96,16 +97,10 @@ export default {
 			},
 		};
 	},
-	// computed: {
-	// 	// count() {
-  //   //   console.log(this.$store.user.);
-	// 	// 	return this.$store.user.signIn;
-	// 	// },
-	// },
 	methods: {
 		confirmRole(role) {
 			this.role = role;
-			if (role === '企业') {
+			if (role === 'enterprise') {
 				document.getElementById('e-clicked').style.color = 'red';
 				document.getElementById('s-clicked').style.color = 'gray';
 				this.holder = '请输入您的邮箱...';
@@ -125,35 +120,33 @@ export default {
 				this.message('账号或密码不能为空!');
 				return false;
 			}
-			if (this.role === '企业') {
-        // this.count();
-				const userData = { email: this.ruleForm.userId, password: this.ruleForm.password };
-				enterpriseSignIn(userData)
-					.then(res => {
-						setToken(res.msg);
-						setUser(this.role);
-						this.$router.push('/enterpriseHomePage');
-					})
-					.catch(err => {
-						this.$message.err('账号或密码不正确！');
-					});
+			const role = this.role;
+			if (this.role === 'enterprise') {
+				const userData = {
+					email: this.ruleForm.userId.trim(),
+					password: this.ruleForm.password,
+				};
+				this.$store.dispatch('SignIn', {
+					userData,
+					role,
+				});
 			} else {
-        // this.count();
-				const userData = { studentId: this.ruleForm.userId, password: this.ruleForm.password };
-				studentSignIn(userData)
-					.then(res => {
-						setToken(res.msg);
-						setUser(this.role);
-						this.$router.push('/studentHomepage');
-					})
-					.catch(err => {
-						this.$message.err('账号或密码不正确！');
-					});
+				const userData = {
+					studentId: this.ruleForm.userId.trim(),
+					password: this.ruleForm.password,
+				};
+				this.$store.dispatch('SignIn', {
+					userData,
+					role,
+				});
 			}
 		},
 		goSignUp() {
 			this.$router.push('/signup');
-		},
+    },
+    getPassword() {
+      this.$router.push('/retrievePassword');
+    },
 		message(m) {
 			this.$message.error({
 				message: m,
@@ -167,8 +160,7 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-	height: $h-signin-container;
-	width: 100%;
+	@include wh(100%, $h-signin-container);
 	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signin/fisherman.jpg');
@@ -176,59 +168,56 @@ export default {
 	background-size: 100% 100%;
 	.main {
 		position: relative;
-		width: 23rem;
-		height: 70%;
-		margin-top: 8%;
-		margin-left: 8%;
+		@include wh(23em, 30vw);
+		@include margin-tl(10%, 10%);
 		box-shadow: $shadow-work;
 		background-color: $clr-white;
 		border-radius: 5px;
-		border: 0.06rem solid $clr-border;
+		border: $border;
 		.role {
-			position: relative;
-			height: 2rem;
+			@include wh(25%, 2em);
+			@include margin-tl(1em, 15em);
 			line-height: 2rem;
-			width: 25%;
-			margin-left: 15rem;
-			margin-top: 1rem;
 			overflow: hidden;
 		}
 		.ruleForm {
 			width: 70%;
-			margin-left: 3rem;
-			margin-top: 2rem;
+			@include margin-tl(2em, 3em);
 		}
 		.content {
-			margin-top: 3rem;
-		}
+      @include margin-tl(1em, 3em);
+      width: 70%;
+      display: flex;
+    }
+    .left {
+      width: 80%;
+      span {
+        color: $clr-gray;
+        cursor: default;
+        &:hover {
+          color: $clr-gray;
+        }
+      }
+    }
 		.right {
-			margin-left: 16rem;
-			margin-top: -2rem;
+      width: 21%;
 		}
 	}
 }
 
 .button {
 	font-size: 0.6rem;
-	margin-top: 3rem;
-	margin-left: 7rem;
+	@include margin-tl(4em, 30%);
 }
 
 span {
 	cursor: pointer;
 	margin: 0.6rem;
 	font-size: 0.8rem;
-	color: $clr-gray;
+	color: gray;
 	&:hover {
 		color: $clr-main;
 	}
-}
-
-p {
-	font-size: 11px;
-	color: $clr-gray;
-	width: 14rem;
-	margin-left: 2.9rem;
 }
 
 a {
