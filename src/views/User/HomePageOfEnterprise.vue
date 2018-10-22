@@ -15,7 +15,7 @@
         :before-upload="onBeforeUpload"
         :on-success="onSuccess"
         :multiple="false">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar-of-business">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       <span>{{ user.userInfo.userName }}</span>
@@ -75,9 +75,8 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-	width: 100%;
+	@include wh(100%, 60rem);
 	margin-top: $h-nav;
-	height: 60rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -113,20 +112,18 @@ export default {
 	font-size: 28px;
   color: #666666;
   @include wh(190px, 180px);
+  @include margin-tl(-1rem, 1rem);
 	line-height: 110px;
 	text-align: center;
 	border: 1px dashed #666666;
-	margin-left: 1em;
-	margin-top: -1em;
 }
-.avatar {
+.avatar-of-business {
 	width: 190px;
   height: 180px;
   @include wh(190px, 180px);
+  @include margin-tl(-1rem, 1rem);
 	display: block;
 	box-shadow: $shadow-work;
   border-radius: 2px;
-	margin-left: 1rem;
-	margin-top: -1rem;
 }
 </style>

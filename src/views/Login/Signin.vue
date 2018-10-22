@@ -21,7 +21,7 @@
           <a @click="getPassword()">忘记密码</a>
         </div>
       </div>
-      <div class="button">
+      <div class="signin-button">
         <button @click="goSignIn()">登录</button>
       </div>
     </div>
@@ -164,12 +164,12 @@ export default {
 	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signin/fisherman.jpg');
-	background-repeat: no-repeat;
+  background-size:cover;
 	background-size: 100% 100%;
 	.main {
 		position: relative;
-		@include wh(23em, 30vw);
-		@include margin-tl(10%, 10%);
+		@include wh(23em, 28em);
+		@include margin-tl(8%, 10%);
 		box-shadow: $shadow-work;
 		background-color: $clr-white;
 		border-radius: 5px;
@@ -205,7 +205,7 @@ export default {
 	}
 }
 
-.button {
+.signin-button {
 	font-size: 0.6rem;
 	@include margin-tl(4em, 30%);
 }

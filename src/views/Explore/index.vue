@@ -12,6 +12,9 @@
         <!-- <img :src="item" alt="works" style="width: {{ item.width*200/item.height }}px;"> -->
         <img :src="item" alt="works" >
       </div>
+      <!-- <div class="main">
+        <works-display :worksId="item" v-for="(item, index) in items" :key="index"></works-display>
+      </div> -->
     </section>
     <div class="pagination">
       <template v-if="count">
@@ -54,7 +57,7 @@ import picture10 from '@/../static/images/home/snowing.jpg';
 import picture11 from '@/../static/images/home/sunflower.jpg';
 import picture12 from '@/../static/images/home/sunset.jpg';
 import picture13 from '@/../static/images/home/yellowFlower.jpg';
-import { getWorksData, queryWorksDetails } from '@/api/works';
+import { getWorksData, queryWorksDetails, getWorksCount } from '@/api/works';
 import axios from 'axios';
 
 export default {
@@ -63,7 +66,7 @@ export default {
 			title: '发现',
 			// works: [],
 			selected: 0, // 当前被选中的项(时间或者follower)
-			pageSize: 8,
+			pageSize: 10,
 			currentPage: 1,
 			count: 50,
 			works: [
@@ -79,21 +82,28 @@ export default {
 				picture10,
 				picture11,
 			],
-			items: [],
+      items: [],
+      timeClicked: false,
+      focusClicked: false,
 		};
 	},
 	methods: {
 		sortOfTime() {
+      this.timeClicked = true;
+      this.focusClicked = false;
 			this.selected = 0;
-			this.currentPage = 1;
+			this.currentPage = 5;
 			const data = {
 				method: this.selected,
 				page: this.currentPage,
 				rows: this.pageSize,
-			};
+      };
+      console.log(data);
       this.getWorksData(data);
 		},
 		sortOfFocused() {
+      this.focusClicked = true;
+      this.timeClicked = false;
 			this.selected = 1;
 			this.currentPage = 1;
 			const data = {
@@ -107,20 +117,26 @@ export default {
 		getWorksData(data) {
 			getWorksData(data)
 				.then(res => {
-					this.items = res;
-					this.count = res.count;
+          this.items = res.data;
+          console.log(this.items);
+					// getWorksCount().then(res => {
+          //   this.count = res.data.count;
+
+          // }).catch(err => {
+          //   console.log('获取作品总数失败！');
+          // });
 				})
 				.then(err => {
-					console.log(err);
+					console.log('获取作品失败' + err);
 				});
 		},
 		pageChange(page) {
 			this.currentPage = page;
 			// this.sortOfFocused();
 		},
-	},
+  },
 	mounted() {
-		// this.sortOfTime();
+		this.sortOfTime();
 	},
 };
 </script>
@@ -160,8 +176,7 @@ export default {
 		}
 	}
 	.pagination {
-		margin-top: 3rem;
-		margin-bottom: 3rem;
+    @include margin-tb(3rem, 3rem);
 		margin-left: -7vw;
 	}
 }

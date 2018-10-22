@@ -39,11 +39,11 @@
         <div class="title">联系开发者</div>
           <div class="a">
             <div class="github">
-              <svg-icon icon="github" ></svg-icon>
+              <svg-icon icon="github-icon" ></svg-icon>
               <a href="https://github.com/mllove">mllove</a>
             </div>
             <div class="github">
-              <svg-icon icon="github" ></svg-icon>
+              <svg-icon icon="github-icon" ></svg-icon>
               <a class="github-name" href="https://github.com/syt-honey">syt-honey</a>
             </div>
             <a href="">mlhaprial1028@gmail.com</a>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="bussinessAdmin">
+    <div class="bussiness-admin">
       <el-upload
         ref="upload"
         :action="uploadUrl()"
@@ -24,7 +24,7 @@
       </div>
       <div class="content">
         <div class="form">
-          <el-form ref="ruleForm" status-icon :model="ruleForm" :rules="rules" class="ruleForm">
+          <el-form ref="ruleForm" status-icon :model="ruleForm" :rules="rules">
           <el-form-item label="名称：" prop="enterpriseName">
             <el-input v-model="ruleForm.enterpriseName" placeholder="请输入您企业的名称..."></el-input>
           </el-form-item>
@@ -49,9 +49,9 @@
         </el-form>
         </div>
           <input class="varify" type="text" v-model="ruleForm.captcha" placeholder="请输入验证码..." >
-          <timer-btn ref="timerbtn" class="captchaButton" :run="sendCode()" ></timer-btn>
+          <timer-btn ref="timerbtn" class="captcha-button" :run="sendCode()" ></timer-btn>
           <el-checkbox v-model="checked"><router-link to="signUpAgreement">同意该协议</router-link></el-checkbox>
-          <Button class="signUpButton" @click="goSignUp()">注册</Button>
+          <Button class="signUp-button" @click="goSignUp()">注册</Button>
       </div>
     </div>
   </div>
@@ -246,7 +246,7 @@ export default {
 	opacity: 0.9;
 }
 
-.bussinessAdmin {
+.bussiness-admin {
 	position: relative;
 	@include margin-tl(5em, 2em);
 	@include wh(20vw, 14rem);
@@ -260,7 +260,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	@include wh(45vw, 80vw);
+	@include wh(45vw, $h-signup-container - $h-footer * 2 + 6rem);
 	@include margin-tl(15em, 2em);
 	box-shadow: $shadow-work;
 	background-color: $clr-white;
@@ -308,12 +308,12 @@ label {
 	font-size: 12px;
 }
 
-.signUpButton {
+.signUp-button {
 	width: 73%;
 	@include margin-tl(1em, 25%);
 }
 
-.captchaButton {
+.captcha-button {
 	@include margin-tl(-30px, 73%);
 }
 

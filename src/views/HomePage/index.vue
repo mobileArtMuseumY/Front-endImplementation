@@ -1,13 +1,13 @@
 <template>
-  <div class="home">
+  <div class="container">
     <div class="banner">
-      <button class="button" @click="goSignUp()">注册</button>
+      <button class="signup-button" @click="goSignUp()">注册</button>
       <!-- <button class="button" @click="goTest()">test</button> -->
     </div>
 
-    <div class="describe">
+    <div class="content">
       <h3>该如何运作我们的网站？</h3>
-      <div class="content">
+      <div class="describe">
         {{ describe }}
       </div>
     </div>
@@ -66,29 +66,30 @@ export default {
 <style lang="scss" scoped>
 @import 'src/assets/scss/index';
 
-.home {
+.container {
 	width: 100%;
 	margin-top: $h-nav;
 	.banner {
 		height: $h-banner;
 		background-image: url('/static/images/home/background.jpg');
 		background-size: cover;
-		.button {
-      position: relative;
-      @include wh(6.25rem, 2.3rem);
-      @include margin-tl(23rem, 15%);
+		.signup-button {
+			position: relative;
+      cursor: pointer;
+			@include wh(6.25rem, 2.3rem);
+			@include margin-tl(23rem, 15%);
 			background-color: $clr-main;
 			color: $clr-white;
 			border: none;
 		}
 	}
-	.describe {
-    padding: 3rem;
-    @include wh(40%, 18rem);
-		.content {
+	.content {
+		padding: 3rem;
+		@include wh(40%, 18rem);
+		.describe {
 			padding: 0.3rem;
-      box-shadow: $shadow-work;
-      @include wh(17rem, 15rem);
+			box-shadow: $shadow-work;
+			@include wh(17rem, 15rem);
 		}
 	}
 	.display {
@@ -102,9 +103,9 @@ export default {
 			justify-content: space-around;
 			box-shadow: $shadow-work;
 			img {
-        border-radius: 3px;
-        @include wh(15vw, calc(20vw));
-				margin: 1em;
+				border-radius: 3px;
+				@include wh(17vw, 35vh);
+				margin: 0.5em;
 				transform: scale(1);
 				transition: all 1s ease 0s;
 				border: $border;

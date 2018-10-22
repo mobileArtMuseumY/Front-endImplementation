@@ -1,12 +1,12 @@
 <template >
-  <div class="containerla" v-if="!user.signIn">
+  <div class="container-la" v-if="!user.signIn">
     <div class="left">
       {{ content }}
     </div>
     <div class="right">
-      <button class="button" @click="goSignUp()">注册</button>
+      <button class="signup-button" @click="goSignUp()">注册</button>
     </div>
-    <!-- <svg-icon icon="delete" @click="goDelete()" class="delete"></svg-icon> -->
+    <!-- <svg-icon icon="delete-icon" @click="goDelete()" class="delete"></svg-icon> -->
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 @import 'src/assets/scss/index';
 
-.containerla {
+.container-la {
 	@include wh(100%, $h-regBtn);
 	background-color: $clr-content;
 	display: flex;
@@ -55,7 +55,7 @@ export default {
 		position: relative;
 		color: #333333;
 	}
-	.button {
+	.signup-button {
 		height: 2rem;
 		background-color: $clr-main;
 		color: $clr-white;

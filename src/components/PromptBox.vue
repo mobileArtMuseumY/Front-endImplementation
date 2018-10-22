@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    {{msg}}
+    <svg-icon icon=""></svg-icon>
   </div>
 </template>
 
@@ -13,9 +13,11 @@
  * 5. 余额不足
  */
 export default {
+  prop: {
+    msg: '',
+  },
   data() {
     return {
-      msg: '提示信息展示',
     };
   },
 };

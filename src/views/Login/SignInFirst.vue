@@ -4,17 +4,17 @@
       <img src="/static/images/signin/sunflowers.jpg" alt="sunflower">
     </div>
     <div class="main">
-          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="ruleForm">
+          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="rule-form">
           <el-form-item label="邮箱：" prop="email" >
             <el-input type="email" v-model="ruleForm.email" placeholder="请输入您的邮箱..."></el-input>
           </el-form-item>
           </el-form>
           <div class="captcha">
             <input class="varify" v-model="captcha" type="text" placeholder="请输入验证码..." >
-            <timer-btn ref="timerbtn" class="captchaBtn" ></timer-btn>
+            <timer-btn ref="timerbtn" class="captcha-btn" ></timer-btn>
             <!-- :run="sendCode()"发送验证码有问题 -->
           </div>
-          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="ruleForm">
+          <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="rule-form">
           <el-form-item label="密码：" prop="password" >
             <el-input type="password" v-model="ruleForm.password" placeholder="请输入您的密码..."></el-input>
           </el-form-item>
@@ -22,7 +22,7 @@
             <el-input type="password" v-model="ruleForm.varifyPassword" placeholder="请确认你的密码..."></el-input>
           </el-form-item>
           </el-form>
-      <div class="button login">
+      <div class="signin-button">
         <button @click="goOn()">登录</button>
       </div>
     </div>
@@ -141,7 +141,7 @@ export default {
 	.main {
     width: 25vw;
     @include margin-tl(18vw, 10vw);
-		.ruleForm {
+		.rule-form {
       width: 20vw;
       @include margin-tl(3rem, 2rem);
 		}
@@ -160,14 +160,14 @@ export default {
 	}
 }
 
-.captchaBtn {
+.captcha-btn {
   cursor: pointer;
   float: right;
   @include margin-tl(-35px, 10vw);
   z-index: 9999;
 }
 
-.login {
+.signin-button {
   font-size: 0.6rem;
   @include margin-tl(5rem, 7rem);
 }

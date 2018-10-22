@@ -5,6 +5,8 @@ import TimerBtn from '@/components/TimerBtn';
 import ProRegistrationBtn from '@/components/ProRegistrationBtn';
 import MultiPage from '@/components/MultiPage';
 import PromptBox from '@/components/PromptBox';
+import WorksDisplay from '@/components/WorksDisplay';
+
 
 const components = {
   SvgIcon,
@@ -14,6 +16,7 @@ const components = {
   ProRegistrationBtn,
   MultiPage,
   PromptBox,
+  WorksDisplay,
 };
 
 export default (Vue) => {

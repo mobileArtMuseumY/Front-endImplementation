@@ -9,11 +9,23 @@
           v-model="search"
           clearable>
         </el-input>
+    
       </div>
-      <div class="sortASkillFarent">
-        <div class="myskill">
+      <div class="sort-of-skill">
+        <div class="my-skill">
           <label>我的技能：</label>
-          <svg-icon icon="upload" :class="[rotate ? 'go' : 'aa']" @click.native="getSkills()"></svg-icon>
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              <svg-icon icon="upload-icon" :class="[rotate ? 'go' : 'aa']" @click.native="getSkills()"></svg-icon>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>js</el-dropdown-item>
+            <el-dropdown-item>css3</el-dropdown-item>
+            <el-dropdown-item>vue</el-dropdown-item>
+            <el-dropdown-item>eslint</el-dropdown-item>
+            <el-dropdown-item>log</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
         <div class="sort">
           <label>分类：</label>
@@ -26,21 +38,21 @@
       <div v-for="data in projectData" :key="data" class="project">
         <!-- <img :src="data.avatar" alt="avatar" class="avatar"> -->
        <div class="top">
-          <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar"></svg-icon>
-          <label class="projectName"><strong>{{ data.projectName }}</strong></label>
+          <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar-of-business"></svg-icon>
+          <label class="project-name"><strong>{{ data.projectName }}</strong></label>
           <label class="budget"><strong>￥{{ data.budget }}</strong></label>
-          <button class="a businessId" @click="goBusinessHome(data.businessId)">{{ data.businessName }}</button>
+          <button class="a business-id-button" @click="goBusinessHome(data.businessId)">{{ data.businessName }}</button>
        </div>
         <p class="description" >{{ data.projectDescription }}</p>
         <div class="bottom">
         <ul v-if="data.skillList">
-          <div class="skillParent">
+          <div class="skill-parent">
             <li v-for="skill in data.skillList" :key="skill" class="skill">{{ skill }}</li>
           </div>
         </ul>
-        <label class="gmtTime">{{ data.gmtCreate }}</label>
-        <label class="leftTime">剩余{{ data.leftTime }}天</label>
-        <button class="a projectId" @click="goProjectHome(data.prjectId)">查看详情</button>
+        <label class="gmt-time">{{ data.gmtCreate }}</label>
+        <label class="left-time">剩余{{ data.leftTime }}天</label>
+        <button class="a project-id-button" @click="goProjectHome(data.prjectId)">查看详情</button>
         </div>
       </div>
     </div>
@@ -192,7 +204,6 @@ export default {
 	methods: {
 		// 有点乱。。。
 		getSkills() {
-			this.$message('hello');
 			this.rotate = !this.rotate;
 			// 发送请求
 			getSkillList()
@@ -281,49 +292,43 @@ export default {
 		background-color: #fff;
 		margin-top: 2rem;
 		border-radius: 4px;
-		width: 80vw;
-		height: 6rem;
+		@include wh(80vw, 6rem);
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
 		.search {
 			position: relative;
-			width: 25vw;
-			height: 2rem;
+			@include wh(25vw, 2rem);
 		}
-		.sortASkillFarent {
+		.sort-of-skill {
 			width: 50vw;
 			.sort {
 				float: right;
 			}
-			.myskill {
+			.my-skill {
 				float: left;
 			}
 		}
 	}
 	.main {
 		width: 80vw;
-		height: 125rem;
-		background-color: #fff;
+		background-color: $clr-white;
 		border-radius: 4px;
 		.project {
 			position: relative;
-			border-top: 0.03rem solid $clr-border;
+			border-top: $border;
 			padding: 2rem;
 			&:hover {
 				box-shadow: $shadow-work;
 				border-left: 0.1rem solid $clr-main;
 			}
 			.top {
-				width: 75vw;
-				height: 6.5rem;
-				.avatar {
-					width: 70px;
-					height: 70px;
+				@include wh(75vw, 6.5rem);
+				.avatar-of-business {
+					@include wh(70px, 70px);
 					float: left;
-					margin-top: 0;
-					margin-left: 0;
+					@include margin-tl(0, 0);
 				}
 				.budget {
 					float: right;
@@ -331,67 +336,24 @@ export default {
 					font-size: 17px;
 					color: $clr-main;
 				}
-				.projectName {
-					// logo设计
+				.project-name {
 					float: left;
 					margin: 0 auto 100px 90px;
 					font-size: 17px;
 					color: $clr-footer-font;
 				}
-				.businessId {
+				.business-id-button {
 					text-align: start;
 					float: left;
-					margin-top: 80px;
-					margin-left: -220px;
-				}
-				.description {
-					padding: 0 0.5rem 0 0;
-					line-height: 20px;
-					width: 50vw;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					display: -webkit-box;
-					-webkit-line-clamp: 2; // 改变行数
-					-webkit-box-orient: vertical;
-					color: #bcbcbc;
-					border: 0.06rem solid $clr-border;
-				}
-				// 整个bottom都瘫痪了？？？
-				.bottom {
-					width: 75vw;
-					height: 7rem;
-					border: 0.06rem solid $clr-border;
-					.projectId {
-						text-align: end;
-						float: right;
-						border: 0.06rem solid $clr-border;
-					}
-					.skillParent {
-						// display: inline-block;
-						// padding: 0;
-						.skill {
-							display: inline;
-							color: #bcbcbc;
-							margin-left: 5px;
-							box-shadow: $shadow-skill;
-							&:first-child {
-								margin-left: -40px; // 为什么0的时候不是最左边？
-							}
-						}
-					}
-					.leftTime {
-						margin-left: 40px;
-					}
+					@include margin-tl(80px, -220px);
 				}
 			}
 		}
 		.pagination {
-			width: 100%;
-			height: 3rem;
+			@include wh(100%, 3rem);
+			@include margin-tl(2rem, -7vw);
 			text-align: center;
 			margin-bottom: 3rem;
-			margin-top: 2rem;
-			margin-left: -7vw;
 		}
 	}
 	.a {
@@ -417,18 +379,53 @@ export default {
 
 	.go {
 		cursor: pointer;
-		transform: rotate(180deg);
-		transition: all 2s;
+		transform: rotate(90deg);
+		transition: all .5s;
 	}
 
 	.aa {
 		cursor: pointer;
 	}
 }
+
+.description {
+	padding: 0 0.5rem 0 0;
+	line-height: 20px;
+	width: 50vw;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2; // 改变行数
+	-webkit-box-orient: vertical;
+	color: $clr-footer-font;
+}
+
+.bottom {
+	@include wh(75vw, 7rem);
+	.project-id-button {
+		text-align: end;
+		float: right;
+	}
+	.skill-parent {
+		.skill {
+			display: inline;
+			color: $clr-footer-font;
+			margin-left: 5px;
+			box-shadow: $shadow-skill;
+			&:first-child {
+				margin-left: -40px; // 为什么0的时候不是最左边？
+			}
+		}
+	}
+	.left-time {
+		margin-left: 40px;
+		color: $clr-footer-font;
+	}
+	.gmt-time {
+		color: $clr-footer-font;
+	}
+}
 </style>
 
 <style lang="scss">
-// .el-input__icon {
-//   line-height: 20px;
-// }
 </style>

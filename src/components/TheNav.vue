@@ -39,11 +39,8 @@
                 <img src="/static/images/nav/avatar.png" alt="avatar" class="nav-avatar">
             </span>
           <el-dropdown-menu slot="dropdown" v-if="user.role === 'enterprise'">
-            <!-- <el-dropdown-item>
-              <router-link to="/enterpriseHomePage">我的主页</router-link>
-            </el-dropdown-item> -->
             <el-dropdown-item>
-              <router-link to="/enterpriseHomePage">我的主页</router-link>
+              <router-link to="/user/enterpriseHomePage">我的主页</router-link>
             </el-dropdown-item>
             <el-dropdown-item> 
               <router-link to="/setting">设置</router-link>
@@ -52,12 +49,12 @@
               <router-link to="/service">客服</router-link>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="lala" @click="signOut">退出</a>
+              <a href="" @click="signOut()">退出</a>
             </el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu slot="dropdown" v-if="user.role === 'student'">
             <el-dropdown-item>
-              <router-link to="/studentHomePage">我的主页</router-link>
+              <router-link to="/user/studentHomePage">我的主页</router-link>
             </el-dropdown-item>
             <el-dropdown-item> 
               <router-link to="/setting">设置</router-link>
@@ -66,13 +63,13 @@
               <router-link to="service">客服</router-link>
             </el-dropdown-item>
             <el-dropdown-item>
-              <a href="lala" @click="signOut()">退出</a>
+              <a href="" @click="signOut()">退出</a>
             </el-dropdown-item>
           </el-dropdown-menu>
           </el-dropdown>
         |
         <div class="reminder">
-          <svg-icon icon="reminder-hollow" style="width: 20px; height: 30px;"></svg-icon>
+          <svg-icon icon="reminder-hollow-icon" style="width: 20px; height: 30px;"></svg-icon>
         </div>
       </div>
     </div>
@@ -133,7 +130,11 @@ export default {
 			this.$store.dispatch('SignOut');
 		},
 	},
-	watch: {},
+	watch: {
+    changeColor() {
+      this.router
+    },
+  },
 };
 </script>
 
@@ -192,6 +193,9 @@ export default {
 			&:hover {
 				color: $clr-main;
 			}
+      &.active {
+				color: $clr-main;
+      }
 		}
 	}
 }

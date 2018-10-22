@@ -14,6 +14,7 @@ import {
   DropdownItem,
   DropdownMenu,
   Checkbox,
+  Dialog,
 } from 'element-ui';
 
 Vue.prototype.$message = Message;
@@ -31,3 +32,4 @@ Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Checkbox);
+Vue.use(Dialog);

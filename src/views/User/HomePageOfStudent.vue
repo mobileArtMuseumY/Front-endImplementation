@@ -15,7 +15,7 @@
         :before-upload="onBeforeUpload"
         :on-success="onSuccess"
         :multiple="false">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar-of-student">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       </div>
@@ -35,8 +35,8 @@
 export default {
 	data() {
 		return {
-      imageUrl: '',
-    };
+			imageUrl: '',
+		};
 	},
 	methods: {
 		uploadUrl() {
@@ -60,12 +60,12 @@ export default {
 			}
 			return isIMAGE && isL1M;
 		},
-  },
-  mounted: {
-    getStudentInfo() {
-      // this.$store.dispatch('GetStudentInfo');
-    },
-  },
+	},
+	mounted: {
+		getStudentInfo() {
+			// this.$store.dispatch('GetStudentInfo');
+		},
+	},
 };
 </script>
 
@@ -73,24 +73,20 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-	width: 100%;
+	@include wh(100%, 60rem);
 	margin-top: $h-nav;
-	height: 60rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	z-index: -1;
 	.background {
-		position: relative;
-		width: 100%;
-		height: 30rem;
+		@include wh(100%, 30rem);
 		z-index: 0;
-    background-image: url('/static/images/user/enterprise/landscape.jpg');
+		background-image: url('/static/images/user/enterprise/landscape.jpg');
 		background-size: 100% 100%;
 	}
 	.top {
-		width: 70vw;
-		height: 40rem;
+		@include wh(70vw, 40rem);
 		margin-top: -13rem;
 		background-color: #fff;
 		z-index: 99;
@@ -112,21 +108,17 @@ export default {
 .avatar-uploader-icon {
 	font-size: 28px;
 	color: #666666;
-	width: 190px;
-	height: 180px;
+  @include wh(190px, 180px);
+  @include margin-tl(-1rem, 1rem);
 	line-height: 110px;
 	text-align: center;
 	border: 1px dashed #666666;
-	margin-left: 1rem;
-	margin-top: -1rem;
 }
-.avatar {
-	width: 190px;
-	height: 180px;
+.avatar-of-student {
+	@include wh(190px, 180px);
+  @include margin-tl(-1rem, 1rem);
 	display: block;
 	box-shadow: $shadow-work;
-  border-radius: 2px;
-	margin-left: 1rem;
-	margin-top: -1rem;
+	border-radius: 2px;
 }
 </style>

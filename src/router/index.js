@@ -97,12 +97,12 @@ const constRouterMap = [
         name: '作品详情',
         component: () => import('@/views/Works/WorksDetails'),
       },
-      {
-        path: '*',
-        redirect: '/404',
-        hidden: true,
-      },
     ],
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true,
   },
 ];
 
@@ -111,16 +111,16 @@ const router = new VueRouter({
   linkActiveClass: 'active',
   routes: [...constRouterMap],
   scrollBehavior(to, from, savedPosition) {
-    return {x: 0, y:0};
+    return { x: 0, y: 0 };
   }
 });
 
 const asyncRouterMap = [
   {
     path: '/permission',
-    name:'权限控制',
+    name: '权限控制',
     component: () => import('@/views/Layout'),
-    meta: { role: ['student']},
+    meta: { role: ['student'] },
   },
   {
     path: '*',
