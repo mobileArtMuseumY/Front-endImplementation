@@ -48,5 +48,6 @@ export default {
 <style>
 .svg-icon{
    vertical-align: -0.25rem;
+   cursor: pointer;
 }
 </style>

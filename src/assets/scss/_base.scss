@@ -7,7 +7,7 @@ body,
   width: 100%;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-size: 16px;
-  color: $clr-black;
+  // color: $clr-black;
   background-color: $clr-bg;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -63,11 +63,6 @@ a:hover {
   text-align-last: initial;
 }
 
-// .active{
-//   color: $clr-main;
-//   border-bottom: solid 1px $clr-main;
-// }
-
 label {
   color: $clr-gray;
   font-size: $font-size-label;
@@ -104,6 +99,8 @@ button {
   height: $h-button;
   font-size: $font-size-button;
   border-radius: 5px;
+  outline: none;
+  cursor: pointer;
   &:hover {
     background-color: $clr-main;
     color: $clr-white;
@@ -130,3 +127,4 @@ li {
     border-bottom: solid 1px $clr-main;
   }
 }
+

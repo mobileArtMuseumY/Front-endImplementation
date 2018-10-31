@@ -10,7 +10,7 @@
           </el-form-item>
           </el-form>
           <div class="captcha">
-            <input class="varify" v-model="captcha" type="text" placeholder="请输入验证码..." >
+            <input class="varify-input" v-model="captcha" type="text" placeholder="请输入验证码..." >
             <timer-btn ref="timerbtn" class="captcha-btn" ></timer-btn>
             <!-- :run="sendCode()"发送验证码有问题 -->
           </div>
@@ -116,7 +116,6 @@ export default {
 			 *   this.$refs.timerbtn.stop();
 			 * }
 			 */
-      // console.log('hellolala');
       const data = this.ruleForm.email;
       this.$store.dispatch('StudentSignInFirstSendEmail', data);
 		},
@@ -147,11 +146,12 @@ export default {
 		}
 		.captcha {
 			width: 20vw;
-			margin-left: 3rem;
-			.varify {
+			margin-left: 2rem;
+			.varify-input {
 				border-radius: 0%;
 				border: none;
-				border-bottom: $border;
+        border-bottom: $border;
+        outline: none;
 				width: 19vw;
 				background-color: transparent;
         z-index: 1;   // 不起作用
@@ -172,7 +172,7 @@ export default {
   @include margin-tl(5rem, 7rem);
 }
 
-.content .varify ::-webkit-input-placeholder {
+.content .varify-input ::-webkit-input-placeholder {
 	color: $clr-black;
 	font-size: 12px;
 }

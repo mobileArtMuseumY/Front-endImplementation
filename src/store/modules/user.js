@@ -25,6 +25,7 @@ import {
 } from '@/api/user';
 import { setToken, getToken, removeToken } from '@/utils/auth';
 import router from '@/router';
+import { setStore, getStore } from '@/utils/storage';
 
 /**
  * 问题：
@@ -67,7 +68,6 @@ const user = {
     },
     [SET_USER_NAME](state, userName) {
       state.userInfo.userName = userName;
-      console.log(userName);
     },
     [SET_AVATAR](state, avatar) {
       state.userInfo.avatar = avatar;
@@ -107,7 +107,9 @@ const user = {
               commit('SET_ROLE', data.role);
               commit('SET_TOKEN', token);
               setToken(token);
-              console.log(getToken());
+              setStore('token', token);
+              // setStore('userId', )
+              console.log(getToken() + 'signin');
               dispatch('GetEnterpriseInfo');
               router.push('/user/enterpriseHomePage');
               resolve();
@@ -183,7 +185,6 @@ const user = {
             if (!res.data) {
               reject('error');
             }
-            console.log('lalal');
             // const data = res.data;
             // if (data.roles && data.roles.length > 0) {
             //   commit('SET_ROLES', data.roles);

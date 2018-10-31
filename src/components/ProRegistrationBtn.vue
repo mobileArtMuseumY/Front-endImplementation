@@ -4,9 +4,9 @@
       {{ content }}
     </div>
     <div class="right">
-      <button class="signup-button" @click="goSignUp()">注册</button>
+      <button class="signup-button" @click="goToSignUp()">注册</button>
     </div>
-    <!-- <svg-icon icon="delete-icon" @click="goDelete()" class="delete"></svg-icon> -->
+    <!-- <svg-icon icon="delete-icon" @click="goToDelete()" class="delete"></svg-icon> -->
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
 		...mapGetters(['user']),
 	},
 	methods: {
-		goSignUp() {
+		goToSignUp() {
 			this.$router.push('/signup');
 		},
 	},

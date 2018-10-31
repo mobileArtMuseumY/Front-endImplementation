@@ -48,10 +48,12 @@
           </el-form-item>
         </el-form>
         </div>
-          <input class="varify" type="text" v-model="ruleForm.captcha" placeholder="请输入验证码..." >
+          <input class="varify-input" type="text" v-model="ruleForm.captcha" placeholder="请输入验证码..." >
           <timer-btn ref="timerbtn" class="captcha-button" :run="sendCode()" ></timer-btn>
-          <el-checkbox v-model="checked"><router-link to="signUpAgreement">同意该协议</router-link></el-checkbox>
-          <Button class="signUp-button" @click="goSignUp()">注册</Button>
+          <div class="check-box">
+            <el-checkbox v-model="checked"><router-link to="/signUpAgreement">同意该协议</router-link></el-checkbox>
+          </div>
+          <Button class="signUp-button" @click="goToSignUp()">注册</Button>
       </div>
     </div>
   </div>
@@ -190,7 +192,7 @@ export default {
 			}
 			return isIMAGE && isL1M;
 		},
-		goSignUp() {
+		goToSignUp() {
       if(!this.checked){
         this.$message.error('非常抱歉，您需同意我们的协议才可以注册！');
         return ;
@@ -224,8 +226,8 @@ export default {
 			 * }
 			 */
 			// this.$refs.timerbtn.setDisabled(true);
-			const phoneNumber = this.ruleForm.phoneNumber;
-			this.$store.dispatch('SendVerify', phoneNumber);
+			// const phoneNumber = this.ruleForm.phoneNumber;
+			// this.$store.dispatch('SendVerify', phoneNumber);
 		},
 	},
 };
@@ -236,7 +238,8 @@ export default {
 @import url('//unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css');
 
 .container {
-	@include wh(100%, $h-signup-container);
+  // @include wh(100%, $h-signup-container);
+  width: 100%;
 	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signup/background.jpg');
@@ -260,7 +263,9 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	@include wh(45vw, $h-signup-container - $h-footer * 2 + 6rem);
+  // @include wh(45vw, $h-signup-container - $h-footer * 2 + 10rem);
+  width: 45vw;
+  margin-bottom: 3rem;
 	@include margin-tl(15em, 2em);
 	box-shadow: $shadow-work;
 	background-color: $clr-white;
@@ -270,13 +275,15 @@ export default {
 .title {
 	font-size: 30px;
 	font-weight: bold;
-	width: 25%;
+  width: 25%;
+  margin-top: 4rem;
 	margin-left: 20%;
 	color: #363636;
 }
 
 .content {
-	@include wh(80%, 80%);
+  // @include wh(80%, 80%);
+  width: 80%;
 	display: flex;
 	flex-direction: column;
 }
@@ -295,26 +302,32 @@ label {
 	@include margin-tb(3em, 3em);
 }
 
-.varify {
+.varify-input {
 	width: 73%;
 	border-radius: 0%;
 	border: none;
 	border-bottom: $border;
-	@include margin-tl(3em, 25%);
+  @include margin-tl(3em, 25%);
+  outline: none;
 }
 
-.varify ::-webkit-input-placeholder {
+.varify-input ::-webkit-input-placeholder {
 	color: $clr-black;
 	font-size: 12px;
 }
 
 .signUp-button {
 	width: 73%;
-	@include margin-tl(1em, 25%);
+  @include margin-tl(.5em, 25%);
+  margin-bottom: 5rem;
 }
 
 .captcha-button {
-	@include margin-tl(-30px, 73%);
+  @include margin-tl(-30px, 73%);
+}
+
+.check-box {
+  margin-left: 25%;
 }
 
 .avatar-uploader .el-upload {
@@ -378,25 +391,18 @@ label {
 	color: #8fb5f2;
 }
 
-.el-checkbox {
-	margin-left: 25%;
-}
-
 .el-checkbox__input.is-checked + .el-checkbox__label {
-	color: $clr-label;
-	&:hover {
-		color: $clr-main;
-	}
+	color: $clr-gray;
 }
 
 .el-checkbox__input.is-checked .el-checkbox__inner,
 .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-	color: $clr-gray;
-	background-color: $clr-gray;
-	border-color: $clr-gray;
+	color: #fff;
+  background-color: $clr-main;
+	border-color: $clr-main;
 }
 
 .el-checkbox__inner:hover {
-	border-color: $clr-gray;
+	border-color: $clr-main;
 }
 </style>

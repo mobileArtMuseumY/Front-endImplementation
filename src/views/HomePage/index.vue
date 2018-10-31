@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="banner">
-      <button class="signup-button" @click="goSignUp()">注册</button>
-      <!-- <button class="button" @click="goTest()">test</button> -->
+      <button class="signup-button" @click="goToSignUp()">注册</button>
     </div>
 
     <div class="content">
@@ -16,7 +15,7 @@
       <h3>美图欣赏</h3>
       <div class="works">
           <div v-for="item in works" :key="item">
-            <img :src="item" alt="works" @click="Display()">
+            <img :src="item" alt="works" @click="goToDisplay()">
           </div>
       </div>
     </div>
@@ -49,13 +48,13 @@ export default {
 		};
 	},
 	methods: {
-		goSignUp() {
+		goToSignUp() {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
 			// this.$router.push('/user/enterpriseHomePage');
 			// this.$router.push('user//studentHomePage');
 			this.$router.push('/signinFirst');
 		},
-		Display() {
+		goToDisplay() {
 			// 点击图片发生的动作
 			// 暂时不需要
 		},

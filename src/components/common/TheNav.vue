@@ -12,8 +12,8 @@
       </router-link>
     </div>
     <div class="nav-search">
-      <!-- 还没实现 -->
-      <!-- :fetch-suggestions="querySearchAsync"
+      <!-- 还没实现
+      :fetch-suggestions="querySearchAsync"
           @select="handleSelect"
           :on-icon-click="handleIconClick"
           @keydown.enter.native="handleIconClick" -->
@@ -26,12 +26,12 @@
           clearable
           style="border: 0px">
         </el-input>
-      </div>
+    </div>
     <div class="nav-right">
       <div class="nav-login" v-if="!user.signIn">
-        <span id="signin-clicked" @click="goSignIn()">登录</span>
+        <router-link to="/signin" class="login-a">登录</router-link>
           |
-        <span id="signiup-clicked" @click="goSignUp()">注册</span>
+        <router-link to="/signup" class="login-a">注册</router-link>
       </div>
       <div class="user-profile" v-if="user.signIn">
           <el-dropdown>
@@ -67,9 +67,9 @@
             </el-dropdown-item>
           </el-dropdown-menu>
           </el-dropdown>
-        |
+          |
         <div class="reminder">
-          <svg-icon icon="reminder-hollow-icon" style="width: 20px; height: 30px;"></svg-icon>
+          <svg-icon icon="reminder-hollow-icon" style="width: 20px; height: 30px;" @click="reminder()" class="reminder" id="reminder" @click.native="openInBox"></svg-icon>
         </div>
       </div>
     </div>
@@ -89,7 +89,9 @@
  *   2. 被选中后颜色不能改变(设置:active 不起作用 )                               //换了一种解决方式
  *   3. name是起什么作用的？为什么注释掉了页面里的nav也同样可以正常显示？           //已解决
  *   4. 当往下滑时nav背景变为透明                                               //未解决
- *   5. 当点击span之后再点击导航栏时，span的颜色该如何变成black?                  //未解决
+ *   5. 当点击span之后再点击导航栏时，span的颜色该如何变成black?                  //已解决
+    6.  消息提醒 
+ *    
  */
 
 import { mapGetters } from 'vuex';
@@ -99,6 +101,7 @@ export default {
 	data() {
 		return {
 			search: '',
+			open: false,
 		};
 	},
 	props: {
@@ -116,25 +119,19 @@ export default {
 		...mapGetters(['user']),
 	},
 	methods: {
-		goSignIn() {
-			document.getElementById('signin-clicked').style.color = 'red';
-			document.getElementById('signiup-clicked').style.color = 'black';
-			this.$router.push('/signin');
-		},
-		goSignUp() {
-			document.getElementById('signin-clicked').style.color = 'black';
-			document.getElementById('signiup-clicked').style.color = 'red';
-			this.$router.push('/signup');
-		},
 		signOut() {
 			this.$store.dispatch('SignOut');
 		},
+		openInBox() {
+			this.open = !this.open;
+			if (this.open) {
+				document.getElementById('reminder').style.color = 'red';
+			} else {
+				document.getElementById('reminder').style.color = 'gray';
+			}
+			// 显示信息
+		},
 	},
-	watch: {
-    changeColor() {
-      this.router
-    },
-  },
 };
 </script>
 
@@ -145,8 +142,8 @@ export default {
 	font-size: 10px;
 	position: fixed;
 	top: 0;
-  z-index: 999;
-  @include wh(100%, $h-nav);
+	z-index: 999;
+	@include wh(100%, $h-nav);
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -174,28 +171,9 @@ export default {
 	justify-content: flex-end;
 	align-items: center;
 	margin-right: 5%;
-	.nav-search {
-		width: 7rem;
-		margin-left: 1rem;
-		.el-input__inner {
-			border: none;
-			border-bottom: $border;
-			&:hover {
-				border-bottom: $border;
-			}
-		}
-	}
 	.nav-login {
-		span {
-			cursor: pointer;
-			margin: 0 0.2rem;
-			font-size: 0.8rem;
-			&:hover {
-				color: $clr-main;
-			}
-      &.active {
-				color: $clr-main;
-      }
+		.login-a {
+			margin: 0;
 		}
 	}
 }
@@ -213,6 +191,13 @@ export default {
 	border-radius: 50%;
 	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 	@include wh(40px, 40px);
+}
+
+.reminder {
+	cursor: pointer;
+	&:hover {
+		color: $clr-main;
+	}
 }
 
 a {
@@ -234,11 +219,14 @@ a {
 <style lang="scss">
 @import 'src/assets/scss/index';
 
-.el-dropdown-menu {
-  display: inline-block;
-	text-align: center;
+.el-input__inner {
+	height: 32px;
 }
 
+.el-dropdown-menu {
+	display: inline-block;
+	text-align: center;
+}
 </style>
 
 

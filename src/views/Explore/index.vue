@@ -3,23 +3,18 @@
     <pro-registration-btn></pro-registration-btn>
     <div class="sort">
       <label>分类：</label>
-      <span @click="sortOfTime()">发布时间</span>
-      <span @click="sortOfFocused()">关注度</span>
+      <span id="t-clicked" @click="sortOfTime()">发布时间</span>
+      <span id="f-clicked" @click="sortOfFocused()">关注度</span>
     </div>
-      <!-- <img :src="item.attachmentShowPath" alt="works" @click="Display()"> -->
     <section>
-      <div class="main" v-for="item in works" :key="item">
-        <!-- <img :src="item" alt="works" style="width: {{ item.width*200/item.height }}px;"> -->
-        <img :src="item" alt="works" >
+      <div class="main">
+        <works-item :works="item" v-for="(item, index) in items" :key="index">{{ item }}</works-item>
       </div>
-      <!-- <div class="main">
-        <works-display :worksId="item" v-for="(item, index) in items" :key="index"></works-display>
-      </div> -->
     </section>
     <div class="pagination">
       <template v-if="count">
         <ul>
-          <li v-for="item in items" :key="item">...</li>
+          <!-- <li v-for="(item, index) in items" :key="index">...</li> -->
           <multi-page
           :page-index="currentPage"
           :total="count"
@@ -35,28 +30,15 @@
 <script>
 /**
  * 作用：发现
- * 状态：两种                                          代码完成(未测试)
+ * 状态：两种                                          代码完成
  * 样式要求：
  *   1. 无
  * 问题：
- *   1. 如果让div在vertical的方向设置距离               笨方法完成(设置margin)
+ *   1. 如果让div在vertical的方向设置距离               笨方法完成(设置margin)<css揭秘 p185>
  *   2. 让图片“自适应”屏幕宽度                         完成
  *   3. 图片放入静态资源服务器中，config中index.js，proxyTable有什么关系？
  *   4. 如何从远程图床上引用图片
  */
-import picture1 from '@/../static/images/home/r11.jpg';
-import picture2 from '@/../static/images/home/r12.jpg';
-import picture3 from '@/../static/images/home/r13.jpg';
-import picture4 from '@/../static/images/home/r21.jpg';
-import picture5 from '@/../static/images/home/r22.jpg';
-import picture6 from '@/../static/images/home/r23.jpg';
-import picture7 from '@/../static/images/home/r24.jpg';
-import picture8 from '@/../static/images/home/ice.jpg';
-import picture9 from '@/../static/images/home/road.jpg';
-import picture10 from '@/../static/images/home/snowing.jpg';
-import picture11 from '@/../static/images/home/sunflower.jpg';
-import picture12 from '@/../static/images/home/sunset.jpg';
-import picture13 from '@/../static/images/home/yellowFlower.jpg';
 import { getWorksData, queryWorksDetails, getWorksCount } from '@/api/works';
 import axios from 'axios';
 
@@ -69,41 +51,25 @@ export default {
 			pageSize: 10,
 			currentPage: 1,
 			count: 50,
-			works: [
-				picture1,
-				picture2,
-				picture3,
-				picture4,
-				picture5,
-				picture6,
-				picture7,
-				picture8,
-				picture9,
-				picture10,
-				picture11,
-			],
-      items: [],
-      timeClicked: false,
-      focusClicked: false,
+			items: [],
 		};
 	},
 	methods: {
 		sortOfTime() {
-      this.timeClicked = true;
-      this.focusClicked = false;
+			document.getElementById('t-clicked').style.color = 'red';
+			document.getElementById('f-clicked').style.color = 'gray';
 			this.selected = 0;
 			this.currentPage = 5;
 			const data = {
 				method: this.selected,
 				page: this.currentPage,
 				rows: this.pageSize,
-      };
-      console.log(data);
-      this.getWorksData(data);
+			};
+			this.getWorksData(data);
 		},
 		sortOfFocused() {
-      this.focusClicked = true;
-      this.timeClicked = false;
+			document.getElementById('t-clicked').style.color = 'gray';
+			document.getElementById('f-clicked').style.color = 'red';
 			this.selected = 1;
 			this.currentPage = 1;
 			const data = {
@@ -117,16 +83,16 @@ export default {
 		getWorksData(data) {
 			getWorksData(data)
 				.then(res => {
-          this.items = res.data;
-          console.log(this.items);
+					this.items = res.data;
+					// console.log(this.items);
 					// getWorksCount().then(res => {
-          //   this.count = res.data.count;
+					//   this.count = res.data.count;
 
-          // }).catch(err => {
-          //   console.log('获取作品总数失败！');
-          // });
+					// }).catch(err => {
+					//   console.log('获取作品总数失败！');
+					// });
 				})
-				.then(err => {
+				.catch(err => {
 					console.log('获取作品失败' + err);
 				});
 		},
@@ -134,7 +100,7 @@ export default {
 			this.currentPage = page;
 			// this.sortOfFocused();
 		},
-  },
+	},
 	mounted() {
 		this.sortOfTime();
 	},
@@ -151,32 +117,17 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	.sort {
-    @include margin-tl(2em, 1em);
+		@include margin-tl(2em, 1em);
 		margin-left: 92vw;
 		width: 20%;
 	}
 	.main {
-		flex-grow: 1;
-		margin: 0.3rem;
-		img {
-			cursor: pointer;
-			border-radius: 1px;
-			height: calc(20vw);
-			max-width: 100%;
-			min-width: 100%;
-			object-fit: cover;
-			vertical-align: bottom;
-			transition: all 1s ease 0s;
-			box-shadow: $shadow-work;
-			z-index: 4;
-			&:hover {
-				transform: translateY(-7px);
-				transition: all 0.5s ease 0s;
-			}
-		}
+		width: 100vw;
+    display: flex;
+    
 	}
 	.pagination {
-    @include margin-tb(3rem, 3rem);
+		@include margin-tb(3rem, 3rem);
 		margin-left: -7vw;
 	}
 }
@@ -197,5 +148,6 @@ section {
 		flex-grow: 99;
 	}
 }
+
 </style>
 

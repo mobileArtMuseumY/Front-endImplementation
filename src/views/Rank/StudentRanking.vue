@@ -2,15 +2,25 @@
   <div class="container">
     <pro-registration-btn></pro-registration-btn>
     <div class="filter">
-
+      <div class="search">
+        <el-input
+          placeholder="search"
+          prefix-icon="el-icon-search"
+          v-model="search"
+          clearable>
+        </el-input>
+      </div>
+      <div class="sort">
+        <label>分类：</label>
+        <span @click="sortOfFocused()">关注度</span>
+      </div>
     </div>
     <div class="main">
-
+      <the-talent :theTalent="item" v-for="(item, index) in items" :key="index"></the-talent>
     </div>
     <div class="pagination">
       <template v-if="count">
         <ul>
-          <li v-for="item in items" :key="item">...</li>
           <multi-page
           :page-index="currentPage"
           :total="count"
@@ -24,6 +34,8 @@
 </template>
 
 <script>
+import { getStudentRanking } from '@/api/user';
+
 export default {
 	data() {
 		return {
@@ -31,15 +43,30 @@ export default {
 			pageSize: 8,
 			currentPage: 1,
 			count: 100,
-			items: [],
+      items: [],
+      search: '',
 		};
 	},
 	methods: {
 		pageChange(page) {
 			this.currentPage = page;
 			// this.sortOfFocused();
-		},
-	},
+    },
+    sortOfFocused() {
+      const data = {
+        page: this.currentPage,
+        rows: this.pageSize,
+      };
+      getStudentRanking(data).then(res => {
+        this.items = res.data;
+      }).catch(err => {
+        console.log(err + '获取学生信息失败！');
+      });
+    },
+  },
+  mounted() {
+    this.sortOfFocused();
+  },
 };
 </script>
 
@@ -53,28 +80,31 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	.filter {
-		position: relative;
-		background-color: #fff;
 		margin-top: 2rem;
 		border-radius: 4px;
-		width: 80vw;
-		height: 6rem;
+		@include wh(80vw, 4rem);
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: space-between;
 		align-items: center;
+		.search {
+			width: 30%;
+		}
 	}
 	.main {
 		width: 80vw;
-		height: 130rem;
 		background-color: #fff;
 		border-radius: 4px;
-		margin-top: 1rem;
 	}
 	.pagination {
-		margin-top: 3rem;
+		@include margin-tl(3rem, -7rem);
 		margin-bottom: 3rem;
-		margin-left: -7vw;
 	}
+}
+
+span {
+	margin: 0.3rem;
+	font-size: 0.8rem;
+	color: $clr-gray;
 }
 </style>

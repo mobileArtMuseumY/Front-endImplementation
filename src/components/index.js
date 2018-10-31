@@ -1,11 +1,14 @@
 import SvgIcon from '@/components/SvgIcon';
-import TheNav from '@/components/TheNav';
-import TheFooter from '@/components/TheFooter';
+import TheNav from '@/components/common/TheNav';
+import TheFooter from '@/components/common/TheFooter';
 import TimerBtn from '@/components/TimerBtn';
 import ProRegistrationBtn from '@/components/ProRegistrationBtn';
 import MultiPage from '@/components/MultiPage';
 import PromptBox from '@/components/PromptBox';
-import WorksDisplay from '@/components/WorksDisplay';
+import WorksItem from '@/components/works/WorksItem';
+import ProjectItem from '@/components/project/ProjectItem';
+import TheTalent from '@/components/users/TheTalent';
+import { Swiper, Slide } from 'vue-swiper-component';
 
 
 const components = {
@@ -16,7 +19,11 @@ const components = {
   ProRegistrationBtn,
   MultiPage,
   PromptBox,
-  WorksDisplay,
+  WorksItem,
+  ProjectItem,
+  TheTalent,
+  Swiper,
+  Slide,
 };
 
 export default (Vue) => {

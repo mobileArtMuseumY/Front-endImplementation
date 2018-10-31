@@ -13,16 +13,19 @@
             <el-input type="password" v-model="ruleForm.password" placeholder="请输入您的密码..."></el-input>
         </el-form-item>
       </el-form>
-      <div class="content">
+      <div class="content-to-password">
         <div class="left">
-          <span>没有注册？那就 &nbsp;<a @click="goSignUp()">注册</a> &nbsp;一个吧！</span>
+          <el-checkbox v-model="remembered" @click="goToRemembered">记住密码</el-checkbox>
         </div>
         <div class="right">
           <a @click="getPassword()">忘记密码</a>
         </div>
       </div>
+      <div class="content-to-signup">
+        <span>没有注册？那就 &nbsp;<a @click="goToSignUp()">注册</a> &nbsp;一个吧！</span>
+      </div>
       <div class="signin-button">
-        <button @click="goSignIn()">登录</button>
+        <button @click="goToSignIn()">登录</button>
       </div>
     </div>
   </div>
@@ -50,7 +53,8 @@
 
 import axios from '@/utils/axios';
 import { enterpriseSignIn, studentSignIn } from '@/api/user';
-import { setToken, setUser, getToken, getUser } from '@/utils/auth';
+import { getStore, setStore, removeStore } from '@/utils/storage';
+import { setToken, getToken } from '@/utils/auth';
 import { mapMutations } from 'vuex';
 
 export default {
@@ -66,6 +70,10 @@ export default {
 			opacity: 0,
 			input: '',
 			role: '',
+			enterpriseChecked: '',
+			studentChecked: '',
+			checked: '',
+			remembered: false,
 			ruleForm: {
 				userId: '',
 				password: '',
@@ -100,18 +108,22 @@ export default {
 	methods: {
 		confirmRole(role) {
 			this.role = role;
-			if (role === 'enterprise') {
-				document.getElementById('e-clicked').style.color = 'red';
-				document.getElementById('s-clicked').style.color = 'gray';
+			if (this.role === 'enterprise') {
+				this.enterpriseChecked = true;
+				this.studentChecked = false;
 				this.holder = '请输入您的邮箱...';
 			} else {
-				document.getElementById('s-clicked').style.color = 'red';
-				document.getElementById('e-clicked').style.color = 'gray';
+				this.enterpriseChecked = false;
+				this.studentChecked = true;
 				this.holder = '请输入学号...';
 			}
 		},
+		goToRemembered() {
+			this.remembered = !this.remembered;
+		},
 		// 登录
-		goSignIn() {
+		goToSignIn() {
+			this.rememberPass();
 			if (!this.role) {
 				this.message('请选择角色！');
 				return false;
@@ -141,16 +153,74 @@ export default {
 				});
 			}
 		},
-		goSignUp() {
+		goToSignUp() {
 			this.$router.push('/signup');
-    },
-    getPassword() {
-      this.$router.push('/retrievePassword');
-    },
+		},
+		getPassword() {
+			this.$router.push('/retrievePassword');
+		},
 		message(m) {
 			this.$message.error({
 				message: m,
 			});
+		},
+		getRemembered() {
+			const judge = getStore('remembered');
+			if (judge === 'true') {
+				this.remembered = true;
+				this.ruleForm.userId = getStore('userId');
+				this.ruleForm.password = getStore('password');
+				this.role = getStore('role');
+			} else {
+				this.role = 'enterprise';
+			}
+		},
+		rememberPass() {
+			if (this.remembered === true) {
+				setStore('remembered', 'true');
+				setStore('role', this.role);
+				setStore('userId', this.ruleForm.userId);
+				setStore('password', this.ruleForm.password);
+			} else {
+				setStore('remembered', 'false');
+				removeStore('userId');
+				removeStore('password');
+				removeStore('role');
+			}
+		},
+	},
+	mounted() {
+		this.getRemembered();
+	},
+	watch: {
+		role: {
+			handler() {
+				if (this.role === 'enterprise') {
+					this.enterpriseChecked = true;
+					this.studentChecked = false;
+					this.holder = '请输入您的邮箱...';
+				} else {
+					this.studentChecked = true;
+					this.enterpriseChecked = false;
+					this.holder = '请输入学号...';
+				}
+			},
+		},
+		enterpriseChecked: {
+			handler() {
+        if(this.role === 'enterprise'){
+          document.getElementById('e-clicked').style.color = 'red';
+          document.getElementById('s-clicked').style.color = 'gray';
+        }
+			},
+		},
+		studentChecked: {
+			handler() {
+        if(this.role === 'student') {
+          document.getElementById('e-clicked').style.color = 'gray';
+          document.getElementById('s-clicked').style.color = 'red';
+        }
+			},
 		},
 	},
 };
@@ -164,7 +234,7 @@ export default {
 	margin-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signin/fisherman.jpg');
-  background-size:cover;
+	background-size: cover;
 	background-size: 100% 100%;
 	.main {
 		position: relative;
@@ -179,28 +249,45 @@ export default {
 			@include margin-tl(1em, 15em);
 			line-height: 2rem;
 			overflow: hidden;
+			span {
+				cursor: pointer;
+				margin: 0.6rem;
+				font-size: 0.8rem;
+				color: $clr-gray;
+				&:hover {
+					color: $clr-main;
+				}
+			}
 		}
 		.ruleForm {
 			width: 70%;
 			@include margin-tl(2em, 3em);
 		}
-		.content {
-      @include margin-tl(1em, 3em);
-      width: 70%;
-      display: flex;
-    }
-    .left {
-      width: 80%;
-      span {
-        color: $clr-gray;
-        cursor: default;
-        &:hover {
-          color: $clr-gray;
-        }
-      }
-    }
-		.right {
-      width: 21%;
+		.content-to-password {
+			@include margin-tl(1em, 3em);
+			width: 70%;
+			display: flex;
+			.left {
+				width: 80%;
+				span {
+					color: $clr-gray;
+					cursor: default;
+					&:hover {
+						color: $clr-gray;
+					}
+				}
+			}
+			.right {
+				width: 21%;
+			}
+		}
+		.content-to-signup {
+			@include margin-tl(1rem, 3rem);
+			span {
+				margin-left: 0;
+				font-size: 8px;
+				color: $clr-gray;
+			}
 		}
 	}
 }
@@ -210,22 +297,14 @@ export default {
 	@include margin-tl(4em, 30%);
 }
 
-span {
-	cursor: pointer;
-	margin: 0.6rem;
-	font-size: 0.8rem;
-	color: gray;
-	&:hover {
-		color: $clr-main;
-	}
-}
-
 a {
 	color: $clr-main;
 }
 </style>
 
 <style lang="scss">
+@import 'src/assets/scss/index';
+
 .el-form-item__label {
 	font-size: 0.6rem;
 	line-height: 20px;
@@ -241,6 +320,21 @@ a {
 
 .el-input__inner {
 	height: 32px;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+	color: $clr-gray;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+	color: #fff;
+  background-color: $clr-main;
+	border-color: $clr-main;
+}
+
+.el-checkbox__inner:hover {
+	border-color: $clr-main;
 }
 </style>
 

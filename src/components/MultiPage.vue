@@ -37,6 +37,10 @@
 </template>
 
 <script>
+/**
+ * 分页
+ */
+
 export default {
 	props: {
 		// 页面中的可见页码， 其他的以...代替，必须是奇数

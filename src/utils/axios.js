@@ -3,7 +3,6 @@ import { Message } from 'element-ui';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from './auth';
-import store from '@/store';
 
 const BASE_API = process.env.NODE_ENV === 'production' ? '' : '/api';
 
@@ -15,6 +14,11 @@ const $http = axios.create({
 
 // 传输数据和传输文件的请求头不相同
 // $http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded';
+/**
+ * 问题：
+ * 1. 在登录的时候会将之前的jwt发送给服务器，目前看来没什么影响。(企业主页))
+ */
+
 
 // 请求拦截
 $http.interceptors.request.use(
@@ -22,8 +26,6 @@ $http.interceptors.request.use(
     NProgress.start();
     if(getToken()) {
       config.headers.Authorization = getToken();
-      // console.log('lala');
-      console.log(config.headers.Authorization);
     }
     return config;
   },
@@ -74,12 +76,12 @@ function checkCode(res) {
   return res;
 }
 
-export const get = (url, data = {}) => {
+export const get = (url, params = {}) => {
   if (!url) return;
   return $http({
     method: 'get',
     url,
-    data,
+    params,
     headers: { 'Content-Type': 'application/json;charset=UTF-8' },
   }).then(checkStatus).then(checkCode);
 };
@@ -94,21 +96,21 @@ export const post = (url, data = {}) => {
 };
 
 // 发送文件请求
-export const getFile = (url, data = {}) => {
+export const getFile = (url, params = {}) => {
   if (!url) return;
   return $http({
     method: 'get',
     url,
-    data,
+    params,
     headers: { 'Content-Type': 'multipart/form-data' },
   }).then(checkStatus).then(checkCode);
 };
-export const postFile = (url, data = {}) => {
+export const postFile = (url, params = {}) => {
   if (!url) return;
   return $http({
     method: 'post',
     url,
-    data,
+    params,
     headers: { 'Content-Type': 'multipart/form-data; boundary=-----------------------------7db372eb000e2' },
   }).then(checkStatus).then(checkCode);
 };
