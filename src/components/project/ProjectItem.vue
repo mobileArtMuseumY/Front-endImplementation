@@ -4,10 +4,10 @@
       <!-- <img src="projectItem.avatar" alt="businessAvatar" class="avatar-of-business"> -->
       <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar-of-business"></svg-icon>
       <label class="project-name"><strong>{{ projectItem.projectName }}</strong></label>
-      <label class="budget"><strong>￥{{ projectItem.budget }}</strong></label>
+      <label class="project-budget"><strong>￥{{ projectItem.budget }}</strong></label>
       <button class="a business-id-button" @click="goToBusinessHome(projectItem.businessId)">{{ projectItem.businessName }}</button>
     </div>
-    <p class="description" >{{ projectItem.projectDescription }}</p>
+    <p class="project-description" >{{ projectItem.projectDescription }}</p>
     <div class="bottom">
       <ul v-if="projectItem.skillList">
         <div class="skill-parent">
@@ -61,7 +61,7 @@ export default {
 			@include wh(70px, 70px);
 			@include margin-tl(0, 0);
 		}
-		.budget {
+		.project-budget {
 			float: right;
 			padding: 0.5rem;
 			font-size: 17px;
@@ -91,7 +91,7 @@ export default {
 			color: $clr-main;
 		}
 	}
-	.description {
+	.project-description {
 		padding: 0 0.5rem 0 0;
 		line-height: 20px;
 		width: 50vw;

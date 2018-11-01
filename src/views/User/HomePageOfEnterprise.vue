@@ -48,12 +48,39 @@
         <label v-if="!project.projectItem">空空如也……</label>
         <div class="project-item" v-if="project.projectItem" v-for="(item, index) in project.projectItem" :key="index">
           <div class="pending" v-if="item.status === 0">
-          <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
-          <label>正在审核项目：</label>
+            <div class="optional" v-if="pendingNum === 1">
+              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
+              <label>正在审核的项目：</label>
+            </div>
             <div class="pending-content">
-              <label>剩余{{ item.leftTime }}</label>
-              <textarea :placeholder="item.projectDescription" style="height: 2rem; background-color: #fff;" disabled></textarea>
-              <label>{{ item.biddenCount }}</label>
+              <project-item-epitome :projectItem="item" @click="goToDetails(item.projectId)"></project-item-epitome>
+            </div>
+          </div>
+          <div class="underWay" v-if="item.status === 1">
+            <div class="optional" v-if="underWayNum === 1">
+              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
+              <label>正在进行的项目：</label>
+            </div>
+            <div class="underWay-content">
+              <project-item-epitome :projectItem="item" ></project-item-epitome>
+            </div>
+          </div>
+          <div class="done" v-if="item.status === 2">
+            <div class="optional" v-if="doneNum === 1">
+              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
+              <label>交易成功的项目：</label>
+            </div>
+            <div class="done-content">
+              <project-item-epitome :projectItem="item" ></project-item-epitome>
+            </div>
+          </div>
+          <div class="incomplete" v-if="item.status === 3">
+            <div class="optional" v-if="incompleteNum === 1">
+              <svg-icon icon="plane" style="color: #666666;"></svg-icon>
+              <label>交易失败的项目：</label>
+            </div>
+            <div class="incomplete-content">
+              <project-item-epitome :projectItem="item" ></project-item-epitome>
             </div>
           </div>
         </div>
@@ -94,11 +121,31 @@ export default {
 					icon: 'email-verify',
 					content: '邮箱验证',
 				},
-			],
+      ],
+      pendingNum: 1,
+      underWayNum: 1,
+      doneNum: 1,
+      incompleteNum: 1,
 		};
 	},
 	computed: {
-		...mapGetters(['user', 'project']),
+    ...mapGetters(['user', 'project']),
+    count(status){
+      switch(status){
+        case 'pending': 
+          ++this.pendingNum;
+          break;
+        case 'underWay':
+          ++this.underWayNum;
+          break;
+        case 'done':
+          ++this.doneNum;
+          break;
+        case 'incomplete':
+          ++this.incompleteNum;
+          break;
+      }
+    },
 	},
 	methods: {
 		uploadUrl() {
@@ -121,7 +168,10 @@ export default {
 				return false;
 			}
 			return isIMAGE && isL1M;
-		},
+    },
+    goToDetails(id) {
+      
+    }
 	},
 };
 </script>
@@ -154,8 +204,8 @@ export default {
 		justify-content: space-between;
 		.left {
 			padding: 2rem;
-      text-align: center;
-      margin-right: 2rem;
+			text-align: center;
+			margin-right: 2rem;
 			.followers-and-following {
 				display: flex;
 				justify-content: space-around;
@@ -193,22 +243,22 @@ export default {
 		margin-bottom: 4rem;
 		width: 85vw;
 		.main {
-			@include wh(60vw, 40rem);
-			// width: 63vw;
+      width: 60vw;
 			background-color: #fff;
 			box-shadow: $shadow-nav;
 			border-radius: 3px;
-			text-align: center;
-      padding: 0.5em;
-      // > div {
-      //   margin: auto;
-      // }
-      .pending {
+			padding: 0.5em;
+      > div {
         width: 80%;
-        height: 5rem;
-        margin: 1em auto;
-        border: $border;
+				margin: 4em auto;
+        // border-bottom: $border;
+        // padding: 2rem;
+        cursor: pointer;
       }
+			// .pending {
+			// 	width: 80%;
+			// 	margin: 3em auto;
+			// }
 		}
 		.right-bar {
 			@include wh(20vw, 20em);
