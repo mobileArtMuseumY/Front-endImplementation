@@ -111,7 +111,9 @@ const user = {
               // setStore('userId', )
               console.log(getToken() + 'signin');
               dispatch('GetEnterpriseInfo');
-              router.push('/user/enterpriseHomePage');
+              router.push({
+                name: 'EnterpriseHomepage',
+              });
               resolve();
             }
           ).catch(err => {
@@ -124,7 +126,9 @@ const user = {
             res => {
               commit('SET_ROLE', data.role);
               if (res.status === 1111) {   // 返回码为 1111 学生第一次登录
-                router.push('/signinFirst');
+                router.push({
+                  name: 'SignInFirst',
+                });
                 resolve();
               } else {
                 const token = res.msg;
@@ -132,7 +136,9 @@ const user = {
                 commit('SET_TOKEN', token);
                 setToken(token);
                 dispatch('GetStudentInfo');
-                router.push('/user/studentHomePage');
+                router.push({
+                  name: 'StudentHomepage',
+                });
                 resolve();
               }
             }
@@ -165,7 +171,9 @@ const user = {
             commit('SET_TOKEN', token);
             setToken(token);
             dispatch('GetStudentInfo');
-            router.push('/user/studentHomePage');
+            router.push({
+              name: 'StudentHomepage',
+            });
             resolve();
           }).catch(err => {
             reject('学生第一次登录表单提交失败！' + err);

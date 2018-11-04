@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     {{msg}}
-    {{ this.$route.params.id }}
   </div>
 </template>
 
@@ -9,7 +8,7 @@
 export default {
   data() {
     return {
-      msg: '项目作品详情',
+      msg: '收藏界面',
     };
   },
 };

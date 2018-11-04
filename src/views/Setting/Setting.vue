@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     {{msg}}
+    {{ this.$route.params.info }}
   </div>
 </template>
 

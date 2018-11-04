@@ -8,94 +8,99 @@ const constRouterMap = [
   {
     path: '/',
     name: 'layout',
-    meta: { auth: false },
+    // meta: { auth: false },
     redirect: '/home',
     component: () => import('@/views/Layout'),
     children: [
       {
         path: 'home',
-        name: '首页',
-        component: () => import('@/views/HomePage'),
+        name: 'Home',
+        component: () => import('@/views/Homepage'),
       },
       {
         path: 'signin',
-        name: '登录',
+        name: 'SignIn',
         component: () => import('@/views/Login/SignIn'),
       },
       {
         path: 'signinFirst',
-        name: '学生第一次登录',
+        name: 'SignInFirst',
         component: () => import('@/views/Login/SignInFirst'),
       },
       {
         path: 'signup',
-        name: '注册',
+        name: 'SignUp',
         component: () => import('@/views/Login/SignUp'),
       },
       {
         path: 'project/publish',
-        name: '发布项目',
+        name: 'ProjectPublish',
         component: () => import('@/views/Project/ProjectPublish'),
       },
       {
         path: 'project/view',
-        name: '浏览项目',
+        name: 'ProjectView',
         component: () => import('@/views/Project/ProjectView'),
       },
       {
         path: 'project/details',
-        name: '项目详情',
+        name: 'ProjectDetails',
         component: () => import('@/views/Project/ProjectDetails'),
       },
       {
         path: 'rank/student',
-        name: '人才排行榜',
+        name: 'StudentRank',
         component: () => import('@/views/Rank/StudentRanking'),
       },
       {
         path: 'explore',
-        name: '发现',
+        name: 'Explore',
         component: () => import('@/views/Explore'),
       },
       {
-        path: 'user/enterpriseHomePage',
-        name: '企业主页',
-        component: () => import('@/views/User/HomePageOfEnterprise'),
+        path: 'user/enterpriseHomepage',
+        name: 'EnterpriseHomepage',
+        component: () => import('@/views/User/HomepageOfEnterprise'),
       },
       {
-        path: 'user/studentHomePage',
-        name: '学生主页',
-        component: () => import('@/views/User/HomePageOfStudent'),
+        path: 'user/studentHomepage',
+        name: 'StudentHomepage',
+        component: () => import('@/views/User/HomepageOfStudent'),
       },
       {
         path: 'setting',
-        name: '设置',
+        name: 'Setting',
         component: () => import('@/views/Setting/Setting'),
       },
       {
         path: 'service',
-        name: '客服',
+        name: 'Service',
         component: () => import('@/views/Service/Service'),
       },
       {
         path: 'signUpAgreement',
-        name: '注册协议',
+        name: 'SignUpAgreement',
         component: () => import('@/views/Agreement/SignUpAgreement'),
       },
       {
         path: 'retrievePassword',
-        name: '找回密码',
+        name: 'RetrievePassword',
         component: () => import('@/views/RetrievePassword/RetrievePassword'),
       },
       {
         path: 'works/upload',
-        name: '作品上传',
+        name: 'WorksUpload',
         component: () => import('@/views/Works/WorksUpload'),
       },
       {
         path: 'works/details',
-        name: '作品详情',
+        name: 'WorksDetails',
         component: () => import('@/views/Works/WorksDetails'),
+      },
+      {
+        path: 'collect',
+        name: 'Collect',
+        component: () => import('@/views/Collect/Collect'),
       },
     ],
   },
@@ -128,6 +133,11 @@ const asyncRouterMap = [
     hidden: true,
   }
 ]
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || '服务端渲染';
+  next();
+});
 
 router.afterEach((to) => {
   document.title = to.name;

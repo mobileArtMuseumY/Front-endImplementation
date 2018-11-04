@@ -16,7 +16,7 @@
       </ul>
       <label class="gmt-time">{{ projectItem.gmtCreate }}</label>
       <label class="left-time">剩余{{ projectItem.leftTime }}天</label>
-      <button class="a project-id-button" @click="goToProjectHome(projectItem.prjectId)">查看详情</button>
+      <button class="a project-id-button" @click="goToProjectDetails(projectItem.prjectId)">查看详情</button>
     </div>
   </div>
 </template>
@@ -35,11 +35,22 @@ export default {
 	},
 	methods: {
 		goToBusinessHome(businessId) {
-			this.$router.push('/user/enterpriseHomePage/businessId=' + businessId);
+			this.$router.push({
+        name: 'EnterpriseHomepage',
+        params: {
+          id: bussinessId,
+        },
+      });
 		},
-		goToProjectHome(projectId) {
-			this.$router.push('/project/details/projectId=' + projectId);
-		},
+		goToProjectDetails(projectId) {
+      console.log('goToProjectDetails');
+      this.$router.push({
+        name: 'ProjectDetails',
+        params: {
+          id: projectId,
+        },
+      });
+    },
 	},
 };
 </script>

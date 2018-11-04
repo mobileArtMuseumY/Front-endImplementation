@@ -17,8 +17,10 @@
         <img v-if="imageUrl" :src="imageUrl" class="avatar-of-business">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <div class="verify-items">
-          <svg-icon :icon="item.icon" v-for="(item, index) in verifyItems" :key="index" class="verify-icon" style="color: #666666 ;"></svg-icon>
+        <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
+          <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
+            <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;"></svg-icon>
+          </el-tooltip>
         </div>
         <div class="followers-and-following">
           <!-- <span>{{ user.userInfo.followers }}</span>
@@ -47,54 +49,43 @@
       <div class="main">
         <label v-if="!project.projectItem">空空如也……</label>
         <div class="project-item" v-if="project.projectItem" v-for="(item, index) in project.projectItem" :key="index">
-          <div class="pending" v-if="item.status === 0">
-            <div class="optional" v-if="pendingNum === 1">
-              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
-              <label>正在审核的项目：</label>
-            </div>
-            <div class="pending-content">
-              <project-item-epitome :projectItem="item" @click="goToDetails(item.projectId)"></project-item-epitome>
-            </div>
-          </div>
-          <div class="underWay" v-if="item.status === 1">
-            <div class="optional" v-if="underWayNum === 1">
-              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
-              <label>正在进行的项目：</label>
-            </div>
-            <div class="underWay-content">
-              <project-item-epitome :projectItem="item" ></project-item-epitome>
-            </div>
-          </div>
-          <div class="done" v-if="item.status === 2">
-            <div class="optional" v-if="doneNum === 1">
-              <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
-              <label>交易成功的项目：</label>
-            </div>
-            <div class="done-content">
-              <project-item-epitome :projectItem="item" ></project-item-epitome>
-            </div>
-          </div>
-          <div class="incomplete" v-if="item.status === 3">
-            <div class="optional" v-if="incompleteNum === 1">
-              <svg-icon icon="plane" style="color: #666666;"></svg-icon>
-              <label>交易失败的项目：</label>
-            </div>
-            <div class="incomplete-content">
-              <project-item-epitome :projectItem="item" ></project-item-epitome>
-            </div>
-          </div>
+          <project-item-epitome :projectItem="item" ></project-item-epitome>
         </div>
       </div>
       <div class="right-bar">
+        <div class="right-bar-verify">
         <div class="right-bar-title">
           <span style="font-size: 18px;"><strong>验证</strong></span>
         </div>
         <div class="verify-item-details" v-for="(item, index) in verifyItems" :key="index">
           <div class="verify-inner">
             <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666 ;"></svg-icon>
-          <span style="font-size: 14px; margin-left: .5rem;"><a @click="toVerify()">{{ item.content }}</a></span>
+            <span style="font-size: 14px; margin-left: .5rem;"><a @click="toVerify(item.content)">{{ item.content }}</a></span>
           </div>
         </div>
+      </div>
+      <div class="right-bar-collect">
+        <div class="right-bar-title">
+          <span style="font-size: 18px;"><strong>收藏</strong></span>
+        </div>
+        <div class="collect-item-details" >
+          <span>作品：</span>
+          <div class="collect-inner-works" v-for="(item, index) in collectWorksItems">
+            <span :key="index + '-name'">{{ item.studentName }}：</span>
+            <span :key="index + '-works'">{{ item.works }}</span>
+          </div>
+            <svg-icon icon="more" class="more" style="color: #BCBCBC;" @click.native="goToCollect()"></svg-icon>
+          <br>
+          <hr>
+          <br>
+          <span>项目：</span>
+          <div class="collect-inner-project" v-for="(item, index) in collectProjectItems" >
+            <span :key="index + '-name'">{{ item.enterpriseName }}：</span>
+            <span :key="index + '-works'">{{ item.projectDescription }}</span>
+          </div>
+            <svg-icon icon="more" class="more" style="color: #BCBCBC;" @click.native="goToCollect()"></svg-icon>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -121,31 +112,40 @@ export default {
 					icon: 'email-verify',
 					content: '邮箱验证',
 				},
-      ],
-      pendingNum: 1,
-      underWayNum: 1,
-      doneNum: 1,
-      incompleteNum: 1,
+			],
+			collectWorksItems: [
+				{
+					studentName: '千竹',
+					works: 'lalala',
+				},
+				{
+					studentName: '千竹呀',
+					works: 'lalala',
+				},
+			],
+			collectProjectItems: [
+				{
+					enterpriseName: '千竹',
+					projectDescription: 'lalala',
+				},
+				{
+					enterpriseName: '千竹呀',
+					projectDescription: 'lalala',
+				},
+				{
+					enterpriseName: '千竹',
+					projectDescription: 'lalala',
+				},
+				{
+					enterpriseName: '千竹呀',
+					projectDescription: 'lalala',
+				},
+			],
+			info: 'perfectUserInfo', // 用于接收验证信息类型
 		};
 	},
 	computed: {
-    ...mapGetters(['user', 'project']),
-    count(status){
-      switch(status){
-        case 'pending': 
-          ++this.pendingNum;
-          break;
-        case 'underWay':
-          ++this.underWayNum;
-          break;
-        case 'done':
-          ++this.doneNum;
-          break;
-        case 'incomplete':
-          ++this.incompleteNum;
-          break;
-      }
-    },
+		...mapGetters(['user', 'project']),
 	},
 	methods: {
 		uploadUrl() {
@@ -168,10 +168,29 @@ export default {
 				return false;
 			}
 			return isIMAGE && isL1M;
-    },
-    goToDetails(id) {
-      
-    }
+		},
+		toVerify(content) {
+			if (content === '完善用户信息') {
+				this.info = 'perfectUserInfo';
+			} else if (content === '手机验证') {
+				this.info = 'verifyPhoneNum';
+			} else if (content === '邮箱验证') {
+				this.info = 'verifyEmail';
+			}
+			this.$router.push({
+				name: 'Setting',
+				params: {
+					info: this.info,
+				},
+			});
+		},
+		// 显示该用户所有信息
+		goToCollect() {
+			this.$router.push({
+				name: 'Collect',
+			});
+		},
+		
 	},
 };
 </script>
@@ -212,10 +231,8 @@ export default {
 				margin-top: 1.5rem;
 			}
 			.verify-items {
-				width: 6rem;
-				margin: auto;
-				display: flex;
-				justify-content: space-around;
+				display: inline;
+				margin: 0.5rem;
 			}
 		}
 		.center {
@@ -243,40 +260,49 @@ export default {
 		margin-bottom: 4rem;
 		width: 85vw;
 		.main {
-      width: 60vw;
+			width: 60vw;
 			background-color: #fff;
 			box-shadow: $shadow-nav;
 			border-radius: 3px;
 			padding: 0.5em;
-      > div {
-        width: 80%;
+			> div {
+				width: 80%;
 				margin: 4em auto;
-        // border-bottom: $border;
-        // padding: 2rem;
-        cursor: pointer;
-      }
-			// .pending {
-			// 	width: 80%;
-			// 	margin: 3em auto;
-			// }
+			}
 		}
-		.right-bar {
-			@include wh(20vw, 20em);
+		.right-bar-verify {
+			@include wh(20vw, 15em);
 			background-color: #fff;
 			box-shadow: $shadow-nav;
 			border-radius: 3px;
-			.right-bar-title {
-				margin-top: 1rem;
+			> div {
+				margin: auto;
+				width: 80%;
 				padding: 1rem;
 			}
 			.verify-item-details {
-				width: 80%;
 				border-top: 0.06rem solid $clr-gray;
+			}
+		}
+		.right-bar-collect {
+			width: 20vw;
+			background-color: #fff;
+			box-shadow: $shadow-nav;
+			border-radius: 3px;
+			margin-top: 2rem;
+			padding-bottom: 2rem;
+			> div {
 				margin: auto;
-				.verify-inner {
-					padding: 1rem;
-					width: 80%;
-					margin: auto;
+				width: 80%;
+				padding: 1rem;
+			}
+			.collect-item-details {
+				> div {
+					margin-top: 1rem;
+				}
+				.more {
+					float: right;
+					transform: translate(50%, -1rem);
 				}
 			}
 		}

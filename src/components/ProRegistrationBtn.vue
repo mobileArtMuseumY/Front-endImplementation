@@ -32,7 +32,9 @@ export default {
 	},
 	methods: {
 		goToSignUp() {
-			this.$router.push('/signup');
+			this.$router.push({
+        name: 'SignUp',
+      });
 		},
 	},
 };

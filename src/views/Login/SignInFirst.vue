@@ -103,7 +103,9 @@ export default {
       // this.$store.dispatch('SignInFirst', data);
 
       // 绿色通道
-      this.$router.push('/user/studentHomePage');
+      this.$router.push({
+        name: StudentHomepage,
+      });
 		},
 		sendCode() {
 			// this.$refs.timerbtn.setDisabled(true);

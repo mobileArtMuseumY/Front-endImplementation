@@ -52,7 +52,9 @@ export default {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
 			// this.$router.push('/user/enterpriseHomePage');
 			// this.$router.push('user//studentHomePage');
-			this.$router.push('/signinFirst');
+			this.$router.push({
+        name: 'SignInFirst',
+      });
 		},
 		goToDisplay() {
 			// 点击图片发生的动作

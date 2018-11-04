@@ -154,10 +154,14 @@ export default {
 			}
 		},
 		goToSignUp() {
-			this.$router.push('/signup');
+			this.$router.push({
+        name: 'SignUp',
+      });
 		},
 		getPassword() {
-			this.$router.push('/retrievePassword');
+			this.$router.push({
+        name: 'RetrievePassword',
+      });
 		},
 		message(m) {
 			this.$message.error({

@@ -40,8 +40,13 @@ export default {
 	},
 	methods: {
 		openWorksDetails(worksId) {
-			console.log('查看详情');
-			this.$router.push('/works/details/worksId=' + worksId);
+			console.log('查看作品详情');
+			this.$router.push({
+        name: 'WorksDetails',
+        params: {
+          worksId,
+        }
+      });
 		},
 		goToCollect(worksId) {
 			if (this.user.signIn) {
