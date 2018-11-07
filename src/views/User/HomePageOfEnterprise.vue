@@ -49,7 +49,7 @@
       <div class="main">
         <label v-if="!project.projectItem">空空如也……</label>
         <div class="project-item" v-if="project.projectItem" v-for="(item, index) in project.projectItem" :key="index">
-          <project-item-epitome :projectItem="item" ></project-item-epitome>
+          <project-item-epitome :projectItem="item" @deleteProject="deleteProject"></project-item-epitome>
         </div>
       </div>
       <div class="right-bar">
@@ -190,7 +190,9 @@ export default {
 				name: 'Collect',
 			});
 		},
-		
+		deleteProject(projectId) {
+      console.log(`父组件删除：${projectId}`);
+    }
 	},
 };
 </script>

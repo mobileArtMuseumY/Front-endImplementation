@@ -52,6 +52,7 @@ export default {
 			});
 		},
 		goToDeleteProject(projectId) {
+      this.$emit('deleteProject', projectId);
 			console.log('就快要删除啦？？');
 			// 执行删除项目操作
 		},
