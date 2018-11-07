@@ -112,7 +112,7 @@ export default {
 
 .container {
 	width: 100%;
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -19,7 +19,7 @@ export default {
 
 
 .container {
-  margin-top: $h-nav;
+	padding-top: $h-nav;
 }
 
 </style>

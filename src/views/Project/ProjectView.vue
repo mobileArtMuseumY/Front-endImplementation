@@ -156,7 +156,7 @@ export default {
 @import 'src/assets/scss/index';
 
 .container {
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	width: 100%;
 	display: flex;
 	flex-direction: column;

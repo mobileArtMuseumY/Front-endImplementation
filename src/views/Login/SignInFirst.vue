@@ -130,7 +130,7 @@ export default {
 
 .container {
   @include wh(100%, 55rem);
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	display: flex;
 	.sample {
     @include margin-tl(5rem, 10vw);

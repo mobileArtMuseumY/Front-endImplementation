@@ -74,7 +74,7 @@ export default {
 
 .container {
 	@include wh(100%, 60rem);
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

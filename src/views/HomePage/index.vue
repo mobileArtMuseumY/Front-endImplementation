@@ -69,7 +69,7 @@ export default {
 
 .container {
 	width: 100%;
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	.banner {
 		height: $h-banner;
 		background-image: url('/static/images/home/background.jpg');

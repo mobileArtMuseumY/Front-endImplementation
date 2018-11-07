@@ -240,7 +240,7 @@ export default {
 .container {
   // @include wh(100%, $h-signup-container);
   width: 100%;
-	margin-top: $h-nav;
+	padding-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signup/background.jpg');
 	background-repeat: no-repeat;
