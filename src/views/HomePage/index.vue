@@ -51,34 +51,34 @@ export default {
 	methods: {
 		goToSignUp() {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
-			this.$router.push('/user/enterpriseHomePage');
+			// this.$router.push('/user/enterpriseHomePage');
 			// this.$router.push('user//studentHomePage');
 			// this.$router.push({
 			//   name: 'SignInFirst',
 			// });
 
-			// const data = {
-			// 	out_trade_no: '2343252342423',
-			// 	subject: 'log',
-			// 	total_amount: 800,
-			// 	body: 'a vue',
-			// 	goods_type: 1,
-			// 	quit_url: null,
-			// 	timeout_express: null,
-			// 	product_code: null,
-      // };
-      // const newTab = window.open();
-			// pay(data)
-			// 	.then(res => {
-			// 		console.log(res);
-			// 		const div = document.createElement('div');
-			// 		div.innerHTML = res; 
-			// 		newTab.document.body.appendChild(div);
-			// 		newTab.document.forms.alipaysubmit.submit();
-			// 	})
-			// 	.catch(err => {
-			// 		console.log(err);
-			// 	});
+			const data = {
+				out_trade_no: '2343252342423',
+				subject: 'log',
+				total_amount: 800,
+				body: 'a vue',
+				goods_type: 1,
+				quit_url: null,
+				timeout_express: null,
+				product_code: null,
+      };
+      const newTab = window.open();
+			pay(data)
+				.then(res => {
+					console.log(res);
+					const div = document.createElement('div');
+					div.innerHTML = res; 
+					newTab.document.body.appendChild(div);
+					newTab.document.forms.alipaysubmit.submit();
+				})
+				.catch(err => {
+					console.log(err);
+				});
 		},
 		goToDisplay() {
 			// 点击图片发生的动作
