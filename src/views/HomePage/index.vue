@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="banner">
-      <button class="signup-button" @click="goToSignUp()">注册</button>
+      <button class="signup-button" @click="goToSignUp()">支付</button>
     </div>
 
     <div class="content">
@@ -39,6 +39,7 @@ import picture5 from '@/../static/images/home/water-bottle.jpg';
 import picture6 from '@/../static/images/home/woman.jpg';
 import picture7 from '@/../static/images/home/fog.jpg';
 import picture8 from '@/../static/images/home/cat.jpg';
+import { pay } from '@/api/user';
 
 export default {
 	data() {
@@ -50,11 +51,34 @@ export default {
 	methods: {
 		goToSignUp() {
 			// 暂时提供进入企业主页的入口，仅供测试时使用
-			// this.$router.push('/user/enterpriseHomePage');
+			this.$router.push('/user/enterpriseHomePage');
 			// this.$router.push('user//studentHomePage');
-			this.$router.push({
-        name: 'SignInFirst',
-      });
+			// this.$router.push({
+			//   name: 'SignInFirst',
+			// });
+
+			// const data = {
+			// 	out_trade_no: '2343252342423',
+			// 	subject: 'log',
+			// 	total_amount: 800,
+			// 	body: 'a vue',
+			// 	goods_type: 1,
+			// 	quit_url: null,
+			// 	timeout_express: null,
+			// 	product_code: null,
+      // };
+      // const newTab = window.open();
+			// pay(data)
+			// 	.then(res => {
+			// 		console.log(res);
+			// 		const div = document.createElement('div');
+			// 		div.innerHTML = res; 
+			// 		newTab.document.body.appendChild(div);
+			// 		newTab.document.forms.alipaysubmit.submit();
+			// 	})
+			// 	.catch(err => {
+			// 		console.log(err);
+			// 	});
 		},
 		goToDisplay() {
 			// 点击图片发生的动作
@@ -76,7 +100,7 @@ export default {
 		background-size: cover;
 		.signup-button {
 			position: relative;
-      cursor: pointer;
+			cursor: pointer;
 			@include wh(6.25rem, 2.3rem);
 			@include margin-tl(23rem, 15%);
 			background-color: $clr-main;

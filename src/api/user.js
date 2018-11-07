@@ -38,4 +38,5 @@ export const getEnterpriseInfo = () => get('/business/home/info');
 // 人才排行榜
 export const getStudentRanking = (data) => get('/show/students', data);
 
-
+// 支付
+export const pay = (data) => post('/alipay', data);
