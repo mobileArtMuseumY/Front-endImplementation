@@ -16,6 +16,8 @@ import {
   Checkbox,
   Dialog,
   Tooltip,
+  Carousel,
+  CarouselItem,
 } from 'element-ui';
 
 Vue.prototype.$message = Message;
@@ -35,3 +37,5 @@ Vue.use(DropdownMenu);
 Vue.use(Checkbox);
 Vue.use(Dialog);
 Vue.use(Tooltip);
+Vue.use(Carousel);
+Vue.use(CarouselItem);

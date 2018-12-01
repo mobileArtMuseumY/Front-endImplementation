@@ -17,15 +17,18 @@ import {
   studentSignIn,
   getStudentInfo,
   getEnterpriseInfo,
-  studentSignInFirstSendEmail,
-  studentSignInFirstVerified,
+  studentSignInFirstlySendEmail,
+  studentSignInFirstlyEmailVerified,
+  studentModifyPassword,
   enterpriseSignUpForm,
   enterpriseSignUpV,
   enterpriseSignUpC,
 } from '@/api/user';
-import { setToken, getToken, removeToken } from '@/utils/auth';
+import { setToken, getToken, removeToken, setUserId, removeUserId, getUserId } from '@/utils/auth';
 import router from '@/router';
-import { setStore, getStore } from '@/utils/storage';
+import { setStore } from '@/utils/storage';
+import { Message } from 'element-ui';
+
 
 /**
  * 问题：
@@ -58,7 +61,6 @@ const user = {
   mutations: {
     [SET_STATUS](state) {
       state.signIn = !state.signIn;
-      // console.log( state.signIn);
     },
     [SET_ROLE](state, role) {
       state.role = role;
@@ -102,21 +104,29 @@ const user = {
         return new Promise((resolve, reject) => {
           enterpriseSignIn(data.userData).then(
             res => {
-              const token = res.msg;
-              commit('SET_STATUS');
-              commit('SET_ROLE', data.role);
-              commit('SET_TOKEN', token);
-              setToken(token);
-              setStore('token', token);
-              // setStore('userId', )
-              console.log(getToken() + 'signin');
-              dispatch('GetEnterpriseInfo');
-              router.push({
-                name: 'EnterpriseHomepage',
-              });
-              resolve();
+              if (res.status === 500) {
+                Message({
+                  type: 'error',
+                  message: '账号或密码错误！'
+                });
+              } else {
+                const token = res.msg;
+                commit('SET_STATUS');
+                commit('SET_ROLE', data.role);
+                commit('SET_TOKEN', token);
+                commit('SET_USERID', res.data);
+                setUserId(res.data);
+                setToken(token);
+                setStore('token', token);
+                dispatch('GetEnterpriseInfo');
+                router.push({
+                  name: 'EnterpriseHomepage',
+                });
+                resolve();
+              }
             }
           ).catch(err => {
+            console.log('企业登录失败！');
             reject(err);
           })
         });
@@ -124,22 +134,31 @@ const user = {
         return new Promise((resolve, reject) => {
           studentSignIn(data.userData).then(
             res => {
-              commit('SET_ROLE', data.role);
-              if (res.status === 1111) {   // 返回码为 1111 学生第一次登录
-                router.push({
-                  name: 'SignInFirst',
+              if (res.status === 500 || res.status === 1100) {  // status为1100没有 此id
+                Message({
+                  type: 'error',
+                  message: '账号或密码错误！'
                 });
-                resolve();
               } else {
+                commit('SET_ROLE', data.role);
                 const token = res.msg;
                 commit('SET_STATUS');
                 commit('SET_TOKEN', token);
+                commit('SET_USERID', res.data);
+                setUserId(res.data);
                 setToken(token);
-                dispatch('GetStudentInfo');
-                router.push({
-                  name: 'StudentHomepage',
-                });
-                resolve();
+                if (res.status === 1111) {   // 返回码为 1111 学生第一次登录
+                  router.push({
+                    name: 'SignInFirst',
+                  });
+                  resolve();
+                } else {
+                  dispatch('GetStudentInfo');
+                  router.push({
+                    name: 'StudentHomepage',
+                  });
+                  resolve();
+                }
               }
             }
           ).catch(err => {
@@ -150,9 +169,13 @@ const user = {
     },
 
     // 学生第一次登录提交邮箱信息
-    StudentSignInFirstSendEmail: function ({ commit }, data) {
+    StudentSignInFirstlySendEmail: function ({ commit }, data) {
       return new Promise((resolve, reject) => {
-        studentSignInFirstSendEmail(data).then(res => {
+        studentSignInFirstlySendEmail(data).then(res => {
+          Message({
+            type: 'success',
+            message: '邮件已发送！'
+          });
           commit('SET_CAPTCHA');
           resolve();
         }).catch(err => {
@@ -163,20 +186,19 @@ const user = {
 
     // 学生第一次提交表单信息登录
     SignInFirst: function ({ commit }, data) {
-      if (user.captcha) {
+      if (user.state.captcha) {
         return new Promise((resolve, reject) => {
-          studentSignInFirstVerified(data).then(res => {
-            const token = res.msg;
-            commit('SET_STATUS');
-            commit('SET_TOKEN', token);
-            setToken(token);
+          studentSignInFirstlyEmailVerified(data).then(res => {
             dispatch('GetStudentInfo');
             router.push({
-              name: 'StudentHomepage',
+              name: 'SignIn',
             });
             resolve();
           }).catch(err => {
-            reject('学生第一次登录表单提交失败！' + err);
+            Message({
+              type: 'error',
+              message: '验证码输入错误！'
+            });
           });
         });
       } else {
@@ -188,17 +210,13 @@ const user = {
     GetEnterpriseInfo: function ({ state, commit }) {
       return new Promise((resolve, reject) => {
         if (state.userInfo.token) {
-          getEnterpriseInfo().then(res => {
-            console.log(res.data);
+          const data = {
+            id: state.userInfo.userId,
+          };
+          getEnterpriseInfo(data).then(res => {
             if (!res.data) {
               reject('error');
             }
-            // const data = res.data;
-            // if (data.roles && data.roles.length > 0) {
-            //   commit('SET_ROLES', data.roles);
-            // } else {
-            //   reject('getInfo: roles must be a non-null array！');
-            // }
             commit('SET_USERID', res.data.id);
             commit('SET_USER_NAME', res.data.businessName);
             commit('SET_AVATAR', res.data.avatar);
@@ -243,7 +261,7 @@ const user = {
 
     // 用户退出
     SignOut: function ({ commit }) {
-      return new Promise(( resolve ) => {
+      return new Promise((resolve) => {
         commit('SET_TOKEN', '');
         commit('SET_ROLES', []);
         removeToken();
@@ -259,10 +277,10 @@ const user = {
      */
 
     // 发送验证
-    SendVerify: function({ state, commit }, data) {
+    SendVerify: function ({ state, commit }, data) {
       return new Promise((resolve, reject) => {
         enterpriseSignUpV(data).then(res => {
-          if(!state.captcha) {
+          if (!state.captcha) {
             commit('SET_CAPTCHA');
           }
           resolve();
@@ -274,8 +292,8 @@ const user = {
     },
 
     // 向服务器发送验证码
-    SendCaptcha: function({ state, dispatch }, data) {
-      if(state.captcha) {
+    SendCaptcha: function ({ state, dispatch }, data) {
+      if (state.captcha) {
         return new Promise((resolve, reject) => {
           enterpriseSignUpC(data.captcha).then(res => {
             dispatch('SignUp', data.userData);
@@ -291,7 +309,7 @@ const user = {
     },
 
     //用户注册,表单发送
-    SignUp: function(data) {
+    SignUp: function (data) {
       return new Promise((resolve, reject) => {
         enterpriseSignUpForm(data).then(res => {
           console.log(res);
@@ -304,7 +322,7 @@ const user = {
         });
       });
     },
-    
+
     // 动态修改权限
     ChangeRoles({ commit, dispatch }, role) {
       return new Promise((resolve, reject) => {

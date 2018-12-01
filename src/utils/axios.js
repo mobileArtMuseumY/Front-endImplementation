@@ -12,19 +12,11 @@ const $http = axios.create({
   withCredentials: true,
 });
 
-// 传输数据和传输文件的请求头不相同
-// $http.headers.post['Content-Type'] = 'application/x-www=form-urlencoded';
-/**
- * 问题：
- * 1. 在登录的时候会将之前的jwt发送给服务器，目前看来没什么影响。(企业主页))
- */
-
-
 // 请求拦截
 $http.interceptors.request.use(
   config => {
     NProgress.start();
-    if(getToken()) {
+    if (getToken()) {
       config.headers.Authorization = getToken();
     }
     return config;
@@ -47,7 +39,7 @@ function checkStatus(res) {
     NProgress.done();
     return {
       code: 0,
-      message: 'Error: 服务器请求出错!',
+      message: 'Error: 服务器出错',
       data: {},
     };
   }
@@ -114,4 +106,3 @@ export const postFile = (url, params = {}) => {
     headers: { 'Content-Type': 'multipart/form-data; boundary=-----------------------------7db372eb000e2' },
   }).then(checkStatus).then(checkCode);
 };
- 

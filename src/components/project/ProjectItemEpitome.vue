@@ -1,31 +1,33 @@
 <template>
   <div>
     <div class="optional" >
-    <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
-    <label>项目：</label>
-  </div>
-  <div class="project-item">
-    <div class="left-time-container">
-      <div class="empty">
-      </div>
-      <div class="left-time">
-        <label>剩余{{ projectItem.leftTime }}天</label>
-      </div>
+      <svg-icon icon="plane" style="color: #666666 ;"></svg-icon>
+      <label>项目：</label>
     </div>
-    <div class="project-content" @click.native="goToProjectDetails(item.projectId)">
-      <p class="project-description">{{ projectItem.projectDescription }}</p>
-      <div class="project-content-footer">
+    <div class="project-item">
+      <div class="left-time-container">
         <div class="empty">
         </div>
-        <div class="solid">
-          <svg-icon icon="hammer" style="height: 30px; width: 30px; cursor: default;"></svg-icon>
-          <label style="font-size: 17px; margin: 0.2rem 0.4rem auto 0.4rem;">{{ projectItem.biddenCount }}</label>
-          <svg-icon icon="clock" style="color: red; height: 30px; width: 30px; cursor: default;" v-if="projectItem.status === 0"></svg-icon>
-          <svg-icon icon="delete" @click.native="goToDeleteProject(projectItem.projectId)" style="color: #666666; height: 23px; width: 23px;" v-if="projectItem.status != 0" ></svg-icon>
+        <div class="left-time">
+          <label>剩余{{ projectItem.leftTime }}天</label>
+        </div>
+      </div>
+      <div class="project-content">
+        <div @click="goToProjectDetails(projectItem.projectId)">
+          <p class="project-description">{{ projectItem.projectDescription }}</p>
+        </div>
+        <div class="project-content-footer">
+          <div class="empty">
+          </div>
+          <div class="solid">
+            <svg-icon icon="hammer" style="height: 30px; width: 30px; cursor: default;"></svg-icon>
+            <label style="font-size: 17px; margin: 0.2rem 0.4rem auto 0.4rem;">{{ projectItem.biddenCount }}</label>
+            <svg-icon icon="clock" style="color: red; height: 30px; width: 30px; cursor: default;" v-if="projectItem.status === 0"></svg-icon>
+            <svg-icon icon="delete" @click.native="goToDeleteProject(projectItem.projectId)" style="color: #666666; height: 23px; width: 23px;" v-if="projectItem.status != 0" ></svg-icon>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -43,7 +45,7 @@ export default {
 	},
 	methods: {
 		goToProjectDetails(projectId) {
-			console.log('goToProjectDetails');
+      this.$emit('toProjectDetails', projectId)
 			this.$router.push({
 				name: 'ProjectDetails',
 				params: {

@@ -1,22 +1,22 @@
 <template>
   <div class="project-item">
     <div class="top">
-      <!-- <img src="projectItem.avatar" alt="businessAvatar" class="avatar-of-business"> -->
+      <!-- <img src="projectItems.avatar" alt="businessAvatar" class="avatar-of-business"> -->
       <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar-of-business"></svg-icon>
-      <label class="project-name"><strong>{{ projectItem.projectName }}</strong></label>
-      <label class="project-budget"><strong>￥{{ projectItem.budget }}</strong></label>
-      <button class="a business-id-button" @click="goToBusinessHome(projectItem.businessId)">{{ projectItem.businessName }}</button>
+      <label class="project-name"><strong>{{ projectItems.projectName }}</strong></label>
+      <label class="project-budget"><strong>￥{{ projectItems.budget }}</strong></label>
+      <button class="a business-id-button" @click="goToBusinessHome(projectItems.businessId)">{{ projectItems.businessName }}</button>
     </div>
-    <p class="project-description" >{{ projectItem.projectDescription }}</p>
+    <p class="project-description" >{{ projectItems.projectDescription }}</p>
     <div class="bottom">
-      <ul v-if="projectItem.skillList">
-        <div class="skill-parent">
-            <li v-for="skill in projectItem.skillList" :key="skill.id" class="skill">{{ skill.skillName }}</li>
+      <ul v-if="projectItems.skillList">
+        <div class="skill-list-container">
+            <li v-for="skill in projectItems.skillList" :key="skill.id" class="skill-item">{{ skill.skillName }}</li>
         </div>
       </ul>
-      <label class="gmt-time">{{ projectItem.gmtCreate }}</label>
-      <label class="left-time">剩余{{ projectItem.leftTime }}天</label>
-      <button class="a project-id-button" @click="goToProjectDetails(projectItem.prjectId)">查看详情</button>
+      <label class="gmt-time">{{ projectItems.gmtCreate }}</label>
+      <label class="left-time">剩余{{ projectItems.leftTime }}天</label>
+      <button class="a project-id-button" @click="goToProjectDetails(projectItems.prjectId)">查看详情</button>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@
 
 export default {
 	props: {
-		projectItem: '',
+		projectItems: '',
 	},
 	data() {
 		return {};
@@ -120,8 +120,8 @@ export default {
 			text-align: end;
 			float: right;
 		}
-		.skill-parent {
-			.skill {
+		.skill-list-container {
+			.skill-item {
 				display: inline;
 				color: $clr-footer-font;
 				margin-left: 5px;

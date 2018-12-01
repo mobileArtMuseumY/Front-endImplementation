@@ -1,6 +1,6 @@
 
 import {
-  getWorksData,
+  getWorksDataPassersBy,
 
 } from '@/api/project';
 import {

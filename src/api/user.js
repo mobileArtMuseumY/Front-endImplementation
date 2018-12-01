@@ -3,18 +3,18 @@ import { post, get, postFile} from '@/utils/axios';
 // 企业登录
 export const enterpriseSignIn = (data) => post('/business/login', data);
 
-// 学生非登录
+// 学生非第一次登录
 export const studentSignIn = (data) => post('/student/login', data);
 
 // 学生第一次登录
 // 发送邮箱
-export const studentSignInFirstSendEmail = (data) => post('/student/firstLogin/SendEmail');
+export const studentSignInFirstlySendEmail = (data) => post('/student/firstLogin/SendEmail', data);
 
 // 邮箱验证码验证
-export const studentSignInFirstVerified = (data) => post('/student/firstLogin/verified');
+export const studentSignInFirstlyEmailVerified = (data) => post('/student/firstLogin/verified', data);
 
-// 管理员登录
-export const adminSignIn = (data) => post('/admin/login', data);
+// 修改密码
+export const studentModifyPassword = (data) => post('/student/password/resetByEmail', data);
 
 // 企业注册
 // 发送验证
@@ -30,13 +30,16 @@ export const enterpriseSignUpForm = (data) => post('/business/register/form', da
 export const enterpriseSignUpFile = (data) => postFile('/business/register/upload', data);
 
 // 获取学生信息
-export const getStudentInfo = () => get('/student/home/info');
+export const getStudentInfo = (data) => get('/student/home/info', data);
 
 // 获取企业信息
-export const getEnterpriseInfo = () => get('/business/home/info');
+export const getEnterpriseInfo = (data) => get('/business/home/info', data);
 
 // 人才排行榜
 export const getStudentRanking = (data) => get('/show/students', data);
 
 // 支付
 export const pay = (data) => post('/alipay', data);
+
+// 获取学生总数
+export const getStudentCount = () => get('/count/student');

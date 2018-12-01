@@ -1,20 +1,21 @@
 <template>
   <div class="container">
-    <div class="banner">
+    <div class="banner-container">
       <button class="signup-button" @click="goToSignUp()">支付</button>
+      <button class="signup-button" @click="temp()">备用</button>
     </div>
 
-    <div class="content">
+    <div class="content-container">
       <h3>该如何运作我们的网站？</h3>
-      <div class="describe">
-        {{ describe }}
+      <div class="description-container">
+        {{ description }}
       </div>
     </div>
 
-    <div class="display">
+    <div class="display-container">
       <h3>美图欣赏</h3>
-      <div class="works">
-          <div v-for="item in works" :key="item">
+      <div class="works-container">
+          <div v-for="(item, index) in works" :key="index">
             <img :src="item" alt="works" @click="goToDisplay()">
           </div>
       </div>
@@ -44,37 +45,28 @@ import { pay } from '@/api/user';
 export default {
 	data() {
 		return {
-			describe: 'Here is the description of the site operation...',
+			description: 'Here is the description of the site operation...',
 			works: [picture1, picture2, picture3, picture4, picture5, picture6, picture7, picture8],
 		};
 	},
 	methods: {
 		goToSignUp() {
-			// 暂时提供进入企业主页的入口，仅供测试时使用
-			// this.$router.push('/user/enterpriseHomePage');
-			// this.$router.push('user//studentHomePage');
-			// this.$router.push({
-			//   name: 'SignInFirst',
-			// });
 
 			const data = {
-				out_trade_no: '2343252342423',
+				out_trade_no: '20150320010101039',
+				product_code: "FAST_INSTANT_TRADE_PAY",
+				total_amount: 66.66,
 				subject: 'log',
-				total_amount: 800,
 				body: 'a vue',
-				goods_type: 1,
-				quit_url: null,
-				timeout_express: null,
-				product_code: null,
       };
-      const newTab = window.open();
+      // const newTab = window.open();
 			pay(data)
 				.then(res => {
 					console.log(res);
 					const div = document.createElement('div');
-					div.innerHTML = res; 
-					newTab.document.body.appendChild(div);
-					newTab.document.forms.alipaysubmit.submit();
+					div.innerHTML = res;
+					document.body.appendChild(div);
+					document.forms.punchout_form.submit();
 				})
 				.catch(err => {
 					console.log(err);
@@ -83,7 +75,10 @@ export default {
 		goToDisplay() {
 			// 点击图片发生的动作
 			// 暂时不需要
-		},
+    },
+    temp() {
+			this.$router.push('/user/enterpriseHomePage');
+    },
 	},
 };
 </script>
@@ -94,7 +89,7 @@ export default {
 .container {
 	width: 100%;
 	padding-top: $h-nav;
-	.banner {
+	.banner-container {
 		height: $h-banner;
 		background-image: url('/static/images/home/background.jpg');
 		background-size: cover;
@@ -108,18 +103,18 @@ export default {
 			border: none;
 		}
 	}
-	.content {
+	.content-container {
 		padding: 3rem;
 		@include wh(40%, 18rem);
-		.describe {
+		.description-container {
 			padding: 0.3rem;
 			box-shadow: $shadow-work;
 			@include wh(17rem, 15rem);
 		}
 	}
-	.display {
+	.display-container {
 		padding: 3rem;
-		.works {
+		.works-container {
 			width: 90%;
 			padding: 1em;
 			display: flex;
