@@ -103,6 +103,11 @@ const constRouterMap = [
         component: () => import('@/views/Collect/Collect'),
       },
       {
+        path: '/order/confirm',
+        name: 'OrderConfirm',
+        component: () => import('@/views/Order/OrderConfirm'),
+      },
+      {
         path: '/setting',
         name: 'Setting',
         component: () => import('@/views/Setting/Setting'),

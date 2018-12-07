@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="banner-container">
-      <button class="signup-button" @click="goToSignUp()">支付</button>
-      <button class="signup-button" @click="temp()">备用</button>
+      <button class="signup-button" @click="goToSignUp()">注册</button>
     </div>
 
     <div class="content-container">
@@ -20,7 +19,6 @@
           </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -51,34 +49,10 @@ export default {
 	},
 	methods: {
 		goToSignUp() {
-
-			const data = {
-				out_trade_no: '20150320010101039',
-				product_code: "FAST_INSTANT_TRADE_PAY",
-				total_amount: 66.66,
-				subject: 'log',
-				body: 'a vue',
-      };
-      // const newTab = window.open();
-			pay(data)
-				.then(res => {
-					console.log(res);
-					const div = document.createElement('div');
-					div.innerHTML = res;
-					document.body.appendChild(div);
-					document.forms.punchout_form.submit();
-				})
-				.catch(err => {
-					console.log(err);
-				});
+      this.$router.push({
+        name: 'SignUp'
+      });
 		},
-		goToDisplay() {
-			// 点击图片发生的动作
-			// 暂时不需要
-    },
-    temp() {
-			this.$router.push('/user/enterpriseHomePage');
-    },
 	},
 };
 </script>

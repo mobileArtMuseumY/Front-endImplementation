@@ -29,7 +29,7 @@ export const studentSignInFirstlyEmailVerified = (data) => post('/student/firstL
 export const studentModifyPassword = (data) => post('/student/password/resetByEmail', data);
 
 // 企业注册
-// 发送验证
+// 验证手机和验证码是否匹配
 export const enterpriseSignUpV = (data) => post('/business/register/varify', data);
 
 // 发送验证码
@@ -43,9 +43,6 @@ export const enterpriseSignUpFile = (data) => postFile('/business/register/uploa
 
 // 人才排行榜
 export const getStudentRanking = (data) => get('/show/students', data);
-
-// 支付
-export const pay = (data) => post('/alipay', data);
 
 // 获取学生总数
 export const getStudentCount = () => get('/count/student');
@@ -74,5 +71,14 @@ export const getEnterpriseCollectInfo = () => get('/collect/home/favoriteProject
 // 学生投标项目
 export const studentGoToBid = (data) => post('/project/student/bidding', data);
 
-// 企业进行选标
+// 企业进行选标（确认订单）
 export const enterpriseSelectBid = (data) => post('/order/bid/confirm', data);
+
+// 企业确认订单
+export const buyWorks = (data) => post('/order/add', data);
+
+// 订单完成
+export const Orderfinished = (data) => post('/order/done', data)
+
+// 支付
+export const pay = (data) => post('/alipay/pay', data);

@@ -162,25 +162,25 @@ export default {
       });
     },
     onBeforeUpload(file) {
-			const isIMAGE = file.type === 'image/jpeg' || file.type === 'image/png';
-			const isL1M = file.size / 1024 / 1024 < 3;
+      const isIMAGE = file.type === "image/jpeg" || file.type === "image/png";
+      const isL1M = file.size / 1024 / 1024 < 3;
 
-			if (!isIMAGE) {
+      if (!isIMAGE) {
         this.$message({
-          type: 'error',
-          message: '上传文件只能是jpeg/png格式!'
+          type: "error",
+          message: "上传文件只能是jpeg/png格式!"
         });
-				return false;
-			}
-			if (!isL1M) {
+        return false;
+      }
+      if (!isL1M) {
         this.$message({
-          type: 'error',
-          message: '上传文件大小不能超过1M!'
+          type: "error",
+          message: "上传文件大小不能超过1M!"
         });
-				return false;
-			}
-			return isIMAGE && isL1M;
-		},
+        return false;
+      }
+      return isIMAGE && isL1M;
+    },
     onSuccess(response) {
       // 获取图片上传后的respones
       this.projectAttachmentList = response.data;
@@ -202,43 +202,51 @@ export default {
     },
     publishProject() {
       if (this.user.signIn) {
-        // 确定用户选择的技能，这个技能应该为[]
-        let skill = this.ruleForm.selecSkill;
-        let obj = {};
-        this.ruleForm.selecSkill = [];
-        for (let i = 0; i < skill.length; ++i) {
-          obj = this.skills.find(item => {
-            return item.value === skill[i];
-          });
-          obj = {
-            id: i + 1,
-            skillName: obj.label
+        if (this.user.role === "enterprise") {
+          // 确定用户选择的技能，这个技能应该为[]
+          let skill = this.ruleForm.selecSkill;
+          let obj = {};
+          this.ruleForm.selecSkill = [];
+          for (let i = 0; i < skill.length; ++i) {
+            obj = this.skills.find(item => {
+              return item.value === skill[i];
+            });
+            obj = {
+              id: i + 1,
+              skillName: obj.label
+            };
+            this.ruleForm.selecSkill.push(obj);
+          }
+          const projectData = {
+            projectName: this.ruleForm.projectName,
+            projectDescription: this.ruleForm.textarea,
+            skillList: this.ruleForm.selecSkill,
+            tenderPeriod: this.ruleForm.bidPeriod,
+            budget: this.ruleForm.budget,
+            expectedTime: this.ruleForm.transaPeriod,
+            projectAttachmentList: this.projectAttachmentList
           };
-          this.ruleForm.selecSkill.push(obj);
-        }
-        const projectData = {
-          projectName: this.ruleForm.projectName,
-          projectDescription: this.ruleForm.textarea,
-          skillList: this.ruleForm.selecSkill,
-          tenderPeriod: this.ruleForm.bidPeriod,
-          budget: this.ruleForm.budget,
-          expectedTime: this.ruleForm.transaPeriod,
-          projectAttachmentList: this.projectAttachmentList
-        };
-        publishProjectForm(projectData)
-          .then(res => {
-            this.$message({
-              type: "success",
-              message: `提交成功！`
+          publishProjectForm(projectData)
+            .then(res => {
+              this.$message({
+                type: "success",
+                message: `提交成功！`
+              });
+              this.$router.push({
+                name: "EnterpriseHomepage"
+              });
+              // 应该显示弹出提示框，然后跳转到主页面
+            })
+            .catch(err => {
+              console.log("项目发布表单提交失败！");
             });
-            this.$router.push({
-              name: "EnterpriseHomepage"
-            });
-            // 应该显示弹出提示框，然后跳转到主页面
-          })
-          .catch(err => {
-            console.log("项目发布表单提交失败！");
+        } else {
+          this.$message({
+            type: "warning",
+            message: `只有企业才能发布项目哦~`
           });
+          return;
+        }
       } else {
         this.$message({
           type: "warning",

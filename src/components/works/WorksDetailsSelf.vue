@@ -1,9 +1,6 @@
 <template>
   <div>
     <div class="works-details-self" style="display: flex;">
-      <div class="empty-container" v-if="!studentItem">
-        <p>暂无投标</p>
-      </div>
       <div class="left-container">
         <!-- <img :src="studentItem.avatar" alt="studentAvatar" class="avatar-of-student"> -->
         <div style="display: flex;">
@@ -27,8 +24,7 @@
           </ul>
         </div>
       </div>
-      <div class="decription-container" v-if="isSelf === 0 || studentItem.worksId">
-        <!-- <div class="center-container"> -->
+      <div class="decription-container" :v-if="isSelf === 0 || studentItem.worksId">
         <p
           class="description"
         >this is the description of this worksthis is the description of this worksthis is the description of this works</p>
@@ -54,14 +50,14 @@
             style="width: 35px; height: 35px; transform: translate(2rem, -2rem);"
             @click.native="goToMark(studentItem.studentId)"
             class="icon"
-            :id= markId
+            :id="markId"
           ></svg-icon>
           <svg-icon
             icon="check"
             style="width: 25px; height: 25px; transform: translateX(2.2rem);"
             @click.native="goToSelectBid(studentItem.worksId)"
             class="icon"
-            :id= bidId
+            :id="bidId"
             v-if="isSelf === 0"
           ></svg-icon>
         </div>
@@ -70,7 +66,10 @@
         <div class="swiper-container">
           <el-carousel height="430px">
             <el-carousel-item v-for="(list, index) in worksData.waterPictureDTOList" :key="index">
-              <img :src="address + list.attachmentWatermarkPath" alt="list.attachmentWatermarkPath">
+              <img
+                :src="address + list.attachmentWatermarkPath"
+                :alt="address + list.attachmentWatermarkPath"
+              >
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -94,10 +93,13 @@ import { mapGetters } from "vuex";
 export default {
   props: {
     studentItem: "",
-    isSelf: ""
+    isSelf: "",
+    projectId: "",
+    type: ""
   },
   data() {
     return {
+      address: "http://120.79.239.141:8080/",
       worksDialogVisible: false,
       worksData: [],
       markId: this.studentItem.studentId + 1,
@@ -106,6 +108,9 @@ export default {
   },
   computed: {
     ...mapGetters(["user"])
+  },
+  mounted() {
+    console.log(this.type);
   },
   methods: {
     goToStudentHome(studentId) {
@@ -130,7 +135,6 @@ export default {
         });
     },
     goToConnectStudent(studentId, id) {
-      // this.changeColor(this.goToConnectOpen, id);
       this.$message({
         message: "敬请期待~"
       });
@@ -140,7 +144,7 @@ export default {
         const data = {
           followedId: studentId
         };
-        if (!(document.getElementById(this.markId).style.color === 'red')) {
+        if (!(document.getElementById(this.markId).style.color === "red")) {
           followOthers(data)
             .then(res => {
               this.changeColor(true, this.markId);
@@ -172,13 +176,24 @@ export default {
         });
       }
     },
+    // 选标进入订单确认界面
     goToSelectBid(worksId, id) {
-      // this.changeColor(this.goToBidOpen, id);
-      const data = {
-        projectId: "",
-        worksId: worksId
-      };
-      enterpriseSelectBid();
+      this.$confirm("选定后将不能更改, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        const data = {
+          projectId: this.projectId,
+          worksId: worksId
+        };
+        this.$router.push({
+          name: "OrderConfirm",
+          params: {
+            data: data
+          }
+        });
+      });
     },
     changeColor(type, id) {
       if (type) {

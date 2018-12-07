@@ -28,7 +28,7 @@
           <button
             class="bid-button"
             @click="goToBidPage(projectData.projectId)"
-            v-if="!(user.role === 'enterprise') || !projectData.myWorks"
+            v-if="!(user.role === 'enterprise') && !projectData.myWorks"
           >投标</button>
         </div>
       </div>
@@ -60,24 +60,33 @@
         <h2>投标作品展示</h2>
       </div>
       <div class="container-bottom">
+        <div class="empty-container" v-if="!projectData.myWorks && !(projectData.biddingLessInfoDTOList) && !projectData.biddingMoreInfoDTOList">
+          <label>暂无投标...</label>
+        </div>
         <div class="student-works-details">
           <works-details-self
             :studentItem="projectData.myWorks"
-            isSelf="projectData.isSelf"
+            :isSelf="projectData.isSelf"
             v-if="projectData.myWorks"
+            :projectId="projectData.projectId"
+            type="myworks"
           ></works-details-self>
           <works-details-self
             :studentItem="works"
             v-for="(works, index) in projectData.biddingLessInfoDTOList"
             :key="index"
-            isSelf="projectData.isSelf"
+            :isSelf="projectData.isSelf"
+            :projectId="projectData.projectId"
+            type="biddingLessInfoDTOList"
             v-if="projectData.biddingLessInfoDTOList.length > 0"
           ></works-details-self>
           <works-details-self
             :studentItem="works"
             v-for="(works, index) in projectData.biddingMoreInfoDTOList"
             :key="index"
-            isSelf="projectData.isSelf"
+            :isSelf="projectData.isSelf"
+            :projectId="projectData.projectId"
+            type="biddingMoreInfoDTOList"
             v-if="projectData.biddingMoreInfoDTOList.length > 0"
           ></works-details-self>
         </div>
@@ -117,8 +126,10 @@ export default {
     const data = {
       projectId: projectId
     };
-    console.log(data);
-
+    if(!this.projectData.myWorks && !(this.projectData.biddingLessInfoDTOList) && !this.projectData.biddingMoreInfoDTOList) {
+      console.log('空的')
+    }
+    // console.log(projectId);
     getProjectDataDetails(data)
       .then(res => {
         this.projectData = res.data;
@@ -211,6 +222,7 @@ export default {
       width: 70vw;
       border: 0.1rem solid #d7d7d7;
       border-radius: 4px;
+      padding: 1rem;
     }
   }
 }

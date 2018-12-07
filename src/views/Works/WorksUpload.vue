@@ -24,7 +24,8 @@
               <textarea v-model="worksData.worksDescribe" placeholder="请介绍您的作品..."></textarea>
             </div>
           </el-form-item>
-          <div class="form-upload">
+
+          <div class="form-upload" v-if="!worksData.worksAttachmentList.length > 0">
             <el-upload
               ref="upload"
               :action="uploadUrl()"
@@ -134,7 +135,7 @@ export default {
     },
     onSuccess(response) {
       // 获取图片上传后的respones
-      this.projectAttachment = response.data;
+      this.projectAttachment = response.data[0];
       this.projectAttachmentList.push(this.projectAttachment);
       this.$message({
         type: "success",
@@ -151,7 +152,6 @@ export default {
         return;
       }
       this.worksData.worksAttachmentList = this.projectAttachmentList;
-      console.log(this.worksData);
       const data = this.worksData;
       uploadWorks(data)
         .then(res => {

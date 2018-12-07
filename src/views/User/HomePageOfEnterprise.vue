@@ -15,8 +15,7 @@
           :on-success="onSuccess"
           :multiple="false"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar-of-business">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <img :src="address + imageUrl " class="avatar-of-business">
         </el-upload>
         <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
           <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
@@ -128,11 +127,12 @@ import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
-      imageUrl: "/static/images/nav/avatar.png",
+      // imageUrl: "/static/images/nav/avatar.png",
+      address: "http://120.79.239.141:8080/",
       headers: {
         Authorization: getToken()
       },
-      // imageUrl: enterpriseInfo.avatar,
+      imageUrl: this.enterpriseInfo.avatar,
       enterpriseInfo: "",
       collectWorksItem: "",
       collectProjectsItem: "",
@@ -260,6 +260,7 @@ export default {
     // 获取基本信息
     getEnterpriseInfo(data).then(res => {
       this.enterpriseInfo = res.data;
+      console.log(this.enterpriseInfo);
       // 获取项目信息
       /**
        * 正在审核 0

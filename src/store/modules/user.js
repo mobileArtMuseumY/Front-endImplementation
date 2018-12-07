@@ -217,36 +217,19 @@ const user = {
      * 3. 将表单发送给服务器
      */
 
-    // 发送验证
-    SendVerify: function ({ state, commit }, data) {
+
+    // 验证手机验证码
+    VerifyCaptcha: function ({ state, dispatch }, data) {
+      console.log('验证手机号')
       return new Promise((resolve, reject) => {
-        enterpriseSignUpV(data).then(res => {
-          if (!state.captcha) {
-            commit('SET_CAPTCHA');
-          }
+        enterpriseSignUpV(data.captcha).then(res => {
+          dispatch('SignUp', data.userData);
           resolve();
         }).catch(err => {
-          console.log('企业注册验证码发送失败！');
+          console.log('企业注册手机验证码验证失败！');
           reject(err);
         });
       });
-    },
-
-    // 向服务器发送验证码
-    SendCaptcha: function ({ state, dispatch }, data) {
-      if (state.captcha) {
-        return new Promise((resolve, reject) => {
-          enterpriseSignUpC(data.captcha).then(res => {
-            dispatch('SignUp', data.userData);
-            resolve();
-          }).catch(err => {
-            console.log('企业注册验证码验证失败！');
-            reject(err);
-          });
-        });
-      } else {
-        console.log('请重新发送验证码！');
-      }
     },
 
     //用户注册,表单发送
@@ -255,7 +238,6 @@ const user = {
         enterpriseSignUpForm(data).then(res => {
           console.log(res);
           console('注册成功');
-          router.push('');   // 邮箱验证提示
           resolve();
         }).catch(err => {
           console.log(err);
