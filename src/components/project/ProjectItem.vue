@@ -2,21 +2,48 @@
   <div class="project-item">
     <div class="top">
       <!-- <img src="projectItems.avatar" alt="businessAvatar" class="avatar-of-business"> -->
-      <svg-icon icon="user" style="width: 70px; height: 70px; color: #5E5E5E; " class="avatar-of-business"></svg-icon>
-      <label class="project-name"><strong>{{ projectItems.projectName }}</strong></label>
-      <label class="project-budget"><strong>￥{{ projectItems.budget }}</strong></label>
-      <button class="a business-id-button" @click="goToBusinessHome(projectItems.businessId)">{{ projectItems.businessName }}</button>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between;">
+          <svg-icon
+            icon="user"
+            style="width: 70px; height: 70px; color: #5E5E5E; "
+            class="avatar-of-business"
+          ></svg-icon>
+          <a
+            class="a"
+            @click="goToProjectDetails(projectItems.prjectId)"
+            style="margin-left: 2rem; color: #5E5E5E;"
+          >
+            <strong>{{ projectItems.projectName }}</strong>
+          </a>
+        </div>
+        <label style="color: red;">
+          <strong>￥{{ projectItems.budget }}</strong>
+        </label>
+      </div>
+      <a
+        class="a"
+        @click="goToBusinessHome(projectItems.businessId)"
+      >{{ projectItems.businessName }}</a>
     </div>
-    <p class="project-description" >{{ projectItems.projectDescription }}</p>
+    <p style="color: #5E5E5E;">{{ projectItems.projectDescription }}</p>
     <div class="bottom">
       <ul v-if="projectItems.skillList">
         <div class="skill-list-container">
-            <li v-for="skill in projectItems.skillList" :key="skill.id" class="skill-item">{{ skill.skillName }}</li>
+          <li
+            v-for="skill in projectItems.skillList"
+            :key="skill.id"
+            class="skill-item"
+          >{{ skill.skillName }}、</li>
         </div>
       </ul>
-      <label class="gmt-time">{{ projectItems.gmtCreate }}</label>
-      <label class="left-time">剩余{{ projectItems.leftTime }}天</label>
-      <button class="a project-id-button" @click="goToProjectDetails(projectItems.prjectId)">查看详情</button>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div>
+          <label>{{ projectItems.gmtCreate }}</label>
+          <label style="margin-left: 2rem; color: #5E5E5E;">剩余 {{ projectItems.leftTime }} 天</label>
+        </div>
+        <a @click="goToProjectDetails(projectItems.projectId)">查看详情</a>
+      </div>
     </div>
   </div>
 </template>
@@ -25,134 +52,64 @@
 /**
  * 浏览项目中的项目item
  */
+import { mapGetters } from "vuex";
+
 
 export default {
-	props: {
-		projectItems: '',
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		goToBusinessHome(businessId) {
-			this.$router.push({
-        name: 'EnterpriseHomepage',
-        params: {
-          id: bussinessId,
-        },
-      });
-		},
-		goToProjectDetails(projectId) {
-      console.log('goToProjectDetails');
+  props: {
+    projectItems: ""
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["user"])
+  },
+  methods: {
+    goToBusinessHome(businessId) {
       this.$router.push({
-        name: 'ProjectDetails',
+        name: "EnterpriseHomepage",
         params: {
-          id: projectId,
-        },
+          id: businessId
+        }
       });
     },
-	},
+    goToProjectDetails(projectId) {
+      if (this.user.signIn) {
+        this.$router.push({
+          name: "ProjectDetails",
+          params: {
+            id: projectId
+          }
+        });
+      } else {
+        this.$message({
+          message: "您需要先登录才能查询项目详情哦~",
+          type: "warning"
+        });
+        return;
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-@import 'src/assets/scss/index';
+@import "src/assets/scss/index";
 
 .project-item {
-	border-top: $border;
-	padding: 1rem;
-	&:hover {
-		box-shadow: $shadow-work;
-		border-left: 0.1rem solid $clr-main;
-	}
-	.top {
-		@include wh(100%, 6.5rem);
-		.avatar-of-business {
-			float: left;
-			@include wh(70px, 70px);
-			@include margin-tl(0, 0);
-		}
-		.project-budget {
-			float: right;
-			padding: 0.5rem;
-			font-size: 17px;
-			color: $clr-main;
-		}
-		.project-name {
-			float: left;
-			margin: 0 auto 100px 90px;
-			font-size: 17px;
-			color: $clr-footer-font;
-		}
-		.business-id-button {
-			// text-align: start;
-			// border: $border;
-			width: 5.5rem;
-			float: left;
-			@include margin-tl(80px, -220px);
-		}
-	}
-	.a {
-		border: none;
-		background-color: transparent;
-		color: $clr-title;
-		cursor: pointer;
-		&:hover {
-			background-color: transparent;
-			color: $clr-main;
-		}
-	}
-	.project-description {
-		padding: 0 0.5rem 0 0;
-		line-height: 20px;
-		width: 50vw;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: 2; // 改变行数
-		-webkit-box-orient: vertical;
-		color: $clr-footer-font;
-	}
-
-	.bottom {
-		@include wh(100%, 5rem);
-		.project-id-button {
-			text-align: end;
-			float: right;
-		}
-		.skill-list-container {
-			.skill-item {
-				display: inline;
-				color: $clr-footer-font;
-				margin-left: 5px;
-				box-shadow: $shadow-skill;
-				&:first-child {
-					margin-left: -40px; // 为什么0的时候不是最左边？
-				}
-			}
-		}
-		.left-time {
-			margin-left: 40px;
-			color: $clr-footer-font;
-		}
-		.gmt-time {
-			color: $clr-footer-font;
-		}
-	}
-}
-
-span {
-	cursor: pointer;
-	margin: 0.3rem;
-	font-size: 0.8rem;
-	color: $clr-gray;
-	&:hover {
-		color: $clr-main;
-	}
-}
-
-button {
-  outline: none;
+  padding: 1rem;
+  border-top: $border;
+  .skill-list-container {
+    .skill-item {
+      display: inline;
+      color: $clr-footer-font;
+      margin-left: 5px;
+      &:first-child {
+        margin-left: -40px; // 为什么0的时候不是最左边？
+      }
+    }
+  }
 }
 </style>
 

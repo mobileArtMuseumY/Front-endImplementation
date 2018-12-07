@@ -39,8 +39,6 @@
  * 1. 验证码hover的时候不变成红色(好像被input遮到了)
  * 2. 去掉input focus时的border
  */
-import { Message } from 'element-ui';
-
 
 export default {
   data() {
@@ -116,7 +114,7 @@ export default {
         email: this.ruleForm.email,
       };
       if(!data.email) {
-        Message({
+        this.$message({
           type: 'warning',
           message: '请先输入邮箱！'
         });

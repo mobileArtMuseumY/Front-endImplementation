@@ -6,11 +6,9 @@
       <span id="t-clicked" @click="sortOfTime()">发布时间</span>
       <span id="f-clicked" @click="sortOfFocused()">关注度</span>
     </div>
-    <section>
-      <div class="main">
-        <works-item :works="item" v-for="(item, index) in items" :key="index">{{ item }}</works-item>
-      </div>
-    </section>
+    <div class="main">
+      <works-item :works="item" v-for="(item, index) in items" :key="index"></works-item>
+    </div>
     <div class="pagination-container">
       <el-pagination
         background
@@ -88,6 +86,7 @@ export default {
       getWorksDataPassersBy(data)
         .then(res => {
           this.items = res.data;
+          console.log(this.items);
           getWorksCount()
             .then(res => {
               this.total = res.data;
@@ -130,12 +129,16 @@ export default {
     width: 20%;
   }
   .main {
-    width: 100vw;
+    @include margin-tb(2rem, 2rem);
     display: flex;
+    flex-wrap: wrap;
+    &::after {
+      content: "";
+      flex-grow: 999999;
+    }
   }
-  .pagination {
-    @include margin-tb(3rem, 3rem);
-    margin-left: -7vw;
+  .pagination-container {
+    @include margin-tb(2rem, 3rem);
   }
 }
 span {
@@ -145,14 +148,6 @@ span {
   color: $clr-gray;
   &:hover {
     color: $clr-main;
-  }
-}
-section {
-  display: flex;
-  flex-wrap: wrap;
-  &::after {
-    content: "";
-    flex-grow: 99;
   }
 }
 </style>

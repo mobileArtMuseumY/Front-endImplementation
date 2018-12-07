@@ -198,6 +198,10 @@ export default {
     width: 80vw;
     background-color: $clr-white;
     border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+  .pagination-container {
+    margin-bottom: 2rem;
   }
   .a {
     border: none;
@@ -208,10 +212,6 @@ export default {
       background-color: transparent;
       color: $clr-main;
     }
-  }
-
-  .pagination-container {
-    margin-bottom: 2rem;
   }
   span {
     cursor: pointer;

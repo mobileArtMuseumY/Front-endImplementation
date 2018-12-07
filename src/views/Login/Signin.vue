@@ -69,7 +69,7 @@ export default {
 		return {
 			opacity: 0,
 			input: '',
-			role: '',
+			role: 'enterprise',
 			enterpriseChecked: '',
 			studentChecked: '',
 			checked: '',
@@ -124,12 +124,11 @@ export default {
 		// 登录
 		goToSignIn() {
 			this.rememberPass();
-			if (!this.role) {
-				this.message('请选择角色！');
-				return false;
-			}
 			if (!this.ruleForm.userId || !this.ruleForm.password) {
-				this.message('账号或密码不能为空!');
+        this.$message({
+          type: 'warning',
+          message: '账号或密码不能为空'
+        });
 				return false;
 			}
 			const role = this.role;
@@ -161,12 +160,16 @@ export default {
 		getPassword() {
 			this.$router.push({
         name: 'RetrievePassword',
+        params: {
+          role: this.role,
+        },
       });
 		},
 		message(m) {
-			this.$message.error({
-				message: m,
-			});
+      this.$message({
+        type: 'error',
+        message: m
+      });
 		},
 		getRemembered() {
 			const judge = getStore('remembered');

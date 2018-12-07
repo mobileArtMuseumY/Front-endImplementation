@@ -81,6 +81,7 @@ export default {
 @import 'src/assets/scss/index';
 
 .footer {
+  border: $border;
 	position: relative;
   float: bottom;
   @include wh(100%, $h-footer);

@@ -1,13 +1,12 @@
 <template>
   <div class="container">
-    <div class="background">
-      <!-- <img src="/static/images/user/enterprise/landscape.jpg" alt="background"> -->
-    </div>
+    <div class="background"></div>
     <div class="top">
       <div class="left">
         <el-upload
           ref="upload"
           :action="uploadUrl()"
+          :headers="headers"
           accept="image/jpeg, image/png"
           :auto-upload="true"
           :with-credentials="true"
@@ -23,38 +22,58 @@
           <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
             <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;"></svg-icon>
           </el-tooltip>
-        </div> -->
+        </div>-->
         <div class="followers-and-following">
-          <!-- <span>{{ user.userInfo.followers }}</span>
-          <span>{{ user.userInfo.following }}</span>-->
+          <!-- <span>{{ studentInfo.followers }}</span>
+          <span>{{ studentInfo.following }}</span>-->
           <span>followers 3</span>
           <span>following 4</span>
         </div>
       </div>
       <div class="center">
         <div class="username">
-          <!-- <span style="font-size: 25px;"> <strong>{{ user.userInfo.userName }}</strong></span> -->
+          <!-- <span style="font-size: 25px;"> <strong>{{ studentInfo.userName }}</strong></span> -->
           <span style="font-size: 25px;">
             <strong>Honeysyt</strong>
           </span>
         </div>
         <div class="description">
-          <!-- <span>{{ user.userInfo.description }}</span> -->
+          <!-- <span>{{ studentInfo.description }}</span> -->
           <textarea disabled>here is the description of me.here is the description of me.</textarea>
         </div>
       </div>
       <div class="right">
         <div class="edit-profile">
-          <button>编辑信息</button>
+          <button @click="toVerify('完善用户信息')">编辑信息</button>
         </div>
       </div>
-      <div ></div>
+      <div></div>
     </div>
     <div class="bottom">
       <div class="main">
-        <!-- <label v-if="!project.projectItem">空空如也……</label> -->
-        <h2>作品展示</h2>
-        
+        <div class="main-top">
+          <h2>作品展示</h2>
+          <!-- 这个只有自己可见 -->
+          <div class="upload" v-if="isSelf">
+            <el-tooltip class="item" effect="dark" content="上传作品" placement="top">
+              <a @click="goToUploadWorks" style="cursor: pointer;">
+                <i
+                  class="el-icon-plus avatar-uploader-icon"
+                  style="width: 20px; height: 20px; border: none;"
+                ></i>
+              </a>
+            </el-tooltip>
+          </div>
+        </div>
+        <div class="main-body">
+          <!-- <label v-if="!project.projectItem">空空如也……</label> -->
+          <works-items-self
+            :worksItem="worksItem"
+            type="details"
+            v-for="(worksItem, index) in worksItems"
+            :key="index"
+          ></works-items-self>
+        </div>
       </div>
       <div class="right-bar">
         <div class="right-bar-verify">
@@ -113,13 +132,25 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Message from 'element-ui';
+import { getSelfWorks } from "@/api/works";
+import { getStudentBasicInfo, getStudentCollectInfo } from "@/api/user";
+import { getUserId } from "@/utils/auth";
+import { getToken } from "@/utils/auth";
+
 
 export default {
   data() {
     return {
       imageUrl: "/static/images/nav/avatar.png",
-      // imageUrl: user.userInfo.avatar,
+      worksItems: "",
+      studentInfo: "",
+      collectWorksItem: "",
+      isSelf: true,
+      id: "",
+      headers: {
+        Authorization: getToken()
+      },
+      // imageUrl: studentInfo.avatar,
       verifyItems: [
         {
           icon: "user-verify",
@@ -161,7 +192,7 @@ export default {
           enterpriseName: "千竹呀",
           projectDescription: "lalala"
         }
-      ],
+      ]
     };
   },
   computed: {
@@ -173,10 +204,9 @@ export default {
     },
     onSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      // this.businessAttachment = res.data;
-      Message({
-        type: 'success',
-        message: '上传成功！'
+      this.$message({
+        type: "success",
+        message: "上传成功！"
       });
     },
     onBeforeUpload(file) {
@@ -184,20 +214,96 @@ export default {
       const isL1M = file.size / 1024 / 1024 < 3;
 
       if (!isIMAGE) {
-        this.$message.error("上传文件只能是jpeg/png格式!");
+        this.$message({
+          type: "error",
+          message: "上传文件只能是jpeg/png格式!"
+        });
         return false;
       }
       if (!isL1M) {
-        this.$message.error("上传文件大小不能超过1M!");
+        this.$message({
+          type: "error",
+          message: "上传文件大小不能超过1M!"
+        });
         return false;
       }
       return isIMAGE && isL1M;
+    },
+    toVerify(content) {
+      if (content === "完善用户信息") {
+        this.info = "perfectUserInfo";
+        console.log(this.info);
+      } else if (content === "手机验证") {
+        this.info = "verifyPhoneNum";
+      } else if (content === "邮箱验证") {
+        this.info = "verifyEmail";
+      }
+      this.$router.push({
+        name: "Setting",
+        params: {
+          info: this.info
+        }
+      });
+    },
+    goToUploadWorks() {
+      this.$router.push({
+        name: "WorksUpload"
+      });
     }
   },
-  mounted: {
-    getStudentInfo() {
-      // this.$store.dispatch('GetStudentInfo');
+  mounted() {
+    // 别人进入主页时先判断是不是本人!!!!!
+    // 本人id和进入主页的id是否相等
+    if (this.$route.params.id) {
+      if (!(this.$route.params.id === this.user.userInfo.userId)) {
+        this.isSelf = false;
+        this.id = this.$route.params.id;
+      }
+    } else {
+      this.id = this.user.userInfo.userId;
     }
+    let data = {
+      id: this.id
+    };
+    // 获取学生基本信息
+    getStudentBasicInfo(data)
+      .then(res => {
+        this.studentInfo = res.data;
+        // 获取作品信息
+        data = {
+          id: this.id,
+          page: 1,
+          rows: 10
+        };
+        getSelfWorks(data)
+          .then(res => {
+            this.worksItems = res.data;
+          })
+          .catch(err => {
+            this.$message({
+              type: "error",
+              message: "获取作品信息失败！"
+            });
+          });
+      })
+      .catch(err => {
+        this.$message({
+          type: "error",
+          message: "获取学生基本信息失败！"
+        });
+      });
+
+    // // 获取学生收藏信息
+    // getStudentCollectInfo(data)
+    //   .then(res => {
+    //     this.collectWorksInfo = res.data;
+    //   })
+    //   .catch(err => {
+    //     Message({
+    //       type: "error",
+    //       message: "获取学生收藏信息失败！"
+    //     });
+    //   });
   }
 };
 </script>
@@ -206,7 +312,6 @@ export default {
 @import "src/assets/scss/index";
 
 .container {
-  // @include wh(100%, 60rem);
   width: 100%;
   padding-top: $h-nav;
   display: flex;
@@ -268,13 +373,18 @@ export default {
     width: 85vw;
     .main {
       width: 60vw;
-      // background-color: #fff;
       box-shadow: $shadow-nav;
       border-radius: 3px;
       padding: 0.5em;
-      > div {
-        width: 80%;
-        margin: 4em auto;
+      .main-top {
+        display: flex;
+        justify-content: space-between;
+        .upload {
+          transform: translate(-1.5rem, -1rem);
+        }
+      }
+      .main-body {
+        display: flex;
       }
     }
     .right-bar-verify {

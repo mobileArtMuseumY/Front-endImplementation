@@ -24,20 +24,12 @@
     <div class="dialog-container">
       <el-dialog :visible.sync="worksDialogVisible" style="height: 70hw;">
         <div class="swiper-container">
-          <el-carousel height="350px">
+          <el-carousel height="400px">
             <el-carousel-item v-for="(list, index) in worksData.waterPictureDTOList" :key="index">
               <img :src="address + list.attachmentWatermarkPath" alt="list.attachmentWatermarkPath">
             </el-carousel-item>
           </el-carousel>
         </div>
-        <!-- <div class="profile-container">
-          <img :src="worksData.avatar">
-          <span>{{ worksData.loginName }}</span>
-          <span>{{ worksData.worksDescribe }}</span>
-        </div> -->
-        <!-- <div slot="footer" class="dialog-footer" style="margin-bottom: 1rem;">
-          <el-button @click="worksDialogVisible = false">确定</el-button>
-        </div> -->
       </el-dialog>
     </div>
   </div>
@@ -85,7 +77,6 @@ export default {
     },
     goToCollect(worksId) {
       if (this.user.signIn) {
-        console.log("你进来了？？？");
         document.getElementById("collect").style.color = "red";
         this.$store.dispatch("CollectWorks", worksId);
       } else {
@@ -103,47 +94,43 @@ export default {
 <style lang="scss" scoped>
 @import "src/assets/scss/index";
 
-.works-img {
-  margin: 0.3rem;
-  transition: all 1s ease 0s;
-  overflow: hidden;
-  img {
-    cursor: pointer;
-    border-radius: 1px;
-    height: calc(15vw);
-    max-width: 100%;
-    min-width: 100%;
-    object-fit: cover;
-    vertical-align: bottom;
-    box-shadow: $shadow-work;
-    z-index: 4;
-    &:hover {
-      filter: blur(2px);
+.works-item {
+  flex-grow: 1;
+  .works-img {
+    border: $border;
+    margin: 2px;
+    transition: all 1s ease 0s;
+    height: calc(20vw);
+    img {
+      cursor: pointer;
+      height: calc(20vw);
+      max-width: 100%;
+      min-width: 100%;
+      object-fit: cover;
+      vertical-align: bottom;
     }
-  }
-  .hover {
-    display: flex;
-    transform: translateY(-1.3rem);
-    justify-content: space-around;
-    // display: none;
-    &:hover {
+    .hover {
       display: flex;
+      transform: translateY(-1.3rem);
+      justify-content: space-around;
+      &:hover {
+        display: flex;
+      }
+    }
+    &:hover {
+      transform: translateY(-0.5rem);
+      transition: all 0.5s ease 0s;
     }
   }
-  &:hover {
-    transform: translateY(-0.5rem);
-    transition: all 0.5s ease 0s;
+
+  // 没效果？？
+  .collect-icon {
+    cursor: pointer;
+    &:hover {
+      color: $clr-main;
+    }
   }
 }
-
-// 没效果？？
-.collect-icon {
-  cursor: pointer;
-  &:hover {
-    color: $clr-main;
-  }
-}
-
 </style>
 
 <style lang="scss">

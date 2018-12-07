@@ -100,7 +100,6 @@ import {
   publishProjectFileUpload
 } from "@/api/project";
 import { enterpriseSignUpFile } from "@/api/user";
-import { Message } from "element-ui";
 import { getToken } from "@/utils/auth";
 import { mapGetters } from "vuex";
 
@@ -108,7 +107,6 @@ export default {
   data() {
     return {
       title: "告诉我们您需要完成的事情",
-      // dialogVisible: true,
       projectAttachmentList: "",
       headers: {
         Authorization: getToken()
@@ -156,7 +154,7 @@ export default {
       return "/api/project/upload";
     },
     handleExceed() {
-      Message({
+      this.$message({
         type: "error",
         message: `最多只能上传3个文件！,共选择了 ${
           this.fileList.length
@@ -164,23 +162,29 @@ export default {
       });
     },
     onBeforeUpload(file) {
-      const isIMAGE = file.type === "image/jpeg" || file.type === "image/png";
-      const isL1M = file.size / 1024 / 1024 < 3;
+			const isIMAGE = file.type === 'image/jpeg' || file.type === 'image/png';
+			const isL1M = file.size / 1024 / 1024 < 3;
 
-      if (!isIMAGE) {
-        this.$message.error("上传文件只能是jpeg/png格式!");
-        return false;
-      }
-      if (!isL1M) {
-        this.$message.error("上传文件大小不能超过1M!");
-        return false;
-      }
-      return isIMAGE && isL1M;
-    },
+			if (!isIMAGE) {
+        this.$message({
+          type: 'error',
+          message: '上传文件只能是jpeg/png格式!'
+        });
+				return false;
+			}
+			if (!isL1M) {
+        this.$message({
+          type: 'error',
+          message: '上传文件大小不能超过1M!'
+        });
+				return false;
+			}
+			return isIMAGE && isL1M;
+		},
     onSuccess(response) {
       // 获取图片上传后的respones
       this.projectAttachmentList = response.data;
-      Message({
+      this.$message({
         type: "success",
         message: `文件上传成功！`
       });
@@ -195,22 +199,27 @@ export default {
     },
     changeValueOfSkills(value) {
       this.ruleForm.selecSkill = value;
-      console.log(this.ruleForm.selecSkill);
-      console.log(this.projectAttachmentList);
     },
     publishProject() {
       if (this.user.signIn) {
         // 确定用户选择的技能，这个技能应该为[]
-        const skill = this.ruleForm.selecSkill;
+        let skill = this.ruleForm.selecSkill;
+        let obj = {};
         this.ruleForm.selecSkill = [];
-        for(let i = 0; i < skill.length; ++i) {
-          
+        for (let i = 0; i < skill.length; ++i) {
+          obj = this.skills.find(item => {
+            return item.value === skill[i];
+          });
+          obj = {
+            id: i + 1,
+            skillName: obj.label
+          };
+          this.ruleForm.selecSkill.push(obj);
         }
         const projectData = {
           projectName: this.ruleForm.projectName,
           projectDescription: this.ruleForm.textarea,
-          // skillList: this.ruleForm.selecSkill,
-          skillList: this.projectSkill,
+          skillList: this.ruleForm.selecSkill,
           tenderPeriod: this.ruleForm.bidPeriod,
           budget: this.ruleForm.budget,
           expectedTime: this.ruleForm.transaPeriod,
@@ -218,7 +227,7 @@ export default {
         };
         publishProjectForm(projectData)
           .then(res => {
-            Message({
+            this.$message({
               type: "success",
               message: `提交成功！`
             });
@@ -231,7 +240,7 @@ export default {
             console.log("项目发布表单提交失败！");
           });
       } else {
-        Message({
+        this.$message({
           type: "warning",
           message: `您需要先登录才能发布项目哦~`
         });

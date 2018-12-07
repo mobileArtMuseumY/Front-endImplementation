@@ -12,11 +12,6 @@
       </router-link>
     </div>
     <div class="nav-search">
-      <!-- 还没实现
-      :fetch-suggestions="querySearchAsync"
-          @select="handleSelect"
-          :on-icon-click="handleIconClick"
-          @keydown.enter.native="handleIconClick" -->
         <el-input
           placeholder="请输入关键字"
           prefix-icon="el-icon-search"
@@ -69,7 +64,7 @@
           </el-dropdown>
           |
         <div class="reminder">
-          <svg-icon icon="reminder-hollow-icon" style="width: 20px; height: 30px;" @click="reminder()" class="reminder" id="reminder" @click.native="openInBox"></svg-icon>
+          <svg-icon icon="reminder-hollow-icon" style="width: 20px; height: 30px;" class="reminder" id="reminder" @click.native="openInBox"></svg-icon>
         </div>
       </div>
     </div>
@@ -194,7 +189,6 @@ export default {
 }
 
 .reminder {
-	cursor: pointer;
 	&:hover {
 		color: $clr-main;
 	}

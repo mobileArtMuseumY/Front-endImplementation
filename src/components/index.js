@@ -10,6 +10,7 @@ import ProjectItemEpitome from '@/components/project/ProjectItemEpitome';
 import TheTalent from '@/components/users/TheTalent';
 import { Swiper, Slide } from 'vue-swiper-component';
 import WorksDetailsSelf from '@/components/works/WorksDetailsSelf';
+import WorksItemsSelf from '@/components/works/WorksItemsSelf';
 
 
 const components = {
@@ -26,6 +27,7 @@ const components = {
   Swiper,
   Slide,
   WorksDetailsSelf,
+  WorksItemsSelf
 };
 
 export default (Vue) => {

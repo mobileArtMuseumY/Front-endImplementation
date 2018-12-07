@@ -15,8 +15,6 @@ import {
 import {
   enterpriseSignIn,
   studentSignIn,
-  getStudentInfo,
-  getEnterpriseInfo,
   studentSignInFirstlySendEmail,
   studentSignInFirstlyEmailVerified,
   studentModifyPassword,
@@ -44,7 +42,7 @@ import { Message } from 'element-ui';
 const user = {
   state: {
     signIn: false,
-    role: '',
+    role: 'passer',
     userInfo: {
       userId: '',
       userName: '',
@@ -118,7 +116,6 @@ const user = {
                 setUserId(res.data);
                 setToken(token);
                 setStore('token', token);
-                dispatch('GetEnterpriseInfo');
                 router.push({
                   name: 'EnterpriseHomepage',
                 });
@@ -153,7 +150,6 @@ const user = {
                   });
                   resolve();
                 } else {
-                  dispatch('GetStudentInfo');
                   router.push({
                     name: 'StudentHomepage',
                   });
@@ -189,7 +185,6 @@ const user = {
       if (user.state.captcha) {
         return new Promise((resolve, reject) => {
           studentSignInFirstlyEmailVerified(data).then(res => {
-            dispatch('GetStudentInfo');
             router.push({
               name: 'SignIn',
             });
@@ -205,65 +200,11 @@ const user = {
         console.log('请重新发送验证码！');
       }
     },
-
-    // 获取企业信息
-    GetEnterpriseInfo: function ({ state, commit }) {
-      return new Promise((resolve, reject) => {
-        if (state.userInfo.token) {
-          const data = {
-            id: state.userInfo.userId,
-          };
-          getEnterpriseInfo(data).then(res => {
-            if (!res.data) {
-              reject('error');
-            }
-            commit('SET_USERID', res.data.id);
-            commit('SET_USER_NAME', res.data.businessName);
-            commit('SET_AVATAR', res.data.avatar);
-            commit('SET_DESCRIPTION', res.data.introduction);
-            commit('SET_PROJECT_NUM', res.data.projectCount);
-            commit('SET_FOLLOWERS', res.data.followerCount);
-            commit('SET_FOLLOWING', res.data.followingCount);
-            resolve(res);
-          }).catch(err => {
-            reject(err);
-          });
-        } else {
-          reject('getInfo: if want to get user information, please must login!');
-        }
-      });
-    },
-
-    // 获取学生信息
-    GetStudentInfo: function ({ commit }) {
-      return new Promise((resolve, reject) => {
-        if (state.userInfo.token) {
-          getStudentInfo().then(res => {
-            if (!res.data) {
-              reject('error');
-            }
-            commit('SET_USERID', res.data.name);
-            commit('SET_USER_NAME', res.data.userName);
-            commit('SET_AVATAR', res.data.avatar);
-            commit('SET_DESCRIPTION', res.data.description);
-            commit('SET_PROJECT_NUM', res.data.projectNum);
-            commit('SET_FOLLOWERS', res.data.followers);
-            commit('SET_FOLLOWING', res.data.following);
-            resolve(res);
-          }).catch(err => {
-            reject(err);
-          });
-        } else {
-          reject('getInfo: if want to get user information, please must login!');
-        }
-      });
-    },
-
     // 用户退出
     SignOut: function ({ commit }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '');
-        commit('SET_ROLES', []);
+        commit('SET_ROLES', 'passer');
         removeToken();
         resolve();
       });

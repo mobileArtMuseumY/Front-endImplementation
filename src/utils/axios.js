@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { Message } from 'element-ui';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from './auth';
+import { Message } from 'element-ui';
+
 
 const BASE_API = process.env.NODE_ENV === 'production' ? '' : '/api';
 

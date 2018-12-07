@@ -6,6 +6,7 @@
         <el-upload
           ref="upload"
           :action="uploadUrl()"
+          :headers="headers"
           accept="image/jpeg, image/png"
           :auto-upload="true"
           :with-credentials="true"
@@ -19,38 +20,38 @@
         </el-upload>
         <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
           <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
-            <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;"></svg-icon>
+            <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;" @click.native="toVerify(item.content)"></svg-icon>
           </el-tooltip>
         </div>
         <div class="followers-and-following">
-          <!-- <span>{{ user.userInfo.followers }}</span>
-          <span>{{ user.userInfo.following }}</span>-->
+          <!-- <span>{{ enterpriseInfo.followers }}</span>
+          <span>{{ enterpriseInfo.following }}</span>-->
           <span>followers 3</span>
           <span>following 4</span>
         </div>
       </div>
       <div class="center">
         <div class="username">
-          <!-- <span style="font-size: 25px;"> <strong>{{ user.userInfo.userName }}</strong></span> -->
+          <!-- <span style="font-size: 25px;"> <strong>{{ enterpriseInfo.userName }}</strong></span> -->
           <span style="font-size: 25px;">
             <strong>Honeysyt</strong>
           </span>
         </div>
         <div class="description">
-          <!-- <span>{{ user.userInfo.description }}</span> -->
+          <!-- <span>{{ enterpriseInfo.description }}</span> -->
           <textarea disabled>here is the description of me.here is the description of me.</textarea>
         </div>
       </div>
       <div class="right">
         <div class="edit-profile">
-          <button >编辑信息</button>
+          <button @click="toVerify('完善用户信息')">编辑信息</button>
         </div>
       </div>
     </div>
     <div class="bottom">
       <div class="main">
         <label v-if="!project.projectItem">空空如也……</label>
-        <div
+        <!-- <div
           class="project-item"
           v-if="project.projectItem"
           v-for="(item, index) in project.projectItem"
@@ -61,7 +62,7 @@
             @deleteProject="deleteProject(item.projectId)"
             @toProjectDetails="toProjectDetails(item.projectId)"
           ></project-item-epitome>
-        </div>
+        </div> -->
       </div>
       <div class="right-bar">
         <div class="right-bar-verify">
@@ -121,12 +122,20 @@
 <script>
 import { mapGetters } from "vuex";
 import { getProjectDataHomepage } from "@/api/project";
+import { getEnterpriseInfo, getAllProjects } from "@/api/user";
+import { getToken } from "@/utils/auth";
 
 export default {
   data() {
     return {
       imageUrl: "/static/images/nav/avatar.png",
-      // imageUrl: user.userInfo.avatar,
+      headers: {
+        Authorization: getToken()
+      },
+      // imageUrl: enterpriseInfo.avatar,
+      enterpriseInfo: "",
+      collectWorksItem: "",
+      collectProjectsItem: "",
       verifyItems: [
         {
           icon: "user-verify",
@@ -170,10 +179,8 @@ export default {
         }
       ],
       info: "perfectUserInfo", // 用于接收验证信息类型
-      pendingItems: "",
-      underwayItems: "",
-      finishedItems: "",
-      failureItems: ""
+      isSelf: true,
+      id: ""
     };
   },
   computed: {
@@ -185,18 +192,27 @@ export default {
     },
     onSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      // this.businessAttachment = res.data;
+      this.$message({
+        type: "success",
+        message: "头像上传成功！"
+      });
     },
     onBeforeUpload(file) {
       const isIMAGE = file.type === "image/jpeg" || file.type === "image/png";
       const isL1M = file.size / 1024 / 1024 < 3;
 
       if (!isIMAGE) {
-        this.$message.error("上传文件只能是jpeg/png格式!");
+        this.$message({
+          type: "error",
+          message: "上传文件只能是jpeg/png格式!"
+        });
         return false;
       }
       if (!isL1M) {
-        this.$message.error("上传文件大小不能超过1M!");
+        this.$message({
+          type: "error",
+          message: "上传文件大小不能超过1M!"
+        });
         return false;
       }
       return isIMAGE && isL1M;
@@ -216,7 +232,6 @@ export default {
         }
       });
     },
-    // 显示该用户所有信息
     goToCollect() {
       this.$router.push({
         name: "Collect"
@@ -230,46 +245,103 @@ export default {
     }
   },
   mounted() {
-    for (let i = 0; i < 6; ++i) {
-      switch (i) {
-        case 0:
-          getProjectDataHomepage(status)
-            .then(res => {
-              this.pendingItems = res.data;
-            })
-            .catch(err => {
-              console.log("pendingItems出错");
-            });
-          break;
-        case 1:
-          break;
-        case 2:
-          break;
-        case 3:
-          getProjectDataHomepage(status)
-            .then(res => {
-              this.underWayItems = res.data;
-            })
-            .catch(err => {
-              console.log("underWayItems");
-            });
-          break;
-        case 4:
-          getProjectDataHomepage(status)
-            .then(res => {
-              this.underWayItems.push(res.data);
-            })
-            .catch(err => {
-              console.log("underWayItems");
-            });
-
-          break;
-        case 5:
-          break;
-        default:
-          console.log("象征性的写一下，反正也进不来~");
+    if (this.$route.params.id) {
+      if (!(this.$route.params.id === this.user.userInfo.userId)) {
+        this.isSelf = false;
+        this.id = this.$route.params.id;
       }
+    } else {
+      this.id = this.user.userInfo.userId;
     }
+    let data = {
+      id: this.id
+    };
+
+    // 获取基本信息
+    getEnterpriseInfo(data).then(res => {
+      this.enterpriseInfo = res.data;
+      // 获取项目信息
+      /**
+       * 正在审核 0
+       * 正在进行（招标状态、已选标）3、4
+       * 完成 6
+       * 失败 1、5
+       */
+      // 正在审核
+      data = {
+        id: this.id,
+        status: 0
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.pendingItems = res.data;
+        })
+        .catch(() => {
+          console.log("获取正在审核项目失败");
+        });
+      // 正在进行 3
+      data = {
+        id: this.id,
+        status: 3
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.pendingItems = res.data;
+        })
+        .catch(() => {
+          console.log("获取正在招标项目失败");
+        });
+      // 正在进行 4
+      data = {
+        id: this.id,
+        status: 4
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.pendingItems.push(res.data);
+        })
+        .catch(() => {
+          console.log("获取正在招标项目失败");
+        });
+      // 失败 1
+      data = {
+        id: this.id,
+        status: 1
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.failedItems = res.data;
+        })
+        .catch(() => {
+          console.log("获取审核失败项目失败");
+        });
+      // 失败 5
+      data = {
+        id: this.id,
+        status: 5
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.failedItems.push(res.data);
+        })
+        .catch(() => {
+          console.log("获取过期项目失败");
+        });
+      // 完成
+      data = {
+        id: this.id,
+        status: 6
+      };
+      getAllProjects(data)
+        .then(res => {
+          this.project.finishedItems = res.data;
+        })
+        .catch(() => {
+          console.log("获取已经完成的项目失败");
+        });
+    });
+
+    // 获取企业收藏信息
   }
 };
 </script>

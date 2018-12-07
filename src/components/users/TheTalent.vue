@@ -12,33 +12,27 @@
           <strong>{{ theTalent.loginName}}</strong>
         </label>
       </a>
-      <p
-        class="description"
-      >there is the description.there is the description.there is the description.there is the description.</p>
-      <!-- <p class="description">{{ theTalent.introduction }}</p> -->
-      <!-- <label>{{ theTalent.followerCount }}</label> -->
-      <label>12</label>
+      <p class="description">{{ theTalent.introduction }}</p>
+      <label>{{ theTalent.followerCount }}</label>
       <label>followers</label>
-      <svg-icon
-        icon="follow"
-        style="width: 15px; height:15px;"
-        class="follow-people"
-        @click.native="goToFollow(theTalent.id)"
-        id="follow-people"
-      ></svg-icon>
+      <el-tooltip class="item" effect="dark" content="关注 ta" placement="top">
+        <svg-icon
+          icon="follow"
+          style="width: 15px; height:15px; margin-left:2rem;"
+          class="follow-people"
+          @click.native="goToFollow(theTalent.id)"
+          id="follow-people"
+        ></svg-icon>
+      </el-tooltip>
     </div>
     <div class="right">
-      <Swiper
-        v-if="theTalent.worksDTOList.length > 0"
-        :autoPlay="true"
-        :showIndicator="true"
-        interval="50000"
-        duration="50000"
-      >
-        <Slide v-for="(list, index) in theTalent.worksVOList" :key="index">
-          <img :src="address + list.attachmentShowPath" alt="list.attachmentShowName">
-        </Slide>
-      </Swiper>
+      <div class="swiper-container">
+          <el-carousel height="250px">
+            <el-carousel-item v-for="(list, index) in theTalent.worksDTOList" :key="index">
+              <img :src="address + list.attachmentShowPath" alt="list.attachmentShowName">
+            </el-carousel-item>
+          </el-carousel>
+        </div>
     </div>
   </div>
 </template>
@@ -47,19 +41,23 @@
 /**
  * 单个学生出色作品展示
  */
+import { mapGetters } from "vuex";
+import { followOthers, unFollowOthers } from '@/api/user';
+
 
 export default {
   props: {
-    theTalent: ""
+    theTalent: "",
   },
   data() {
     return {
-      address: "http://120.79.239.141:8080/"
+      address: "http://120.79.239.141:8080/",
+      followed: false,
     };
   },
-  // computed: {
-  // 	...mapGetters(['user']),
-  // },
+  computed: {
+    ...mapGetters(["user"])
+  },
   methods: {
     goToStudentHome(studentId) {
       this.$router.push({
@@ -68,8 +66,46 @@ export default {
       });
     },
     goToFollow(followedId) {
-      document.getElementById("follow-people").color = "red";
-      // 发送请求
+      // 需要判断是否登录
+      if (this.user.signIn) {
+        this.followed = !this.followed;
+        const data = {
+          followedId: followedId,
+        }
+        if(this.followed) {
+          document.getElementById("follow-people").style.color = "red";
+          followOthers(data).then(res => {
+            this.$message({
+              type: 'success',
+              message: '关注成功！'
+            });
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: '关注失败！'
+            });
+          });
+        } else {
+          document.getElementById("follow-people").style.color = "black";
+          unFollowOthers(data).then(res => {
+            this.$message({
+              type: 'success',
+              message: '取消关注！'
+            });
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: '取消关注失败！'
+            });
+          });
+        }
+      } else {
+        this.$message({
+          message: "您需要先登录才能follow别人哦~",
+          type: "warning"
+        });
+        return;
+      }
     }
   }
 };

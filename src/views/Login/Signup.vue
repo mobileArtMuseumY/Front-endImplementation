@@ -183,18 +183,27 @@ export default {
 			const isL1M = file.size / 1024 / 1024 < 3;
 
 			if (!isIMAGE) {
-				this.$message.error('上传文件只能是jpeg/png格式!');
+        this.$message({
+          type: 'error',
+          message: '上传文件只能是jpeg/png格式!'
+        });
 				return false;
 			}
 			if (!isL1M) {
-				this.$message.error('上传文件大小不能超过1M!');
+        this.$message({
+          type: 'error',
+          message: '上传文件大小不能超过1M!'
+        });
 				return false;
 			}
 			return isIMAGE && isL1M;
 		},
 		goToSignUp() {
       if(!this.checked){
-        this.$message.error('非常抱歉，您需同意我们的协议才可以注册！');
+        this.$message({
+          type: 'error',
+          message: '非常抱歉，您需同意我们的协议才可以注册！'
+        });
         return ;
       }
 			// 发送请求
@@ -214,20 +223,6 @@ export default {
 				userData,
 			};
 			this.$store.dispatch('SendCaptcha', data);
-		},
-		sendCode() {
-			// 向服务器发送请求
-			/**
-			 * data为参数
-			 * if(data.status) {
-			 *   this.$refs.timerbtn.start();
-			 * } else {
-			 *   this.$refs.timerbtn.stop();
-			 * }
-			 */
-			// this.$refs.timerbtn.setDisabled(true);
-			// const phoneNumber = this.ruleForm.phoneNumber;
-			// this.$store.dispatch('SendVerify', phoneNumber);
 		},
 	},
 };
