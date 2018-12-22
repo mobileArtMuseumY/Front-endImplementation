@@ -15,8 +15,7 @@
           :on-success="onSuccess"
           :multiple="false"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar-of-student">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <img :src="address + studentInfo.avatar " class="avatar-of-student">
         </el-upload>
         <!-- <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
           <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
@@ -137,20 +136,18 @@ import { getStudentBasicInfo, getStudentCollectInfo } from "@/api/user";
 import { getUserId } from "@/utils/auth";
 import { getToken } from "@/utils/auth";
 
-
 export default {
   data() {
     return {
-      imageUrl: "/static/images/nav/avatar.png",
       worksItems: "",
       studentInfo: "",
       collectWorksItem: "",
       isSelf: true,
       id: "",
+      address: "http://120.79.239.141:8080/",
       headers: {
         Authorization: getToken()
       },
-      // imageUrl: studentInfo.avatar,
       verifyItems: [
         {
           icon: "user-verify",
@@ -203,7 +200,7 @@ export default {
       return "/api/student/avatar";
     },
     onSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.studentInfo.avatar = res.data;
       this.$message({
         type: "success",
         message: "上传成功！"
@@ -239,7 +236,7 @@ export default {
         this.info = "verifyEmail";
       }
       this.$router.push({
-        name: "Setting",
+        name: "VerifyEmail",
         params: {
           info: this.info
         }

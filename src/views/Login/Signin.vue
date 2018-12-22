@@ -2,7 +2,7 @@
   <div class="container">
     <div class="main">
       <div class="role">
-        <span id="e-clicked" @click="confirmRole('enterprise')">企业</span>
+        <span id="e-clicked" @click="confirmRole('enterprise')" style="color: red;">企业</span>
         <span id="s-clicked" @click="confirmRole('student')">学生</span>
       </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="ruleForm">

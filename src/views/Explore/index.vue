@@ -61,7 +61,6 @@ export default {
       document.getElementById("t-clicked").style.color = "red";
       document.getElementById("f-clicked").style.color = "gray";
       this.selected = 0;
-      this.currentPage = 5;
       const data = {
         method: this.selected,
         page: this.currentPage,

@@ -61,14 +61,13 @@ export default {
     return {
       address: "http://120.79.239.141:8080/",
       worksDialogVisible: false,
-      worksData: [],
+      worksData: []
     };
   },
   computed: {
     ...mapGetters(["user"])
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     goToWorksDetails(worksId) {
       this.worksDialogVisible = true;
@@ -130,6 +129,12 @@ export default {
       };
       studentGoToBid(data)
         .then(res => {
+          this.$router.push({
+            name: "ProjectDetails",
+            params: {
+              id: this.projectId
+            }
+          });
           this.$message({
             type: "success",
             message: "投标成功！"

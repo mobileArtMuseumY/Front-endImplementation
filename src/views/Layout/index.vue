@@ -42,6 +42,7 @@ export default {
 
 <style lang="scss" scoped>
 .main-wrap{
-  min-height: calc(100vh - 56px - 120px)
+  min-height: calc(100vh + 100px);
+  // min-height: calc(100vh - 56px - 120px);
 }
 </style>

@@ -15,11 +15,16 @@
           :on-success="onSuccess"
           :multiple="false"
         >
-          <img :src="address + imageUrl " class="avatar-of-business">
+          <img :src="address + enterpriseInfo.avatar " class="avatar-of-business">
         </el-upload>
         <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
           <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
-            <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;" @click.native="toVerify(item.content)"></svg-icon>
+            <svg-icon
+              :icon="item.icon"
+              class="verify-icon"
+              style="color: #666666;"
+              @click.native="toVerify(item.content)"
+            ></svg-icon>
           </el-tooltip>
         </div>
         <div class="followers-and-following">
@@ -49,19 +54,85 @@
     </div>
     <div class="bottom">
       <div class="main">
-        <label v-if="!project.projectItem">空空如也……</label>
-        <!-- <div
-          class="project-item"
-          v-if="project.projectItem"
-          v-for="(item, index) in project.projectItem"
-          :key="index"
-        >
-          <project-item-epitome
-            :projectItem="item"
-            @deleteProject="deleteProject(item.projectId)"
-            @toProjectDetails="toProjectDetails(item.projectId)"
-          ></project-item-epitome>
-        </div> -->
+        <label
+          v-if="!project.pendingItems && !project.biddingItems && !project.biddenItems && !project.notPassItems"
+        >空空如也……</label>
+        <div class="nav-of-enterprise">
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+            <el-submenu index="1">
+              <template slot="title">项目管理</template>
+              <el-menu-item index="1-1">
+                <span slot="title" @click="goToProject('0')">正在审核的项目</span>
+              </el-menu-item>
+              <el-menu-item index="1-2">
+                <span slot="title" @click="goToProject('3')">正在招标的项目</span>
+              </el-menu-item>
+              <el-menu-item index="1-3">
+                <span slot="title" @click="goToProject('4')">已选标的项目</span>
+              </el-menu-item>
+              <el-menu-item index="1-4">
+                <span slot="title" @click="goToProject('10')">审核未通过</span>
+              </el-menu-item>
+            </el-submenu>
+            <el-menu-item index="2">
+              <span slot="title" @click="goToOrder()">订单管理</span>
+            </el-menu-item>
+            <el-submenu index="3">
+              <template slot="title">收藏</template>
+              <el-menu-item index="3-1">
+                <span slot="title" @click="goToCollect('works')">作品</span>
+              </el-menu-item>
+              <el-menu-item index="3-2">
+                <span slot="title" @click="goToCollect('project')">项目</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+          <div class="line"></div>
+        </div>
+        <div class="content-container" style="padding-top: 2rem;">
+          <!-- 项目展示部分 -->
+          <span style="margin-left: 1rem;">{{ content.title}}</span>
+          <div class="project-item" v-show="status === 1">
+            <div class="item-container">
+              <project-item-epitome
+                :projectItem="item"
+                :status="content.status"
+                v-for="(item, index) in content.projects "
+                :key="index"
+              ></project-item-epitome>
+            </div>
+          </div>
+          <!-- 订单管理部分 -->
+          <div class="order-item" v-show="status === 2">
+            <el-table
+              :data="orderInfo"
+              tooltip-effect="dark"
+              style="width: 100%"
+              stripe
+              :default-sort="{prop: 'id', order: 'descending'}"
+            >
+              <el-table-column prop="projectName" label="项目名称"></el-table-column>
+              <el-table-column prop="businessName" label="企业名称"></el-table-column>
+              <el-table-column prop="worksName" label="作品名称"></el-table-column>
+              <el-table-column prop="price" label="价格" sortable></el-table-column>
+              <el-table-column prop="status" label="订单状态"></el-table-column>
+              <el-table-column prop="gmtCreate" label="创建时间"></el-table-column>
+            </el-table>
+          </div>
+          <!-- 收藏部分 -->
+          <div class="collect-item" v-show="status === 3">
+            <div class="works-container" v-if="content.status === 2">
+              <works-item :works="item" v-for="(item, index) in content.projects " :key="index"></works-item>
+            </div>
+            <div class="projects-container" v-if="content.status === 1">
+              <project-item
+                :projectItems="item"
+                v-for="(item, index) in content.projects "
+                :key="index"
+              ></project-item>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="right-bar">
         <div class="right-bar-verify">
@@ -79,40 +150,6 @@
             </div>
           </div>
         </div>
-        <div class="right-bar-collect">
-          <div class="right-bar-title">
-            <span style="font-size: 18px;">
-              <strong>收藏</strong>
-            </span>
-          </div>
-          <div class="collect-item-details">
-            <span>作品：</span>
-            <div class="collect-inner-works" v-for="(item, index) in collectWorksItems">
-              <span :key="index + '-name'">{{ item.studentName }}：</span>
-              <span :key="index + '-works'">{{ item.works }}</span>
-            </div>
-            <svg-icon
-              icon="more"
-              class="more"
-              style="color: #BCBCBC;"
-              @click.native="goToCollect()"
-            ></svg-icon>
-            <br>
-            <hr>
-            <br>
-            <span>项目：</span>
-            <div class="collect-inner-project" v-for="(item, index) in collectProjectsItems">
-              <span :key="index + '-name'">{{ item.enterpriseName }}：</span>
-              <span :key="index + '-works'">{{ item.projectDescription }}</span>
-            </div>
-            <svg-icon
-              icon="more"
-              class="more"
-              style="color: #BCBCBC;"
-              @click.native="goToCollect()"
-            ></svg-icon>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -121,21 +158,33 @@
 <script>
 import { mapGetters } from "vuex";
 import { getProjectDataHomepage } from "@/api/project";
-import { getEnterpriseInfo, getAllProjects } from "@/api/user";
+import {
+  getEnterpriseInfo,
+  getAllProjects,
+  getEnterpriseProjectCollectInfo,
+  getEnterpriseWorksCollectInfo,
+  getEnterpriseOrderInfo
+} from "@/api/user";
 import { getToken } from "@/utils/auth";
 
 export default {
   data() {
     return {
-      // imageUrl: "/static/images/nav/avatar.png",
+      activeIndex: "1",
       address: "http://120.79.239.141:8080/",
       headers: {
         Authorization: getToken()
       },
-      imageUrl: this.enterpriseInfo.avatar,
-      enterpriseInfo: "",
-      collectWorksItem: "",
-      collectProjectsItem: "",
+      imageUrl: "",
+      content: {
+        title: "正在审核的项目",
+        projects: "",
+        status: 0
+      },
+      status: 1, // 标记选中第几个项(1. 项目管理 2. 订单管理 3. 收藏)
+      enterpriseInfo: "", // 企业基本信息
+      collectWorksItems: "",
+      collectProjectsItems: "",
       verifyItems: [
         {
           icon: "user-verify",
@@ -150,48 +199,64 @@ export default {
           content: "邮箱验证"
         }
       ],
-      collectWorksItems: [
-        {
-          studentName: "千竹",
-          works: "lalala"
-        },
-        {
-          studentName: "千竹呀",
-          works: "lalala"
-        }
-      ],
-      collectProjectsItems: [
-        {
-          enterpriseName: "千竹",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹呀",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹呀",
-          projectDescription: "lalala"
-        }
-      ],
       info: "perfectUserInfo", // 用于接收验证信息类型
       isSelf: true,
-      id: ""
+      id: "",
+      orderInfo: []
     };
   },
   computed: {
     ...mapGetters(["user", "project"])
   },
   methods: {
+    goToProject(value) {
+      this.status = 1;
+      switch (value) {
+        case "0":
+          this.content.title = "正在审核的项目";
+          this.content.projects = this.project.pendingItems;
+          this.content.status = 0;
+          break;
+        case "3":
+          this.content.title = "正在招标的项目";
+          this.content.projects = this.project.biddingItems;
+          this.content.status = 3;
+          break;
+        case "4":
+          this.content.title = "已选标的项目";
+          this.content.projects = this.project.biddenItems;
+          this.content.status = 4;
+          break;
+        case "10":
+          this.content.title = "审核未通过的项目";
+          this.content.projects = this.project.notPassItems;
+          this.content.status = 10;
+          break;
+      }
+    },
+    goToOrder(value) {
+      this.status = 2;
+    },
+    goToCollect(value) {
+      this.status = 3;
+      switch (value) {
+        case "project":
+          this.content.title = "项目";
+          this.content.projects = this.collectProjectsItems;
+          this.content.status = 1;
+          break;
+        case "works":
+          this.content.title = "作品";
+          this.content.projects = this.collectWorksItems;
+          this.content.status = 2;
+          break;
+      }
+    },
     uploadUrl() {
       return "/api/business/avatar";
     },
     onSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.imageUrl = res.data;
       this.$message({
         type: "success",
         message: "头像上传成功！"
@@ -226,15 +291,10 @@ export default {
         this.info = "verifyEmail";
       }
       this.$router.push({
-        name: "Setting",
+        name: "VerifyInfo",
         params: {
           info: this.info
         }
-      });
-    },
-    goToCollect() {
-      this.$router.push({
-        name: "Collect"
       });
     },
     toProjectDetails(projectId) {
@@ -258,91 +318,123 @@ export default {
     };
 
     // 获取基本信息
-    getEnterpriseInfo(data).then(res => {
-      this.enterpriseInfo = res.data;
-      console.log(this.enterpriseInfo);
-      // 获取项目信息
-      /**
-       * 正在审核 0
-       * 正在进行（招标状态、已选标）3、4
-       * 完成 6
-       * 失败 1、5
-       */
-      // 正在审核
-      data = {
-        id: this.id,
-        status: 0
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.pendingItems = res.data;
-        })
-        .catch(() => {
-          console.log("获取正在审核项目失败");
-        });
-      // 正在进行 3
-      data = {
-        id: this.id,
-        status: 3
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.pendingItems = res.data;
-        })
-        .catch(() => {
-          console.log("获取正在招标项目失败");
-        });
-      // 正在进行 4
-      data = {
-        id: this.id,
-        status: 4
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.pendingItems.push(res.data);
-        })
-        .catch(() => {
-          console.log("获取正在招标项目失败");
-        });
-      // 失败 1
-      data = {
-        id: this.id,
-        status: 1
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.failedItems = res.data;
-        })
-        .catch(() => {
-          console.log("获取审核失败项目失败");
-        });
-      // 失败 5
-      data = {
-        id: this.id,
-        status: 5
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.failedItems.push(res.data);
-        })
-        .catch(() => {
-          console.log("获取过期项目失败");
-        });
-      // 完成
-      data = {
-        id: this.id,
-        status: 6
-      };
-      getAllProjects(data)
-        .then(res => {
-          this.project.finishedItems = res.data;
-        })
-        .catch(() => {
-          console.log("获取已经完成的项目失败");
-        });
-    });
+    getEnterpriseInfo(data)
+      .then(res => {
+        this.enterpriseInfo = res.data;
+        // 获取项目信息
+        // 正在审核
+        data = {
+          id: this.id,
+          status: 0
+        };
+        getAllProjects(data)
+          .then(res => {
+            this.project.pendingItems = res.data;
+            // 初始化
+            this.content.status = 0;
+            this.content.title = "正在审核的项目";
+            this.content.projects = this.project.pendingItems;
+          })
+          .catch(() => {
+            console.log("获取正在审核项目失败");
+          });
+        // 正在招标 3
+        data = {
+          id: this.id,
+          status: 3
+        };
+        getAllProjects(data)
+          .then(res => {
+            this.project.biddingItems = res.data;
+          })
+          .catch(() => {
+            console.log("获取正在招标项目失败");
+          });
+        // 已选标 4
+        data = {
+          id: this.id,
+          status: 4
+        };
+        getAllProjects(data)
+          .then(res => {
+            console.log(res.data);
+            this.project.biddenItems = res.data;
+          })
+          .catch(() => {
+            console.log("获取已选标项目失败");
+          });
 
-    // 获取企业收藏信息
+        // 审核未通过 10
+        data = {
+          id: this.id,
+          status: 10
+        };
+        getAllProjects(data)
+          .then(res => {
+            this.project.notPassItems = res.data;
+          })
+          .catch(() => {
+            console.log("获取审核未通过项目失败");
+          });
+
+        //获取订单信息
+        data = {
+          id: this.id
+        };
+        getEnterpriseOrderInfo(data)
+          .then(res => {
+            this.orderInfo = res.data;
+            console.log(this.orderInfo);
+            for (let i = 0; i < this.orderInfo.length; ++i) {
+              if (this.orderInfo[i].status === 0) {
+                this.orderInfo[i].status = "未支付";
+              } else if (this.orderInfo[i].status === 1) {
+                this.orderInfo[i].status = "已支付";
+              } else if (this.orderInfo[i].status === 2) {
+                this.orderInfo[i].status = "正在进行";
+              } else if (this.orderInfo[i].status === 3) {
+                this.orderInfo[i].status = "订单完成";
+              } else if (this.orderInfo[i].status === 4) {
+                this.orderInfo[i].status = "订单失败";
+              }
+              const date = new Date(this.orderInfo[i].gmtCreate);
+              const Y = date.getFullYear() + "-";
+              const M =
+                (date.getMonth() + 1 < 10
+                  ? "0" + (date.getMonth() + 1)
+                  : date.getMonth() + 1) + "-";
+              const D =
+                date.getDate() < 10
+                  ? "0" + (date.getDate() + " ")
+                  : date.getDate() + " ";
+              this.orderInfo[i].gmtCreate = Y + M + D;
+            }
+          })
+          .catch(() => {
+            console.log("获取企业收藏的项目失败");
+          });
+
+        // 获取企业收藏信息（项目）
+        getEnterpriseProjectCollectInfo()
+          .then(res => {
+            this.collectProjectsItems = res.data;
+          })
+          .catch(() => {
+            console.log("获取企业收藏的项目失败");
+          });
+
+        // 获取企业收藏信息（作品）
+        getEnterpriseWorksCollectInfo()
+          .then(res => {
+            this.collectWorksItems = res.data;
+          })
+          .catch(() => {
+            console.log("获取企业收藏的作品失败");
+          });
+      })
+      .catch(() => {
+        console.log("获取项目基本信息失败");
+      });
   }
 };
 </script>
@@ -413,14 +505,9 @@ export default {
     width: 85vw;
     .main {
       width: 60vw;
-      background-color: #fff;
+      // border: $border;
       box-shadow: $shadow-nav;
-      border-radius: 3px;
       padding: 0.5em;
-      > div {
-        width: 80%;
-        margin: 4em auto;
-      }
     }
     .right-bar-verify {
       @include wh(20vw, 15em);
@@ -459,6 +546,25 @@ export default {
       }
     }
   }
+}
+
+.works-container {
+  @include margin-tb(2rem, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  &::after {
+    content: "";
+    flex-grow: 999999;
+  }
+  > div {
+    width: 15vw;
+  }
+}
+
+.order-item {
+  margin-top: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .avatar-uploader .el-upload {

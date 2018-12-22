@@ -27,7 +27,7 @@ const components = {
   Swiper,
   Slide,
   WorksDetailsSelf,
-  WorksItemsSelf
+  WorksItemsSelf,
 };
 
 export default (Vue) => {

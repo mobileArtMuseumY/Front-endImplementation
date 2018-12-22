@@ -11,6 +11,8 @@ import {
   SET_COLLECTION,
   SET_WORKS_INFO,
 } from './mutation-types';
+import { Message } from 'element-ui';
+
 
 const works = {
   state: {
@@ -39,10 +41,13 @@ const works = {
     },
     CollectWorks: function ({ commit }, worksId) {
       // 收藏作品
-      collectWorks(worksId)
+      const data = {
+        worksId: worksId,
+      }
+      collectWorks(data)
         .then(res => {
           commit('SET_COLLECTION');
-          this.$message({
+          Message({
             message: '收藏成功！',
             type: 'success',
           });

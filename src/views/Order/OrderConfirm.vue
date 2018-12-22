@@ -62,7 +62,7 @@ export default {
       address: "http://120.79.239.141:8080/",
       orderInfo: "",
       worksData: {},
-      payInfo: '',
+      payInfo: ""
     };
   },
   methods: {
@@ -78,14 +78,10 @@ export default {
         };
         pay(data)
           .then(res => {
-            console.log(res);
             const div = document.createElement("div");
             div.innerHTML = res;
             document.body.appendChild(div);
             document.forms.punchout_form.submit();
-            this.$router.push({
-              name: 'EnterpriseHomepage',
-            });
           })
           .catch(err => {
             console.log(err);

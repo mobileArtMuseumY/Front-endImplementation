@@ -22,8 +22,14 @@ export const enterpriseFPSubmitForm = (data) => post('/business/password/reset',
 // 发送邮箱
 export const studentSignInFirstlySendEmail = (data) => post('/student/firstLogin/SendEmail', data);
 
-// 邮箱验证码验证
+// 学生第一次登录邮箱验证码验证
 export const studentSignInFirstlyEmailVerified = (data) => post('/student/firstLogin/verified', data);
+
+// 企业验证邮箱(登录之后想要修改)(获取验证码)
+export const enterpriseGetCaptcha = (data) =>post('business/update/email', data);
+
+// 企业验证邮箱(登录之后想要修改)
+export const enterpriseVerifiedEmail = (data) =>post('business/email/verified', data);
 
 // 修改密码
 export const studentModifyPassword = (data) => post('/student/password/resetByEmail', data);
@@ -62,11 +68,23 @@ export const getEnterpriseInfo = (data) => get('/business/home/info', data);
 // 获取企业个人主页中的各种状态的项目
 export const getAllProjects = (data) => get('/business/home/projectShow', data);
 
-// 获取学生首页收藏信息
-export const getStudentCollectInfo = () => get('/collect/home/favoriteWorksShow');
+// 获取学生首页收藏信息（项目）
+export const getStudentProjectCollectInfo = () => get('/collect/home/favoriteProjectShow');
 
-// 获取企业首页收藏信息
-export const getEnterpriseCollectInfo = () => get('/collect/home/favoriteProjectShow');
+// 获取学生首页收藏信息（作品）
+export const getStudentWorksCollectInfo = () => get('/collect/home/favoriteWorksShow');
+
+// 获取企业首页收藏信息(项目)
+export const getEnterpriseProjectCollectInfo = () => get('/collect/home/favoriteProjectShow');
+
+// 获取企业首页收藏信息(作品)
+export const getEnterpriseWorksCollectInfo = () => get('/collect/home/favoriteWorksShow');
+
+// 获取企业首页订单信息
+export const getEnterpriseOrderInfo = (data) => get('/business/home/orderShow', data);
+
+// 获取学生首页订单信息
+export const getStudentOrderInfo = (data) => get('/student/home/orderShow', data);
 
 // 学生投标项目
 export const studentGoToBid = (data) => post('/project/student/bidding', data);

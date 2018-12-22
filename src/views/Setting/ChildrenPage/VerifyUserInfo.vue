@@ -19,7 +19,9 @@ export default {
 
 
 .container {
-	padding-top: $h-nav;
+  padding-top: $h-nav;
+  border: 0.06rem solid red;
+  display: flex;
 }
 
 </style>
