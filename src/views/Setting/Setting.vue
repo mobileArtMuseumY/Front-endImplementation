@@ -4,9 +4,9 @@
       <el-col :span="4">
         <el-menu :default-active="defaultActive" router style>
           <el-menu-item style="background-color: #F2F5F8;">用户信息设置</el-menu-item>
-          <!-- <el-menu-item index="1">
+          <el-menu-item index="1">
             <span slot="title" @click="goToSetting('UserInfo')">修改用户信息</span>
-          </el-menu-item> -->
+          </el-menu-item>
           <el-menu-item index="2">
             <span slot="title" @click="goToSetting('VerifyEmail')">验证邮箱</span>
           </el-menu-item>
@@ -37,9 +37,9 @@ export default {
   methods: {
     goToSetting(value) {
       if (value === "UserInfo") {
-        // this.$router.push({
-        //   name: "VerifyInfo"
-        // });
+        this.$router.push({
+          name: "VerifyInfo"
+        });
       } else if (value === "VerifyEmail") {
         this.$router.push({
           name: "VerifyEmail"

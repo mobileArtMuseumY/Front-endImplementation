@@ -6,7 +6,7 @@
         <span id="s-clicked" @click="confirmRole('student')">学生</span>
       </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="ruleForm">
-        <el-form-item label="昵称或邮箱：" prop="userId">
+        <el-form-item label="邮箱或学号：" prop="userId">
             <el-input v-model="ruleForm.userId" :placeholder = holder></el-input>
         </el-form-item>
         <el-form-item  label="密码：" prop="password" >
@@ -275,7 +275,7 @@ export default {
 			width: 70%;
 			display: flex;
 			.left {
-				width: 80%;
+				width: 75%;
 				span {
 					color: $clr-gray;
 					cursor: default;
@@ -285,7 +285,7 @@ export default {
 				}
 			}
 			.right {
-				width: 21%;
+				width: 25%;
 			}
 		}
 		.content-to-signup {

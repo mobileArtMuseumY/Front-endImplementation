@@ -137,7 +137,6 @@ export default {
           getProjectCount()
             .then(res => {
               this.total = res.data;
-              console.log(this.total)
             })
             .catch(err => {
               console.log("获取项目总数和失败！");
@@ -153,7 +152,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
-      // this.sortOfTime();
+      this.sortOfTime();
     }
   },
   mounted() {

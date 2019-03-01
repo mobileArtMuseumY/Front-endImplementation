@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { enterpriseVerifiedEmail, enterpriseGetCaptcha } from "@/api/user";
+import { enterpriseVerifiedEmail, enterpriseGetCaptcha, studentSignInFirstlySendEmail, studentVerifiedEmail } from "@/api/user";
 
 export default {
   data() {
@@ -37,12 +37,15 @@ export default {
   computed: {
     ...mapGetters(["user"])
   },
+  mounted() {
+  },
   methods: {
     getCaptcha() {
       const data = {
         email: this.form.email
       };
-      enterpriseGetCaptcha(data)
+      if(this.user.role === 'student') {
+        studentSignInFirstlySendEmail(data)
         .then(res => {
           if (res.status === 500) {
             this.$message({
@@ -59,13 +62,42 @@ export default {
         .catch(() => {
           console.log("邮件发送失败");
         });
+      } else {
+        enterpriseGetCaptcha(data)
+        .then(res => {
+          if (res.status === 500) {
+            this.$message({
+              type: "warning",
+              message: "该邮箱已经被注册过了，请重新输入！"
+            });
+          } else {
+            this.$message({
+              type: "success",
+              message: "邮件已发送，请注意查收"
+            });
+          }
+        })
+        .catch(() => {
+          console.log("邮件发送失败");
+        });
+      }
     },
     sendForm() {
       const data = {
         email: this.form.email,
         code: this.form.captcha
       };
-      enterpriseVerifiedEmail(data)
+      if(this.user.role === 'student') {
+        studentVerifiedEmail(data).then(res => {
+           this.$message({
+            type: "success",
+            message: "邮箱修改成功"
+          });
+        }).catch(() => {
+          console.log("邮箱修改失败");
+        });
+      } else {
+        enterpriseVerifiedEmail(data)
         .then(res => {
           this.$message({
             type: "success",
@@ -75,6 +107,7 @@ export default {
         .catch(() => {
           console.log("邮箱修改失败");
         });
+      }
     }
   }
 };
@@ -89,7 +122,7 @@ export default {
     margin-top: 3rem;
     width: 70%;
     .captcha-button {
-      transform: translate(20rem, -2.5rem);
+      transform: translate(22rem, -2.5rem);
       width: 100px;
     }
     .check-button {

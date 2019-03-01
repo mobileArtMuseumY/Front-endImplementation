@@ -4,7 +4,7 @@ import { post, get, postFile} from '@/utils/axios';
 export const getWorksDataPassersBy = (data) => get('/show/works', data);
 
 // 查看作品详情
-export const queryWorksDetails = (data) => get('/show/works/attachment', data);
+export const queryWorksDetails = (data) => get('/works/attachment', data);
 
 // 收藏作品
 export const collectWorks = (data) => post('/collect/works/add', data);

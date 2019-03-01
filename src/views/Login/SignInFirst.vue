@@ -102,12 +102,7 @@ export default {
         code: this.captcha,
         newPassword: this.ruleForm.password,
       };
-      console.log(data);
       this.$store.dispatch('SignInFirst', data);
-      // // 绿色通道
-      // this.$router.push({
-      //   name: StudentHomepage
-      // });
     },
     sendCode() {
       const data = {

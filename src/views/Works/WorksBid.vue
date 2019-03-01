@@ -5,6 +5,7 @@
         :worksItem="worksItem"
         type="bid"
         :projectId="projectId"
+        :isSelf="isSelf"
         v-for="(worksItem, index) in worksItems"
         :key="index"
       ></works-items-self>
@@ -20,7 +21,9 @@ export default {
   data() {
     return {
       worksItems: "",
-      projectId: ""
+      projectId: "",
+      isSelf: true,
+      type: "",
     };
   },
   computed: {
@@ -55,7 +58,13 @@ export default {
 .container {
   padding-top: $h-nav;
   .works-item-container {
+    padding: 1rem;
     display: flex;
+    flex-wrap: wrap;
+    &::after {
+      content: "";
+      flex-grow: 999999;
+    }
   }
 }
 </style>

@@ -69,7 +69,7 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
-      this.sortOfTime();
+      this.sortOfFocused();
     }
   },
   mounted() {

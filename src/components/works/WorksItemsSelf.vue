@@ -55,7 +55,8 @@ export default {
   props: {
     worksItem: {},
     type: "",
-    projectId: ""
+    projectId: "",
+    isSelf: ""
   },
   data() {
     return {
@@ -70,17 +71,27 @@ export default {
   mounted() {},
   methods: {
     goToWorksDetails(worksId) {
-      this.worksDialogVisible = true;
-      const data = {
-        worksId
-      };
-      queryWorksDetails(data)
-        .then(res => {
-          this.worksData = res.data;
-        })
-        .catch(err => {
-          console.log("查看作品详情失败！");
+      if (this.isSelf) {
+        this.worksDialogVisible = true;
+        const data = {
+          worksId
+        };
+        console.log(data);
+        queryWorksDetails(data)
+          .then(res => {
+            this.worksData = res.data;
+          })
+          .catch(err => {
+            console.log("查看作品详情失败！");
+          });
+      } else {
+        this.$router.push({
+          name: "WorksDetails",
+          params: {
+            worksId: worksId
+          }
         });
+      }
     },
     modifyWorks(worksId) {
       // 修改作品信息
@@ -155,16 +166,18 @@ export default {
 @import "src/assets/scss/index";
 
 .works-item-self {
-  margin: 0.3rem;
-  transition: all 1s ease 0s;
-  overflow: hidden;
-  img {
-    max-width: 100%;
-    min-width: 100%;
-    object-fit: cover;
-    vertical-align: bottom;
-    box-shadow: $shadow-work;
-    z-index: 4;
+  flex-grow: 1;
+  .works-img {
+    margin: 0.3rem;
+    transition: all 1s ease 0s;
+    img {
+      max-width: 100%;
+      min-width: 100%;
+      object-fit: cover;
+      vertical-align: bottom;
+      box-shadow: $shadow-work;
+      height: calc(10vw);
+    }
   }
 }
 </style>

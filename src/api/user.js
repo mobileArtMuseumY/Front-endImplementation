@@ -19,7 +19,7 @@ export const studentFPSubmitForm = (data) => post('/student/password/resetByEmai
 export const enterpriseFPSubmitForm = (data) => post('/business/password/reset', data);
 
 // 学生第一次登录
-// 发送邮箱
+// 发送邮箱 // 学生验证邮箱(登录之后想要修改)(获取验证码)
 export const studentSignInFirstlySendEmail = (data) => post('/student/firstLogin/SendEmail', data);
 
 // 学生第一次登录邮箱验证码验证
@@ -30,6 +30,9 @@ export const enterpriseGetCaptcha = (data) =>post('business/update/email', data)
 
 // 企业验证邮箱(登录之后想要修改)
 export const enterpriseVerifiedEmail = (data) =>post('business/email/verified', data);
+
+// 学生验证邮箱(登录之后想要修改)
+export const studentVerifiedEmail = (data) =>post('student/email/verified', data);
 
 // 修改密码
 export const studentModifyPassword = (data) => post('/student/password/resetByEmail', data);
@@ -63,7 +66,7 @@ export const unFollowOthers = (data) => post('/follower/delete', data);
 export const getStudentBasicInfo = (data) => get('/student/home/info', data);
 
 // 获取企业个人主页中的基本信息
-export const getEnterpriseInfo = (data) => get('/business/home/info', data);
+export const getEnterpriseBasicInfo = (data) => get('/business/home/info', data);
 
 // 获取企业个人主页中的各种状态的项目
 export const getAllProjects = (data) => get('/business/home/projectShow', data);
@@ -100,3 +103,10 @@ export const Orderfinished = (data) => post('/order/done', data)
 
 // 支付
 export const pay = (data) => post('/alipay/pay', data);
+
+//企业个人简介修改
+export const enterpriseUpdateInfo = (data) => post('/business/update/introduction', data);
+
+//学生个人简介修改
+export const studentUpdateInfo = (data) => post('/student/update/introduction', data);
+

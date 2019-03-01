@@ -9,5 +9,3 @@ export const setUserId = (data) => Cookie.set('id', data);
 export const getUserId = () => Cookie.get('id');
 export const removeUserId = () => Cookie.remove('id');
 
-// export const setUser = (user) => Cookie.set('user', user);
-// export const getUser = () => Cookie.get('user');

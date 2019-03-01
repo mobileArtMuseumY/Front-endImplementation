@@ -46,7 +46,6 @@ export default {
   data() {
     return {
       title: "发现",
-      // works: [],
       selected: 0, // 当前被选中的项(时间或者follower)
       items: [],
       rows: 10,
@@ -85,7 +84,6 @@ export default {
       getWorksDataPassersBy(data)
         .then(res => {
           this.items = res.data;
-          console.log(this.items);
           getWorksCount()
             .then(res => {
               this.total = res.data;

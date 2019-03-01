@@ -2,9 +2,7 @@
   <div class="container">
     <div class="main">
       <p>敬请期待~</p>
-    </div>
-    <div class="footer">
-      {{ msg }}
+      <p>{{ msg }}</p>
     </div>
   </div>
 </template>
@@ -26,16 +24,11 @@ export default {
   padding-top: $h-nav;
   .main {
     @include wh(50%, 7rem);
-    margin: 4rem auto;
-    background-color: #fff;
+    margin: 25vh auto;
+    background-color: #f7f8fa;
     padding: 2rem;
     color: $clr-footer-font;
-  }
-  .footer {
-    width: 23%;
-    color: $clr-footer-font;
-    font-size: 13px;
-    margin: 4rem auto;
+    box-shadow: $shadow-nav;
   }
 }
 </style>

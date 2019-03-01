@@ -2,9 +2,15 @@
   <div>
     <div class="works-details-self" style="display: flex;">
       <div class="left-container">
-        <!-- <img :src="studentItem.avatar" alt="studentAvatar" class="avatar-of-student"> -->
         <div style="display: flex;">
-          <svg-icon icon="user" style="width: 50px; height:50px;"></svg-icon>
+          <img
+            :src="address + studentItem.avatar"
+            style="width: 50px; height:50px; border-radius: 50%;"
+            v-show="studentItem.avatar"
+            alt="studentAvatar"
+            class="avatar-of-student"
+          >
+          <svg-icon icon="user" style="width: 50px; height:50px;" v-show="!studentItem.avatar"></svg-icon>
           <span class="student-name">
             <strong>{{ studentItem.loginName }}</strong>
           </span>
@@ -24,7 +30,7 @@
           </ul>
         </div>
       </div>
-      <div class="decription-container" :v-if="isSelf === 0 || studentItem.worksId">
+      <div class="decription-container" v-show="(isSelf === 0 || studentItem.worksId)">
         <p
           class="description"
         >this is the description of this worksthis is the description of this worksthis is the description of this works</p>
@@ -47,7 +53,7 @@
         <div class="icon-container">
           <svg-icon
             icon="bookmarker"
-            style="width: 35px; height: 35px; transform: translate(2rem, -2rem);"
+            style="width: 25px; height: 25px; transform: translate(2rem, -2rem);"
             @click.native="goToMark(studentItem.studentId)"
             class="icon"
             :id="markId"
@@ -110,7 +116,6 @@ export default {
     ...mapGetters(["user"])
   },
   mounted() {
-    console.log(this.type);
   },
   methods: {
     goToStudentHome(studentId) {
@@ -210,17 +215,12 @@ export default {
 @import "src/assets/scss/index";
 
 .works-details-self {
-  // .empty-container {
-  //   // width:
-  // }
   padding: 1rem 1rem 2rem 2rem;
   margin: 1rem;
   border-bottom: 0.06rem solid #bcbcbc;
   display: flex;
-  // border: $border;
   justify-content: space-between;
   .left-container {
-    // border: $border;
     .avatar-of-student {
       @include wh(50px, 50px);
     }
@@ -232,28 +232,6 @@ export default {
       margin-top: 2rem;
     }
   }
-  // .center-container {
-  //   // border: $border;
-  //   display: flex;
-  //   width: 25vw;
-  //   justify-content: space-between;
-  //   flex-direction: column;
-  //   .details-container {
-  //     display: flex;
-  //     justify-content: space-between;
-  //   }
-  //   .description {
-  //     margin: 0;
-  //     width: 25vw;
-  //     line-height: 1.5rem;
-  //     overflow: hidden;
-  //     text-overflow: ellipsis;
-  //     display: -webkit-box;
-  //     -webkit-line-clamp: 2; // 改变行数
-  //     -webkit-box-orient: vertical;
-  //     color: $clr-footer-font;
-  //   }
-  // }
   .details-container {
     display: flex;
     justify-content: space-between;
@@ -271,7 +249,6 @@ export default {
     color: $clr-footer-font;
   }
   .right-container {
-    // border: $border;
     display: flex;
     > div {
       margin-left: 2rem;

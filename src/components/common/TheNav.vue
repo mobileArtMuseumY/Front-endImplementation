@@ -1,7 +1,6 @@
 <template>
   <div class="nav-wrap">
     <div class="nav-left">
-      <!-- <icon class="icon" name="logo" scale="5"></icon> -->
       <svg-icon icon="logo" style="width: 2rem;height: 2rem;"></svg-icon>
     </div>
     <div class="nav-center">
@@ -31,14 +30,15 @@
       <div class="user-profile" v-if="user.signIn">
           <el-dropdown>
             <span class="el-dropdown-link">
-                <img src="/static/images/nav/avatar.png" alt="avatar" class="nav-avatar">
+              <img :src="address + user.userInfo.avatar" alt="avatar" class="nav-avatar" v-if="user.userInfo.avatar">
+              <img src="\static\images\default\default.png" alt="avatar" class="nav-avatar" v-if="!user.userInfo.avatar">
             </span>
           <el-dropdown-menu slot="dropdown" v-if="user.role === 'enterprise'">
             <el-dropdown-item>
               <router-link to="/user/enterpriseHomePage">我的主页</router-link>
             </el-dropdown-item>
             <el-dropdown-item> 
-              <router-link to="/setting">设置</router-link>
+              <router-link to="/setting/verify/info">设置</router-link>
             </el-dropdown-item>
             <el-dropdown-item>
               <router-link to="/service">客服</router-link>
@@ -52,10 +52,10 @@
               <router-link to="/user/studentHomePage">我的主页</router-link>
             </el-dropdown-item>
             <el-dropdown-item> 
-              <router-link to="/setting">设置</router-link>
+              <router-link to="/setting/verify/info">设置</router-link>
             </el-dropdown-item>
             <el-dropdown-item>
-              <router-link to="service">客服</router-link>
+              <router-link to="/service">客服</router-link>
             </el-dropdown-item>
             <el-dropdown-item>
               <a href="" @click="signOut()">退出</a>
@@ -96,7 +96,8 @@ export default {
 	data() {
 		return {
 			search: '',
-			open: false,
+      open: false,
+      address: "http://120.79.239.141:8080/",
 		};
 	},
 	props: {
@@ -111,8 +112,8 @@ export default {
 				return this.nav.filter(x => x.name);
 			}
 		},
-		...mapGetters(['user']),
-	},
+		...mapGetters(["user"]),
+  },
 	methods: {
 		signOut() {
 			this.$store.dispatch('SignOut');
@@ -126,7 +127,7 @@ export default {
 			}
 			// 显示信息
 		},
-	},
+  },
 };
 </script>
 

@@ -89,7 +89,7 @@ export default {
     margin-top: 3rem;
     width: 70%;
     .captcha-button {
-      transform: translate(20rem, -2.5rem);
+      transform: translate(22rem, -2.5rem);
       width: 100px;
     }
     .check-button {

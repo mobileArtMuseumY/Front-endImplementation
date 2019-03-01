@@ -15,35 +15,48 @@
           :on-success="onSuccess"
           :multiple="false"
         >
-          <img :src="address + studentInfo.avatar " class="avatar-of-student">
+          <img
+            :src="address + studentInfo.avatar "
+            class="avatar-of-student"
+            v-if="studentInfo.avatar"
+          >
+          <img
+            src="\static\images\default\default.png"
+            class="avatar-of-student"
+            v-if="!studentInfo.avatar"
+          >
         </el-upload>
-        <!-- <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
-          <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
-            <svg-icon :icon="item.icon" class="verify-icon" style="color: #666666;"></svg-icon>
-          </el-tooltip>
-        </div>-->
         <div class="followers-and-following">
-          <!-- <span>{{ studentInfo.followers }}</span>
-          <span>{{ studentInfo.following }}</span>-->
-          <span>followers 3</span>
-          <span>following 4</span>
+          <span>关注：{{ studentInfo.followingCount }}</span>
+          <span>粉丝：{{ studentInfo.followerCount }}</span>
+        </div>
+        <div class="breakTime-and-orderCount">
+          违约次数/订单数：
+          <span>{{ studentInfo.breakTime }}/{{ studentInfo.orderCount }}</span>
         </div>
       </div>
       <div class="center">
         <div class="username">
-          <!-- <span style="font-size: 25px;"> <strong>{{ studentInfo.userName }}</strong></span> -->
           <span style="font-size: 25px;">
-            <strong>Honeysyt</strong>
+            <strong>{{ studentInfo.loginName }}</strong>
           </span>
         </div>
         <div class="description">
-          <!-- <span>{{ studentInfo.description }}</span> -->
-          <textarea disabled>here is the description of me.here is the description of me.</textarea>
+          <p>{{ studentInfo.introduction }}</p>
         </div>
       </div>
       <div class="right">
-        <div class="edit-profile">
+        <div class="edit-profile" v-if="isSelf">
           <button @click="toVerify('完善用户信息')">编辑信息</button>
+        </div>
+        <div class="edit-profile" v-if="!isSelf">
+          <svg-icon
+            icon="follow"
+            style="width: 45px; height:45px; "
+            class="follow-people"
+            @click.native="goToFollow(studentInfo.id)"
+            id="follow-people"
+          ></svg-icon>
         </div>
       </div>
       <div></div>
@@ -65,16 +78,17 @@
           </div>
         </div>
         <div class="main-body">
-          <!-- <label v-if="!project.projectItem">空空如也……</label> -->
           <works-items-self
             :worksItem="worksItem"
+            :isSelf="isSelf"
+            projectId="02"
             type="details"
             v-for="(worksItem, index) in worksItems"
             :key="index"
           ></works-items-self>
         </div>
       </div>
-      <div class="right-bar">
+      <div class="right-bar" v-if="isSelf">
         <div class="right-bar-verify">
           <div class="right-bar-title">
             <span style="font-size: 18px;">
@@ -98,30 +112,30 @@
           </div>
           <div class="collect-item-details">
             <span>作品：</span>
-            <div class="collect-inner-works" v-for="(item, index) in collectWorksItems">
-              <span :key="index + '-name'">{{ item.studentName }}：</span>
-              <span :key="index + '-works'">{{ item.works }}</span>
+            <div
+              class="collect-item collect-inner-works"
+              v-for="(item, index) in collectWorksItems"
+              :key="index"
+            >
+              <span
+                :key="index + '-name'"
+                @click="goToCollectDetail('works', item.id)"
+              >{{ item.worksName }}</span>
             </div>
-            <svg-icon
-              icon="more"
-              class="more"
-              style="color: #BCBCBC;"
-              @click.native="goToCollect()"
-            ></svg-icon>
             <br>
             <hr>
             <br>
             <span>项目：</span>
-            <div class="collect-inner-project" v-for="(item, index) in collectProjectsItems">
-              <span :key="index + '-name'">{{ item.enterpriseName }}：</span>
-              <span :key="index + '-works'">{{ item.projectDescription }}</span>
+            <div
+              class="collect-item collect-inner-project"
+              v-for="(item, index) in collectProjectsItems"
+              :key="index"
+            >
+              <span
+                :key="index + '-works'"
+                @click="goToCollectDetail('project', item.id)"
+              >{{ item.projectDescription }}</span>
             </div>
-            <svg-icon
-              icon="more"
-              class="more"
-              style="color: #BCBCBC;"
-              @click.native="goToCollect()"
-            ></svg-icon>
           </div>
         </div>
       </div>
@@ -132,7 +146,13 @@
 <script>
 import { mapGetters } from "vuex";
 import { getSelfWorks } from "@/api/works";
-import { getStudentBasicInfo, getStudentCollectInfo } from "@/api/user";
+import {
+  getStudentBasicInfo,
+  getStudentWorksCollectInfo,
+  getStudentProjectCollectInfo,
+  followOthers,
+  unFollowOthers
+} from "@/api/user";
 import { getUserId } from "@/utils/auth";
 import { getToken } from "@/utils/auth";
 
@@ -141,13 +161,13 @@ export default {
     return {
       worksItems: "",
       studentInfo: "",
-      collectWorksItem: "",
       isSelf: true,
       id: "",
       address: "http://120.79.239.141:8080/",
       headers: {
         Authorization: getToken()
       },
+      isFollowed: 0,
       verifyItems: [
         {
           icon: "user-verify",
@@ -162,34 +182,8 @@ export default {
           content: "邮箱验证"
         }
       ],
-      collectWorksItems: [
-        {
-          studentName: "千竹",
-          works: "lalala"
-        },
-        {
-          studentName: "千竹呀",
-          works: "lalala"
-        }
-      ],
-      collectProjectsItems: [
-        {
-          enterpriseName: "千竹",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹呀",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹",
-          projectDescription: "lalala"
-        },
-        {
-          enterpriseName: "千竹呀",
-          projectDescription: "lalala"
-        }
-      ]
+      collectWorksItems: "",
+      collectProjectsItems: ""
     };
   },
   computed: {
@@ -229,18 +223,71 @@ export default {
     toVerify(content) {
       if (content === "完善用户信息") {
         this.info = "perfectUserInfo";
-        console.log(this.info);
       } else if (content === "手机验证") {
         this.info = "verifyPhoneNum";
       } else if (content === "邮箱验证") {
         this.info = "verifyEmail";
       }
       this.$router.push({
-        name: "VerifyEmail",
+        name: "VerifyInfo",
         params: {
           info: this.info
         }
       });
+    },
+    goToFollow(followedId) {
+      // 关注 the-talent
+      const data = {
+        followedId: followedId
+      };
+      if (this.isFollowed === 1) {
+        // 取消关注
+        unFollowOthers(data)
+          .then(res => {
+            document.getElementById("follow-people").style.color = "gray";
+            this.isFollowed = 0;
+            this.$message({
+              type: "success",
+              message: "取消关注成功！"
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        //关注
+        followOthers(data)
+          .then(res => {
+            document.getElementById("follow-people").style.color = "red";
+            this.isFollowed = 1;
+            this.$message({
+              type: "success",
+              message: "关注成功！"
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    goToCollectDetail(content, id) {
+      if (content === "works") {
+        // 查看作品详情
+        this.$router.push({
+          name: "WorksDetails",
+          params: {
+            worksId: id
+          }
+        });
+      } else {
+        //查看项目详情
+        this.$router.push({
+          name: "ProjectDetails",
+          params: {
+            id: id
+          }
+        });
+      }
     },
     goToUploadWorks() {
       this.$router.push({
@@ -249,15 +296,19 @@ export default {
     }
   },
   mounted() {
-    // 别人进入主页时先判断是不是本人!!!!!
+    // 别人进入主页时先判断是不是本人
     // 本人id和进入主页的id是否相等
     if (this.$route.params.id) {
       if (!(this.$route.params.id === this.user.userInfo.userId)) {
         this.isSelf = false;
         this.id = this.$route.params.id;
+      } else {
+        this.id = this.user.userInfo.userId;
+        this.$store.dispatch("SetBasicInfo", "student");
       }
     } else {
       this.id = this.user.userInfo.userId;
+      this.$store.dispatch("SetBasicInfo", "student");
     }
     let data = {
       id: this.id
@@ -266,6 +317,7 @@ export default {
     getStudentBasicInfo(data)
       .then(res => {
         this.studentInfo = res.data;
+        this.isFollowed = res.data.isFollowed;
         // 获取作品信息
         data = {
           id: this.id,
@@ -275,11 +327,38 @@ export default {
         getSelfWorks(data)
           .then(res => {
             this.worksItems = res.data;
+            // 获取学生收藏信息
+            getStudentWorksCollectInfo()
+              .then(res => {
+                this.collectWorksItems = res.data;
+                getStudentProjectCollectInfo()
+                  .then(res => {
+                    this.collectProjectsItems = res.data;
+                  })
+                  .catch(err => {
+                    this.$message({
+                      type: "error",
+                      message: "获取学生收藏项目信息失败！"
+                    });
+                  })
+                  .catch(err => {
+                    this.$message({
+                      type: "error",
+                      message: "获取学生收藏作品信息失败！"
+                    });
+                  });
+              })
+              .catch(err => {
+                this.$message({
+                  type: "error",
+                  message: "获取作品信息失败！"
+                });
+              });
           })
           .catch(err => {
             this.$message({
               type: "error",
-              message: "获取作品信息失败！"
+              message: "获取学生基本信息失败！"
             });
           });
       })
@@ -289,18 +368,15 @@ export default {
           message: "获取学生基本信息失败！"
         });
       });
-
-    // // 获取学生收藏信息
-    // getStudentCollectInfo(data)
-    //   .then(res => {
-    //     this.collectWorksInfo = res.data;
-    //   })
-    //   .catch(err => {
-    //     Message({
-    //       type: "error",
-    //       message: "获取学生收藏信息失败！"
-    //     });
-    //   });
+  },
+  updated() {
+    if (!this.isSelf) {
+      if (this.isFollowed === 1) {
+        document.getElementById("follow-people").style.color = "red";
+      } else {
+        document.getElementById("follow-people").style.color = "gray";
+      }
+    }
   }
 };
 </script>
@@ -339,6 +415,11 @@ export default {
         justify-content: space-around;
         margin-top: 1.5rem;
       }
+      .breakTime-and-orderCount {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1.5rem;
+      }
       .verify-items {
         display: inline;
         margin: 0.5rem;
@@ -347,14 +428,13 @@ export default {
     .center {
       @include margin-tl(2rem, -13vw);
       .description {
-        textarea {
-          margin-top: 3.5rem;
-          width: 30vw;
-          line-height: 1rem;
-          background-color: #f7f8fa;
-          border: none;
-          outline: none;
-        }
+        margin-top: 3.5rem;
+        width: 30vw;
+        line-height: 1rem;
+        background-color: #f7f8fa;
+        border: none;
+        outline: none;
+        padding: 0.5rem 0.5rem;
       }
     }
     .right {
@@ -382,6 +462,11 @@ export default {
       }
       .main-body {
         display: flex;
+        flex-wrap: wrap;
+        &::after {
+          content: "";
+          flex-grow: 999999;
+        }
       }
     }
     .right-bar-verify {
@@ -414,9 +499,9 @@ export default {
         > div {
           margin-top: 1rem;
         }
-        .more {
-          float: right;
-          transform: translate(50%, -1rem);
+        .collect-item {
+          color: $clr-gray;
+          cursor: pointer;
         }
       }
     }
@@ -444,7 +529,7 @@ export default {
 }
 .avatar-of-student {
   @include wh(190px, 180px);
-  @include margin-tl(-1rem, 1rem);
+  transform: translate(0, -3rem);
   display: block;
   box-shadow: $shadow-work;
   border-radius: 2px;

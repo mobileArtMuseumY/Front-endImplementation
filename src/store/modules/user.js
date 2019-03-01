@@ -18,6 +18,8 @@ import {
   studentSignInFirstlySendEmail,
   studentSignInFirstlyEmailVerified,
   studentModifyPassword,
+  getStudentBasicInfo,
+  getEnterpriseBasicInfo,
   enterpriseSignUpForm,
   enterpriseSignUpV,
   enterpriseSignUpC,
@@ -44,13 +46,13 @@ const user = {
     signIn: false,
     role: 'passer',
     userInfo: {
-      userId: '',
-      userName: '',
       avatar: '',
-      description: '',
-      projectNum: '',
       followers: '',
       following: '',
+      userId: '',
+      description: '',
+      userName: '',
+      projectNum: '',
       roles: [],
       token: getToken(),
     },
@@ -144,6 +146,7 @@ const user = {
                 commit('SET_USERID', res.data);
                 setUserId(res.data);
                 setToken(token);
+                dispatch('SetBasicInfo', "student");
                 if (res.status === 1111) {   // 返回码为 1111 学生第一次登录
                   router.push({
                     name: 'SignInFirst',
@@ -162,6 +165,44 @@ const user = {
           })
         });
       }
+    },
+
+    //获取基本信息
+    SetBasicInfo: function ({ state, commit }, role) {
+      return new Promise((resolve, reject) => {
+        const data = {
+          id: state.userInfo.userId,
+        }
+        if(role === 'student') {
+          getStudentBasicInfo(data).then(res => {
+            commit('SET_AVATAR', res.data.avatar);
+            commit('SET_USER_NAME', res.data.loginName);
+            commit('SET_DESCRIPTION', res.data.introduction);
+            commit('SET_FOLLOWERS', res.data.followerCount);
+            commit('SET_FOLLOWING', res.data.followingCount);
+            resolve();
+          }).catch(err => {
+            Message({
+              type: "error",
+              message: "获取学生基本信息失败！"
+            });
+          });
+        } else {
+          getEnterpriseBasicInfo(data).then(res => {
+            commit('SET_AVATAR', res.data.avatar);
+            commit('SET_USER_NAME', res.data.businessName);
+            commit('SET_DESCRIPTION', res.data.introduction);
+            commit('SET_FOLLOWERS', res.data.followerCount);
+            commit('SET_FOLLOWING', res.data.followingCount);
+            resolve();
+          }).catch(err => {
+            Message({
+              type: "error",
+              message: "获取企业基本信息失败！"
+            });
+          });
+        }
+      })
     },
 
     // 学生第一次登录提交邮箱信息
@@ -219,8 +260,7 @@ const user = {
 
 
     // 验证手机验证码
-    VerifyCaptcha: function ({ state, dispatch }, data) {
-      console.log('验证手机号')
+    VerifyCaptcha: function ({ dispatch }, data) {
       return new Promise((resolve, reject) => {
         enterpriseSignUpV(data.captcha).then(res => {
           dispatch('SignUp', data.userData);
@@ -236,7 +276,6 @@ const user = {
     SignUp: function (data) {
       return new Promise((resolve, reject) => {
         enterpriseSignUpForm(data).then(res => {
-          console.log(res);
           console('注册成功');
           resolve();
         }).catch(err => {

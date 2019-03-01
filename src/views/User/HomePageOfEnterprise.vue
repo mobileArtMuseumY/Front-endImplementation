@@ -15,69 +15,82 @@
           :on-success="onSuccess"
           :multiple="false"
         >
-          <img :src="address + enterpriseInfo.avatar " class="avatar-of-business">
+          <img
+            :src="address + enterpriseInfo.avatar "
+            class="avatar-of-business"
+            v-if="enterpriseInfo.avatar"
+          >
+          <img
+            src="\static\images\default\default.png"
+            class="avatar-of-business"
+            v-if="!enterpriseInfo.avatar"
+          >
         </el-upload>
-        <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
-          <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
-            <svg-icon
-              :icon="item.icon"
-              class="verify-icon"
-              style="color: #666666;"
-              @click.native="toVerify(item.content)"
-            ></svg-icon>
-          </el-tooltip>
+        <div v-if="isSelf">
+          <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
+            <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
+              <svg-icon
+                :icon="item.icon"
+                class="verify-icon"
+                style="color: #666666;"
+                @click.native="toVerify(item.content)"
+              ></svg-icon>
+            </el-tooltip>
+          </div>
         </div>
         <div class="followers-and-following">
-          <!-- <span>{{ enterpriseInfo.followers }}</span>
-          <span>{{ enterpriseInfo.following }}</span>-->
-          <span>followers 3</span>
-          <span>following 4</span>
+          <span>关注：{{ enterpriseInfo.followerCount }}</span>
+          <span>粉丝：{{ enterpriseInfo.followingCount }}</span>
         </div>
       </div>
       <div class="center">
         <div class="username">
-          <!-- <span style="font-size: 25px;"> <strong>{{ enterpriseInfo.userName }}</strong></span> -->
           <span style="font-size: 25px;">
-            <strong>Honeysyt</strong>
+            <strong>{{ enterpriseInfo.businessName }}</strong>
           </span>
         </div>
         <div class="description">
-          <!-- <span>{{ enterpriseInfo.description }}</span> -->
-          <textarea disabled>here is the description of me.here is the description of me.</textarea>
+          <p>{{ enterpriseInfo.introduction }}</p>
         </div>
       </div>
       <div class="right">
-        <div class="edit-profile">
+        <div class="edit-profile" v-if="isSelf">
           <button @click="toVerify('完善用户信息')">编辑信息</button>
+        </div>
+        <div class="edit-profile" v-if="!isSelf">
+          <svg-icon
+            icon="follow"
+            style="width: 45px; height:45px;"
+            class="follow-people"
+            @click.native="goToFollow(enterpriseInfo.id)"
+            id="follow-people"
+          ></svg-icon>
         </div>
       </div>
     </div>
     <div class="bottom">
       <div class="main">
-        <label
-          v-if="!project.pendingItems && !project.biddingItems && !project.biddenItems && !project.notPassItems"
-        >空空如也……</label>
         <div class="nav-of-enterprise">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-submenu index="1">
               <template slot="title">项目管理</template>
               <el-menu-item index="1-1">
-                <span slot="title" @click="goToProject('0')">正在审核的项目</span>
-              </el-menu-item>
-              <el-menu-item index="1-2">
                 <span slot="title" @click="goToProject('3')">正在招标的项目</span>
               </el-menu-item>
-              <el-menu-item index="1-3">
+              <el-menu-item index="1-2">
                 <span slot="title" @click="goToProject('4')">已选标的项目</span>
               </el-menu-item>
-              <el-menu-item index="1-4">
+              <el-menu-item index="1-3" v-if="isSelf">
+                <span slot="title" @click="goToProject('0')">正在审核的项目</span>
+              </el-menu-item>
+              <el-menu-item index="1-4" v-if="isSelf">
                 <span slot="title" @click="goToProject('10')">审核未通过</span>
               </el-menu-item>
             </el-submenu>
-            <el-menu-item index="2">
+            <el-menu-item index="2" v-if="isSelf">
               <span slot="title" @click="goToOrder()">订单管理</span>
             </el-menu-item>
-            <el-submenu index="3">
+            <el-submenu index="3" v-if="isSelf">
               <template slot="title">收藏</template>
               <el-menu-item index="3-1">
                 <span slot="title" @click="goToCollect('works')">作品</span>
@@ -97,7 +110,7 @@
               <project-item-epitome
                 :projectItem="item"
                 :status="content.status"
-                v-for="(item, index) in content.projects "
+                v-for="(item, index) in content.projects"
                 :key="index"
               ></project-item-epitome>
             </div>
@@ -134,7 +147,7 @@
           </div>
         </div>
       </div>
-      <div class="right-bar">
+      <div class="right-bar" v-if="isSelf">
         <div class="right-bar-verify">
           <div class="right-bar-title">
             <span style="font-size: 18px;">
@@ -159,11 +172,13 @@
 import { mapGetters } from "vuex";
 import { getProjectDataHomepage } from "@/api/project";
 import {
-  getEnterpriseInfo,
+  getEnterpriseBasicInfo,
   getAllProjects,
   getEnterpriseProjectCollectInfo,
   getEnterpriseWorksCollectInfo,
-  getEnterpriseOrderInfo
+  getEnterpriseOrderInfo,
+  followOthers,
+  unFollowOthers
 } from "@/api/user";
 import { getToken } from "@/utils/auth";
 
@@ -176,10 +191,15 @@ export default {
         Authorization: getToken()
       },
       imageUrl: "",
+      // content: {
+      //   title: "正在审核的项目",
+      //   projects: "",
+      //   status: 0
+      // },
       content: {
-        title: "正在审核的项目",
+        title: "正在招标的项目",
         projects: "",
-        status: 0
+        status: 3
       },
       status: 1, // 标记选中第几个项(1. 项目管理 2. 订单管理 3. 收藏)
       enterpriseInfo: "", // 企业基本信息
@@ -202,7 +222,8 @@ export default {
       info: "perfectUserInfo", // 用于接收验证信息类型
       isSelf: true,
       id: "",
-      orderInfo: []
+      orderInfo: [],
+      isFollowed: 0
     };
   },
   computed: {
@@ -302,6 +323,42 @@ export default {
     },
     deleteProject(projectId) {
       console.log(`父组件删除：${projectId}`);
+    },
+    goToFollow(followedId) {
+      //关注企业
+      const data = {
+        followedId: followedId
+      };
+      if (this.isFollowed === 1) {
+        // 取消关注
+        unFollowOthers(data).then(res => {
+          document.getElementById("follow-people").style.color = "gray";
+          this.isFollowed = 0;
+          this.$message({
+            type: "success",
+            message: "取消关注成功！"
+          });
+        });
+      } else {
+        //关注
+        followOthers(data).then(res => {
+          document.getElementById("follow-people").style.color = "red";
+          this.isFollowed = 1;
+          this.$message({
+            type: "success",
+            message: "关注成功！"
+          });
+        });
+      }
+    }
+  },
+  updated() {
+    if (!this.isSelf) {
+      if (this.isFollowed === 1) {
+        document.getElementById("follow-people").style.color = "red";
+      } else {
+        document.getElementById("follow-people").style.color = "gray";
+      }
     }
   },
   mounted() {
@@ -309,18 +366,23 @@ export default {
       if (!(this.$route.params.id === this.user.userInfo.userId)) {
         this.isSelf = false;
         this.id = this.$route.params.id;
+      } else {
+        this.id = this.user.userInfo.userId;
+        this.$store.dispatch("SetBasicInfo", "enterprise");
       }
     } else {
       this.id = this.user.userInfo.userId;
+      this.$store.dispatch("SetBasicInfo", "enterprise");
     }
     let data = {
       id: this.id
     };
 
     // 获取基本信息
-    getEnterpriseInfo(data)
+    getEnterpriseBasicInfo(data)
       .then(res => {
         this.enterpriseInfo = res.data;
+        this.isFollowed = res.data.isFollowed;
         // 获取项目信息
         // 正在审核
         data = {
@@ -330,10 +392,6 @@ export default {
         getAllProjects(data)
           .then(res => {
             this.project.pendingItems = res.data;
-            // 初始化
-            this.content.status = 0;
-            this.content.title = "正在审核的项目";
-            this.content.projects = this.project.pendingItems;
           })
           .catch(() => {
             console.log("获取正在审核项目失败");
@@ -345,7 +403,11 @@ export default {
         };
         getAllProjects(data)
           .then(res => {
+            // 初始化
             this.project.biddingItems = res.data;
+            this.content.status = 3;
+            this.content.title = "正在招标的项目";
+            this.content.projects = this.project.biddingItems;
           })
           .catch(() => {
             console.log("获取正在招标项目失败");
@@ -357,7 +419,6 @@ export default {
         };
         getAllProjects(data)
           .then(res => {
-            console.log(res.data);
             this.project.biddenItems = res.data;
           })
           .catch(() => {
@@ -384,7 +445,6 @@ export default {
         getEnterpriseOrderInfo(data)
           .then(res => {
             this.orderInfo = res.data;
-            console.log(this.orderInfo);
             for (let i = 0; i < this.orderInfo.length; ++i) {
               if (this.orderInfo[i].status === 0) {
                 this.orderInfo[i].status = "未支付";
@@ -474,22 +534,26 @@ export default {
         justify-content: space-around;
         margin-top: 1.5rem;
       }
+      .breakTime-and-orderCount {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1.5rem;
+      }
       .verify-items {
         display: inline;
         margin: 0.5rem;
       }
     }
     .center {
-      @include margin-tl(2rem, -13vw);
+      @include margin-tl(2rem, -30vw);
       .description {
-        textarea {
-          margin-top: 3.5rem;
-          width: 30vw;
-          line-height: 1rem;
-          background-color: #f7f8fa;
-          border: none;
-          outline: none;
-        }
+        margin-top: 3.5rem;
+        width: 30vw;
+        line-height: 1rem;
+        background-color: #f7f8fa;
+        border: none;
+        outline: none;
+        padding: 0.5rem 0.5rem;
       }
     }
     .right {

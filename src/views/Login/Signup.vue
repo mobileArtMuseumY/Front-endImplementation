@@ -1,24 +1,5 @@
 <template>
   <div class="container">
-    <div class="bussiness-admin">
-      <el-upload
-        ref="upload"
-        :action="uploadUrl()"
-        accept="image/jpeg, image/png"
-        :auto-upload="true"
-        :with-credentials="true"
-        :show-file-list="false"
-        :before-upload="onBeforeUpload"
-        :on-success="onSuccess"
-        :multiple="false"
-      >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
-      <div class="certificate-content">
-        <label>上传工商管理登记证</label>
-      </div>
-    </div>
     <div class="main">
       <div class="title">{{title}}</div>
       <div class="content">
@@ -27,10 +8,13 @@
             <el-form-item label="名称：" prop="enterpriseName">
               <el-input v-model="ruleForm.enterpriseName" placeholder="请输入您企业的名称..."></el-input>
             </el-form-item>
+            <el-form-item label="统一社会信用代码：" prop="enterpriseName">
+              <el-input v-model="ruleForm.code" placeholder="请输入统一社会信息代码..."></el-input>
+            </el-form-item>
             <el-form-item label="登录者姓名：" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入您的姓名..."></el-input>
             </el-form-item>
-            <el-form-item label="登录者身份证" prop="idCard">
+            <el-form-item label="登录者身份证：" prop="idCard">
               <el-input v-model="ruleForm.idCard" placeholder="请输入您的身份证号码..."></el-input>
             </el-form-item>
             <el-form-item label="密码：" prop="password">
@@ -100,6 +84,7 @@ export default {
       title: "企业注册",
       ruleForm: {
         enterpriseName: "",
+        code: "",
         name: "",
         idCard: "",
         password: "",
@@ -117,6 +102,13 @@ export default {
           {
             required: true,
             message: "请输入您的企业名称",
+            trigger: "blur"
+          }
+        ],
+        code: [
+          {
+            required: true,
+            message: "请输入统一社会信用代码",
             trigger: "blur"
           }
         ],
@@ -173,34 +165,6 @@ export default {
     };
   },
   methods: {
-    uploadUrl() {
-      return "/api/business/register/upload";
-    },
-    onSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      this.businessAttachment = res.data;
-      console.log(this.businessAttachment);
-    },
-    onBeforeUpload(file) {
-      const isIMAGE = file.type === "image/jpeg" || file.type === "image/png";
-      const isL1M = file.size / 1024 / 1024 < 3;
-
-      if (!isIMAGE) {
-        this.$message({
-          type: "error",
-          message: "上传文件只能是jpeg/png格式!"
-        });
-        return false;
-      }
-      if (!isL1M) {
-        this.$message({
-          type: "error",
-          message: "上传文件大小不能超过1M!"
-        });
-        return false;
-      }
-      return isIMAGE && isL1M;
-    },
     getCaptcha() {
       if (this.ruleForm.phoneNumber) {
         const data = {
@@ -233,7 +197,7 @@ export default {
         return;
       }
       // 发送请求
-      if(!this.ruleForm.captcha) {
+      if (!this.ruleForm.captcha) {
         this.$message({
           type: "error",
           message: "请输入验证码"
@@ -243,6 +207,7 @@ export default {
       const captcha = this.ruleForm.captcha;
       const userData = {
         businessName: this.ruleForm.enterpriseName,
+        code: this.ruleForm.code,
         representationName: this.ruleForm.name,
         representationIdcard: this.ruleForm.idCard,
         password: this.ruleForm.password,
@@ -266,7 +231,6 @@ export default {
 @import url("//unpkg.com/element-ui@2.4.6/lib/theme-chalk/index.css");
 
 .container {
-  // @include wh(100%, $h-signup-container);
   width: 100%;
   padding-top: $h-nav;
   display: flex;
@@ -277,24 +241,12 @@ export default {
   opacity: 0.9;
 }
 
-.bussiness-admin {
-  position: relative;
-  @include margin-tl(5em, 2em);
-  @include wh(20vw, 14rem);
-}
-
-.certificate-content {
-  @include margin-tl(2em, 20%);
-}
-
 .main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // @include wh(45vw, $h-signup-container - $h-footer * 2 + 10rem);
   width: 45vw;
-  margin-bottom: 3rem;
-  @include margin-tl(15em, 2em);
+  margin: 25vh auto;
   box-shadow: $shadow-work;
   background-color: $clr-white;
   border-radius: 5px;
@@ -310,7 +262,6 @@ export default {
 }
 
 .content {
-  // @include wh(80%, 80%);
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -356,36 +307,6 @@ label {
 
 .check-box {
   margin-left: 25%;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed $clr-white;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: $clr-label;
-  @include wh(205px, 110px);
-  line-height: 110px;
-  text-align: center;
-  border: 1px dashed $clr-label;
-  @include margin-tl(10%, 10%);
-  box-shadow: $shadow-work;
-}
-
-.avatar {
-  display: block;
-  @include wh(205px, 110px);
-  @include margin-tl(10%, 10%);
-  box-shadow: $shadow-work-hover;
 }
 </style>
 

@@ -3,6 +3,13 @@
     <div class="container-introduction">
       <div class="title">
         <h2>{{ projectData.projectName }}</h2>
+        <svg-icon
+          icon="bookmarker"
+          @click.native="goToCollectProject(projectData.projectId)"
+          class="collect-icon"
+          id="collect-project"
+          style="width: 30px; height: 30px;"
+        ></svg-icon>
       </div>
       <div class="container-top">
         <div class="bid-left">
@@ -60,7 +67,10 @@
         <h2>投标作品展示</h2>
       </div>
       <div class="container-bottom">
-        <div class="empty-container" v-if="!projectData.myWorks && !(projectData.biddingLessInfoDTOList) && !projectData.biddingMoreInfoDTOList">
+        <div
+          class="empty-container"
+          v-if="!projectData.myWorks && !(projectData.biddingLessInfoDTOList) && !projectData.biddingMoreInfoDTOList"
+        >
           <label>暂无投标...</label>
         </div>
         <div class="student-works-details">
@@ -99,12 +109,14 @@
 <script>
 import { mapGetters } from "vuex";
 import { getProjectDataDetails } from "@/api/project";
+import { collectProjects, cancelCollectProjects } from "@/api/works";
 import { studentGoToBid } from "@/api/user";
 
 export default {
   data() {
     return {
-      projectData: ""
+      projectData: "",
+      isCollected: 0 // 项目是否被当前用户收藏
     };
   },
   computed: {
@@ -118,6 +130,39 @@ export default {
           projectId: projectId
         }
       });
+    },
+    goToCollectProject(projectId) {
+      const data = {
+        projectId: projectId
+      };
+      if (this.isCollected === 1) {
+        //取消收藏
+        cancelCollectProjects(data).then(res => {
+          document.getElementById("collect-project").style.color = "gray";
+          this.$message({
+            type: "success",
+            message: "取消收藏成功！"
+          });
+          this.isCollected = 0;
+        });
+      } else {
+        //收藏
+        collectProjects(data).then(res => {
+          if (res.status === 500) {
+            this.$message({
+              type: "warning",
+              message: "自己不能收藏自己的作品哦~"
+            });
+          } else {
+            document.getElementById("collect-project").style.color = "red";
+            this.$message({
+              type: "success",
+              message: "收藏成功！"
+            });
+            this.isCollected = 1;
+          }
+        });
+      }
     }
   },
   mounted() {
@@ -126,14 +171,22 @@ export default {
     const data = {
       projectId: projectId
     };
-    if(!this.projectData.myWorks && !(this.projectData.biddingLessInfoDTOList) && !this.projectData.biddingMoreInfoDTOList) {
-      console.log('空的')
+    if (
+      !this.projectData.myWorks &&
+      !this.projectData.biddingLessInfoDTOList &&
+      !this.projectData.biddingMoreInfoDTOList
+    ) {
     }
-    // console.log(projectId);
     getProjectDataDetails(data)
       .then(res => {
         this.projectData = res.data;
-        console.log(this.projectData);
+        // console.log(this.projectData);
+        this.isCollected = res.data.isCollect;
+        if (this.isCollected === 1) {
+          document.getElementById("collect-project").style.color = "red";
+        } else {
+          document.getElementById("collect-project").style.color = "gray";
+        }
       })
       .catch(err => {
         console.log("获取项目详细失败！");
@@ -157,6 +210,7 @@ export default {
     .title {
       display: flex;
       justify-content: space-between;
+      // background-color: black;
     }
     .container-top {
       display: flex;

@@ -8,18 +8,6 @@
           :key="works.id"
         >
       </a>
-      <div class="hover">
-        <a @click="openWorksDetails(works.id)">
-          <label>{{ works.attachmentShowName }}</label>
-        </a>
-        <svg-icon
-          icon="collection"
-          @click.native="goToCollect(works.id)"
-          id="collect"
-          class="collect-icon"
-          style="width: 15px; height: 15px;"
-        ></svg-icon>
-      </div>
     </div>
     <div class="dialog-container">
       <el-dialog :visible.sync="worksDialogVisible" style="height: 70hw;">
@@ -55,36 +43,37 @@ export default {
     return {
       address: "http://120.79.239.141:8080/",
       worksDialogVisible: false,
-      worksData: []
+      worksData: [],
+      role: "passer"
     };
   },
   computed: {
     ...mapGetters(["user"])
   },
+  mounted() {
+    this.role = this.user.role;
+  },
   methods: {
     openWorksDetails(worksId) {
-      this.worksDialogVisible = true;
-      const data = {
-        worksId
-      };
-      queryWorksDetails(data)
-        .then(res => {
-          this.worksData = res.data;
-        })
-        .catch(err => {
-          console.log("获取作品详情失败！");
-        });
-    },
-    goToCollect(worksId) {
-      if (this.user.signIn) {
-        document.getElementById("collect").style.color = "red";
-        this.$store.dispatch("CollectWorks", worksId);
+      if (this.role === "passer") {
+        this.worksDialogVisible = true;
+        const data = {
+          worksId
+        };
+        queryWorksDetails(data)
+          .then(res => {
+            this.worksData = res.data;
+          })
+          .catch(err => {
+            console.log("获取作品详情失败！");
+          });
       } else {
-        this.$message({
-          message: "您需要先登录才能收藏哦~",
-          type: "warning"
+        this.$router.push({
+          name: "WorksDetails",
+          params: {
+            worksId: worksId
+          }
         });
-        return;
       }
     }
   }
@@ -97,7 +86,6 @@ export default {
 .works-item {
   flex-grow: 1;
   .works-img {
-    border: $border;
     margin: 2px;
     transition: all 1s ease 0s;
     height: calc(20vw);
@@ -108,14 +96,6 @@ export default {
       min-width: 100%;
       object-fit: cover;
       vertical-align: bottom;
-    }
-    .hover {
-      display: flex;
-      transform: translateY(-1.3rem);
-      justify-content: space-around;
-      &:hover {
-        display: flex;
-      }
     }
     &:hover {
       transform: translateY(-0.5rem);
