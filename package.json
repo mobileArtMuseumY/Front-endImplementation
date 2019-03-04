@@ -24,7 +24,6 @@
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.4.5",
-    "jison": "^0.4.18",
     "js-cookie": "^2.2.0",
     "normalize.css": "^8.0.0",
     "npm": "^6.4.1",
