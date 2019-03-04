@@ -14,6 +14,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :multiple="false"
+          v-if="isSelf"
         >
           <img
             :src="address + studentInfo.avatar "
@@ -26,6 +27,18 @@
             v-if="!studentInfo.avatar"
           >
         </el-upload>
+        <div v-if="!isSelf">
+          <img
+            :src="address + studentInfo.avatar "
+            class="avatar-of-student"
+            v-if="studentInfo.avatar"
+          >
+          <img
+            src="\static\images\default\default.png"
+            class="avatar-of-student"
+            v-if="!studentInfo.avatar"
+          >
+        </div>
         <div class="followers-and-following">
           <span>关注：{{ studentInfo.followingCount }}</span>
           <span>粉丝：{{ studentInfo.followerCount }}</span>
@@ -386,7 +399,7 @@ export default {
 
 .container {
   width: 100%;
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   display: flex;
   flex-direction: column;
   align-items: center;

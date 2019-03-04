@@ -238,7 +238,6 @@ export default {
 
 .container {
 	@include wh(100%, $h-signin-container);
-	padding-top: $h-nav;
 	display: flex;
 	background-image: url('/static/images/signin/fisherman.jpg');
 	background-size: cover;

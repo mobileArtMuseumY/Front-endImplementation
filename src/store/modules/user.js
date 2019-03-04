@@ -24,10 +24,21 @@ import {
   enterpriseSignUpV,
   enterpriseSignUpC,
 } from '@/api/user';
-import { setToken, getToken, removeToken, setUserId, removeUserId, getUserId } from '@/utils/auth';
+import {
+  setToken,
+  getToken,
+  removeToken,
+  setUserId,
+  removeUserId,
+  getUserId
+} from '@/utils/auth';
 import router from '@/router';
-import { setStore } from '@/utils/storage';
-import { Message } from 'element-ui';
+import {
+  setStore
+} from '@/utils/storage';
+import {
+  Message
+} from 'element-ui';
 
 
 /**
@@ -56,7 +67,7 @@ const user = {
       roles: [],
       token: getToken(),
     },
-    captcha: false,    // 验证码是否发送成功
+    captcha: false, // 验证码是否发送成功
   },
   mutations: {
     [SET_STATUS](state) {
@@ -99,7 +110,10 @@ const user = {
   actions: {
     // 定义提交触发更改信息的描述
     // 企业第一次登录，学生非第一次登录
-    SignIn: function ({ commit, dispatch }, data) {
+    SignIn: function ({
+      commit,
+      dispatch
+    }, data) {
       if (data.role === 'enterprise') {
         return new Promise((resolve, reject) => {
           enterpriseSignIn(data.userData).then(
@@ -133,7 +147,7 @@ const user = {
         return new Promise((resolve, reject) => {
           studentSignIn(data.userData).then(
             res => {
-              if (res.status === 500 || res.status === 1100) {  // status为1100没有 此id
+              if (res.status === 500 || res.status === 1100) { // status为1100没有 此id
                 Message({
                   type: 'error',
                   message: '账号或密码错误！'
@@ -146,13 +160,13 @@ const user = {
                 commit('SET_USERID', res.data);
                 setUserId(res.data);
                 setToken(token);
-                dispatch('SetBasicInfo', "student");
-                if (res.status === 1111) {   // 返回码为 1111 学生第一次登录
+                if (res.status === 1111) { // 返回码为 1111 学生第一次登录
                   router.push({
                     name: 'SignInFirst',
                   });
                   resolve();
                 } else {
+                  dispatch('SetBasicInfo', "student");
                   router.push({
                     name: 'StudentHomepage',
                   });
@@ -168,12 +182,15 @@ const user = {
     },
 
     //获取基本信息
-    SetBasicInfo: function ({ state, commit }, role) {
+    SetBasicInfo: function ({
+      state,
+      commit
+    }, role) {
       return new Promise((resolve, reject) => {
         const data = {
           id: state.userInfo.userId,
         }
-        if(role === 'student') {
+        if (role === 'student') {
           getStudentBasicInfo(data).then(res => {
             commit('SET_AVATAR', res.data.avatar);
             commit('SET_USER_NAME', res.data.loginName);
@@ -206,7 +223,9 @@ const user = {
     },
 
     // 学生第一次登录提交邮箱信息
-    StudentSignInFirstlySendEmail: function ({ commit }, data) {
+    StudentSignInFirstlySendEmail: function ({
+      commit
+    }, data) {
       return new Promise((resolve, reject) => {
         studentSignInFirstlySendEmail(data).then(res => {
           Message({
@@ -222,7 +241,9 @@ const user = {
     },
 
     // 学生第一次提交表单信息登录
-    SignInFirst: function ({ commit }, data) {
+    SignInFirst: function ({
+      commit
+    }, data) {
       if (user.state.captcha) {
         return new Promise((resolve, reject) => {
           studentSignInFirstlyEmailVerified(data).then(res => {
@@ -242,7 +263,9 @@ const user = {
       }
     },
     // 用户退出
-    SignOut: function ({ commit }) {
+    SignOut: function ({
+      commit
+    }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '');
         commit('SET_ROLES', 'passer');
@@ -260,7 +283,9 @@ const user = {
 
 
     // 验证手机验证码
-    VerifyCaptcha: function ({ dispatch }, data) {
+    VerifyCaptcha: function ({
+      dispatch
+    }, data) {
       return new Promise((resolve, reject) => {
         enterpriseSignUpV(data.captcha).then(res => {
           dispatch('SignUp', data.userData);
@@ -286,7 +311,10 @@ const user = {
     },
 
     // 动态修改权限
-    ChangeRoles({ commit, dispatch }, role) {
+    ChangeRoles({
+      commit,
+      dispatch
+    }, role) {
       return new Promise((resolve, reject) => {
         commit('SET_TOKEN', role);
         setToken(role);

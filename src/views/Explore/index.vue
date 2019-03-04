@@ -116,7 +116,7 @@ export default {
 
 .container {
   width: 100%;
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,9 +126,11 @@ export default {
     width: 20%;
   }
   .main {
+    width: 100%;
     @include margin-tb(2rem, 2rem);
     display: flex;
     flex-wrap: wrap;
+    // text-align: start;
     &::after {
       content: "";
       flex-grow: 999999;

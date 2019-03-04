@@ -2,7 +2,7 @@
   <div class="container">
     <div class="dialog-container" v-if="worksData.waterPictureDTOList.length > 0">
       <div class="swiper-container">
-        <el-carousel :interval="4000" type="card" height="300px">
+        <el-carousel :interval="4000" type="card" height="500px">
           <el-carousel-item v-for="(list, index) in worksData.waterPictureDTOList" :key="index">
             <img :src="address + list.attachmentWatermarkPath" alt="list.attachmentName">
           </el-carousel-item>
@@ -139,7 +139,7 @@ export default {
 @import "src/assets/scss/index";
 
 .container {
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   .dialog-container {
     width: 80%;
     margin: 4rem auto;

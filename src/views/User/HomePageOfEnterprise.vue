@@ -14,6 +14,7 @@
           :before-upload="onBeforeUpload"
           :on-success="onSuccess"
           :multiple="false"
+          v-if="isSelf"
         >
           <img
             :src="address + enterpriseInfo.avatar "
@@ -26,6 +27,18 @@
             v-if="!enterpriseInfo.avatar"
           >
         </el-upload>
+        <div v-if="!isSelf">
+          <img
+            :src="address + studentInfo.avatar "
+            class="avatar-of-business"
+            v-if="enterpriseInfo.avatar"
+          >
+          <img
+            src="\static\images\default\default.png"
+            class="avatar-of-business"
+            v-if="!enterpriseInfo.avatar"
+          >
+        </div>
         <div v-if="isSelf">
           <div class="verify-items" v-for="(item, index) in verifyItems" :key="index">
             <el-tooltip class="item" effect="dark" :content="item.content" placement="top">
@@ -504,7 +517,7 @@ export default {
 
 .container {
   width: 100%;
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   display: flex;
   flex-direction: column;
   align-items: center;

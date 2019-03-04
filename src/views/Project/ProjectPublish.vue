@@ -282,7 +282,7 @@ export default {
 
 .container {
   width: 100%;
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   display: flex;
   background-image: url("/static/images/signup/background.jpg");
   background-repeat: no-repeat;

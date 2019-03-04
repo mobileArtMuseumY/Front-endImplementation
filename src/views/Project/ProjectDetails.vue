@@ -201,7 +201,7 @@ export default {
 .container {
   background-color: #fff;
   border: 0.1rem solid #fff;
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   color: #5e5e5e;
   .container-introduction {
     width: 70vw;

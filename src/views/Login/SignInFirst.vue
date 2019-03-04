@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div class="sample">
-      <img src="/static/images/signin/sunflowers.jpg" alt="sunflower">
-    </div>
     <div class="main">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="rule-form">
         <el-form-item label="邮箱：" prop="email">
@@ -11,10 +8,7 @@
       </el-form>
       <div class="captcha">
         <input class="varify-input" v-model="captcha" type="text" placeholder="请输入验证码...">
-        <!-- <timer-btn ref="timerbtn" class="captcha-btn" ></timer-btn> -->
         <button class="captcha-btn" @click="sendCode">获取验证码</button>
-
-        <!-- :run="sendCode()"发送验证码有问题 -->
       </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="rule-form">
         <el-form-item label="密码：" prop="password">
@@ -28,6 +22,7 @@
         <button @click="goOn()">登录</button>
       </div>
     </div>
+    <img src="/static/images/signin/signinFirst.jpg" alt="背景图">
   </div>
 </template>
 <script>
@@ -100,20 +95,20 @@ export default {
       const data = {
         email: this.ruleForm.email,
         code: this.captcha,
-        newPassword: this.ruleForm.password,
+        newPassword: this.ruleForm.password
       };
-      this.$store.dispatch('SignInFirst', data);
+      this.$store.dispatch("SignInFirst", data);
     },
     sendCode() {
       const data = {
-        email: this.ruleForm.email,
+        email: this.ruleForm.email
       };
-      if(!data.email) {
+      if (!data.email) {
         this.$message({
-          type: 'warning',
-          message: '请先输入邮箱！'
+          type: "warning",
+          message: "请先输入邮箱！"
         });
-        return ;
+        return;
       }
       this.$store.dispatch("StudentSignInFirstlySendEmail", data);
     }
@@ -125,24 +120,24 @@ export default {
 @import "src/assets/scss/index";
 
 .container {
-  @include wh(100%, 55rem);
-  padding-top: $h-nav;
-  display: flex;
-  .sample {
-    @include margin-tl(5rem, 10vw);
-    img {
-      @include wh(205px, 110px);
-      border-radius: 2px;
-    }
+  width: 100%;
+  img {
+    width: 100%;
+    height: 100%;
+    @include margin-tl(-67vh, 0);
+    z-index: 1;
   }
   .main {
+    z-index: 5;
     width: 25vw;
-    @include margin-tl(18vw, 10vw);
+    transform: translate(58vw, 20vh);
     .rule-form {
+      z-index: 5;
       width: 20vw;
       @include margin-tl(3rem, 2rem);
     }
     .captcha {
+      z-index: 5;
       width: 20vw;
       margin-left: 2rem;
       border: none;
@@ -151,10 +146,14 @@ export default {
       outline: none;
       display: flex;
       .varify-input {
+        z-index: 5;
         outline: none;
         border: none;
         width: 50%;
         background-color: transparent;
+      }
+      .captcha-btn {
+        z-index: 5;
       }
     }
   }
@@ -163,11 +162,13 @@ export default {
 .signin-button {
   font-size: 0.6rem;
   @include margin-tl(5rem, 7rem);
+  z-index: 5;
 }
 
 .content .varify-input ::-webkit-input-placeholder {
   color: $clr-black;
   font-size: 12px;
+  z-index: 5;
 }
 </style>
 

@@ -72,6 +72,7 @@
  * 浏览项目中的项目item
  */
 import { mapGetters } from "vuex";
+import { formatTime } from "@/utils/format";
 
 export default {
   props: {
@@ -90,6 +91,7 @@ export default {
   mounted() {
     console.log(this.projectItems)
     this.role = this.user.role;
+    this.projectItems.gmtCreate = (formatTime(this.projectItems.gmtCreate));
     if(this.projectItems.avatar) {
       this.isAvatar = true;
     } else {

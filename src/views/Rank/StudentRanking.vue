@@ -82,7 +82,7 @@ export default {
 @import "src/assets/scss/index";
 
 .container {
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -116,3 +116,15 @@ span {
   color: $clr-gray;
 }
 </style>
+
+<style lang="scss">
+
+.btn-prev {
+  background-color: white;
+}
+
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+  background-color: white;
+}
+</style>
+

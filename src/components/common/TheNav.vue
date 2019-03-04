@@ -136,9 +136,9 @@ export default {
 
 .nav-wrap {
 	font-size: 10px;
-	position: fixed;
-	top: 0;
-	z-index: 999;
+	// position: fixed;
+	// top: 0;
+	// z-index: 999;
 	@include wh(100%, $h-nav);
 	display: flex;
 	flex-direction: row;

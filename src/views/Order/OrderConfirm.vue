@@ -3,7 +3,7 @@
     <div class="swiper-container">
       <el-carousel :interval="4000" type="card" height="300px">
         <el-carousel-item v-for="(list, index) in worksData.worksAttachmentList" :key="index">
-          <img :src="address + list.attachmentPath" alt="list.attachmentName">
+          <img :src="address + list.attachmentWatermarkPath" alt="list.attachmentName">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -73,11 +73,12 @@ export default {
           out_trade_no: this.payInfo.id,
           product_code: "FAST_INSTANT_TRADE_PAY",
           total_amount: this.payInfo.price,
-          subject: "log",
+          subject: "移动艺术馆支付",
           body: this.payInfo.worksId
         };
         pay(data)
           .then(res => {
+            console.log(res);
             const div = document.createElement("div");
             div.innerHTML = res;
             document.body.appendChild(div);
@@ -115,7 +116,7 @@ export default {
 @import "src/assets/scss/index";
 
 .container {
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   .swiper-container {
     width: 80%;
     margin: 4rem auto;

@@ -58,7 +58,7 @@ export default {
 @import "src/assets/scss/index";
 
 .setting-container {
-  padding-top: $h-nav;
+  // padding-top: $h-nav;
   background-color: #fff;
   min-height: calc(100vh - 56px - 120px);
   width: 100%;

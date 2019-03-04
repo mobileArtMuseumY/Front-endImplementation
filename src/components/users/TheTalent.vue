@@ -109,10 +109,11 @@ export default {
   }
   .right {
     @include wh(40%, 15rem);
+    text-align: center;
     img {
       cursor: pointer;
       border-radius: 1px;
-      @include wh(100%, 15rem);
+      width: 20vw;
     }
   }
 }
