@@ -203,7 +203,8 @@ a {
 	line-height: 3rem;
 	padding: 0 0.5rem;
 	margin: 0 1rem;
-	border-bottom: solid 0.099rem transparent;
+  border-bottom: solid 0.099rem transparent;
+  
 	&.active {
 		color: $clr-main;
 		border-bottom-color: $clr-main;

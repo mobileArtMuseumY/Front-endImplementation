@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-// 注：后台管理的路由还没有写进来，fenchuqu l 
 const constRouterMap = [
   {
     path: '/',
@@ -15,7 +14,7 @@ const constRouterMap = [
       {
         path: '/home',
         name: 'Home',
-        component: () => import('@/views/Homepage'),
+        component: () => import('@/views/HomePage'),
       },
       {
         path: '/signin',
