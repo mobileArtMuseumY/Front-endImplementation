@@ -1,0 +1,2 @@
+webpackJsonp([24],{Zz7M:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",{staticClass:"container"},[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var a=n("VU/8")({data:function(){return{msg:"收藏界面"}}},s,!1,function(t){n("x7x/")},"data-v-0a82148a",null);e.default=a.exports},"x7x/":function(t,e){}});
+//# sourceMappingURL=24.35c0fd4ea0df17842432.js.map

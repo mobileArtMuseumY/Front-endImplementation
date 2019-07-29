@@ -1,0 +1,2 @@
+webpackJsonp([11],{"8/ed":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s={render:function(){var t=this.$createElement;return(this._self._c||t)("div",{staticClass:"container"},[this._v("\n  "+this._s(this.msg)+"\n")])},staticRenderFns:[]};var i=n("VU/8")({data:function(){return{msg:"注册协议"}}},s,!1,function(t){n("IWLu")},"data-v-6937d26e",null);e.default=i.exports},IWLu:function(t,e){}});
+//# sourceMappingURL=11.916600a90f380758ecab.js.map
